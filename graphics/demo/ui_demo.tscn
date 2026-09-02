@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Theme" path="res://graphics/ui/paddock_theme.tres" id="1"]
-[ext_resource type="Texture2D" path="res://graphics/logos/logo_team_apex_nova.svg" id="2"]
-[ext_resource type="Script" path="res://web/build_info.gd" id="3"]
+[ext_resource type="Texture2D" path="res://graphics/ui/backgrounds/main_menu_garage.svg" id="2"]
+[ext_resource type="Texture2D" path="res://graphics/logos/logo_team_apex_nova.svg" id="3"]
+[ext_resource type="Script" path="res://web/build_info.gd" id="4"]
+[ext_resource type="Texture2D" path="res://graphics/icons/racing/icon_trophy.svg" id="5"]
 
 [node name="MainMenuVisualDemo" type="Control"]
 layout_mode = 3
@@ -13,135 +15,215 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Garage" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.035, 0.055, 0.09, 1)
+texture = ExtResource("2")
+expand_mode = 1
+stretch_mode = 6
 mouse_filter = 2
 
-[node name="RacingLine" type="Line2D" parent="Background"]
-points = PackedVector2Array(930, 920, 1100, 710, 1280, 760, 1480, 470, 1920, 350)
-width = 8.0
-default_color = Color(0.094, 0.827, 0.773, 0.32)
-
-[node name="DataLine" type="Line2D" parent="Background"]
-points = PackedVector2Array(780, 1020, 1070, 780, 1290, 830, 1510, 535, 1920, 440)
-width = 2.0
-default_color = Color(0.239, 0.486, 1, 0.35)
-
-[node name="PaddockSilhouette" type="Polygon2D" parent="Background"]
-polygon = PackedVector2Array(720, 1080, 720, 790, 850, 790, 850, 720, 980, 720, 980, 850, 1140, 850, 1140, 660, 1340, 660, 1340, 810, 1500, 810, 1500, 590, 1740, 590, 1740, 740, 1920, 740, 1920, 1080)
-color = Color(0.055, 0.082, 0.125, 1)
-
-[node name="Content" type="MarginContainer" parent="."]
+[node name="Readability" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 112.0
-offset_top = 88.0
-offset_right = -112.0
-offset_bottom = -88.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.012, 0.02, 0.028, 0.2)
+mouse_filter = 2
 
-[node name="Columns" type="HBoxContainer" parent="Content"]
-layout_mode = 2
-theme_override_constants/separation = 110
+[node name="TopRail" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 6.0
+grow_horizontal = 2
+color = Color(0.06, 0.82, 0.75, 1)
 
-[node name="Menu" type="VBoxContainer" parent="Content/Columns"]
-custom_minimum_size = Vector2(560, 0)
-layout_mode = 2
-theme_override_constants/separation = 18
-
-[node name="Eyebrow" type="Label" parent="Content/Columns/Menu"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.094, 0.827, 0.773, 1)
-theme_override_font_sizes/font_size = 18
-text = "MOTORSPORT MANAGEMENT"
-
-[node name="Title" type="Label" parent="Content/Columns/Menu"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 72
-text = "PADDOCK\nLEGACY"
-
-[node name="Rule" type="ColorRect" parent="Content/Columns/Menu"]
-custom_minimum_size = Vector2(128, 5)
-layout_mode = 2
-color = Color(0.094, 0.827, 0.773, 1)
-
-[node name="Spacer" type="Control" parent="Content/Columns/Menu"]
-custom_minimum_size = Vector2(0, 54)
-layout_mode = 2
-
-[node name="Continue" type="Button" parent="Content/Columns/Menu"]
-layout_mode = 2
-text = "Continuer"
-
-[node name="NewCareer" type="Button" parent="Content/Columns/Menu"]
-layout_mode = 2
-text = "Nouvelle carrière"
-
-[node name="Load" type="Button" parent="Content/Columns/Menu"]
-layout_mode = 2
-text = "Charger"
-
-[node name="Settings" type="Button" parent="Content/Columns/Menu"]
-layout_mode = 2
-text = "Paramètres"
-
-[node name="Visual" type="Control" parent="Content/Columns"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TeamCard" type="PanelContainer" parent="Content/Columns/Visual"]
+[node name="Brand" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 470.0
-offset_top = 580.0
-offset_right = 1000.0
-offset_bottom = 830.0
+offset_left = 86.0
+offset_top = 74.0
+offset_right = 680.0
+offset_bottom = 303.0
+theme_override_constants/separation = 3
 
-[node name="Row" type="HBoxContainer" parent="Content/Columns/Visual/TeamCard"]
+[node name="Series" type="Label" parent="Brand"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_colors/font_color = Color(0.23, 0.9, 0.83, 1)
+theme_override_font_sizes/font_size = 15
+text = "THE MOTORSPORT CAREER EXPERIENCE  /  01"
 
-[node name="Logo" type="TextureRect" parent="Content/Columns/Visual/TeamCard/Row"]
-custom_minimum_size = Vector2(130, 130)
+[node name="Title" type="Label" parent="Brand"]
 layout_mode = 2
-texture = ExtResource("2")
+theme_override_font_sizes/font_size = 64
+text = "PADDOCK LEGACY"
+
+[node name="Subtitle" type="Label" parent="Brand"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.61, 0.69, 0.71, 1)
+theme_override_font_sizes/font_size = 17
+text = "BÂTISSEZ L'ÉCURIE. FORMEZ LE PILOTE. LAISSEZ UNE TRACE."
+
+[node name="TelemetryRule" type="HBoxContainer" parent="Brand"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Signal" type="ColorRect" parent="Brand/TelemetryRule"]
+custom_minimum_size = Vector2(92, 3)
+layout_mode = 2
+color = Color(0.06, 0.82, 0.75, 1)
+
+[node name="Signal2" type="ColorRect" parent="Brand/TelemetryRule"]
+custom_minimum_size = Vector2(28, 3)
+layout_mode = 2
+color = Color(0.25, 0.39, 0.43, 1)
+
+[node name="MenuPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 338.0
+offset_right = 596.0
+offset_bottom = 930.0
+
+[node name="Menu" type="VBoxContainer" parent="MenuPanel"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="ProfileRow" type="HBoxContainer" parent="MenuPanel/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Logo" type="TextureRect" parent="MenuPanel/Menu/ProfileRow"]
+custom_minimum_size = Vector2(62, 62)
+layout_mode = 2
+texture = ExtResource("3")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Info" type="VBoxContainer" parent="Content/Columns/Visual/TeamCard/Row"]
+[node name="Profile" type="VBoxContainer" parent="MenuPanel/Menu/ProfileRow"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Status" type="Label" parent="Content/Columns/Visual/TeamCard/Row/Info"]
+[node name="Status" type="Label" parent="MenuPanel/Menu/ProfileRow/Profile"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.094, 0.827, 0.773, 1)
-text = "SAUVEGARDE ACTIVE"
+theme_override_colors/font_color = Color(0.16, 0.87, 0.79, 1)
+theme_override_font_sizes/font_size = 13
+text = "●  CARRIÈRE ACTIVE"
 
-[node name="Team" type="Label" parent="Content/Columns/Visual/TeamCard/Row/Info"]
+[node name="Team" type="Label" parent="MenuPanel/Menu/ProfileRow/Profile"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 21
 text = "Apex Nova Racing"
 
-[node name="Details" type="Label" parent="Content/Columns/Visual/TeamCard/Row/Info"]
+[node name="Divider" type="HSeparator" parent="MenuPanel/Menu"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.682, 0.725, 0.788, 1)
-text = "Saison 2  •  Manche 4/10"
 
-[node name="DevelopmentBuild" type="Label" parent="."]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 1042.0
-offset_right = 470.0
-offset_bottom = 1070.0
-theme_override_colors/font_color = Color(0.55, 0.62, 0.68, 0.8)
+[node name="Continue" type="Button" parent="MenuPanel/Menu"]
+layout_mode = 2
+text = "CONTINUER   ›"
+alignment = 0
+
+[node name="CareerDetail" type="Label" parent="MenuPanel/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.57, 0.6, 1)
 theme_override_font_sizes/font_size = 14
+text = "      SAISON 02  •  MANCHE 04/10  •  KART NATIONAL"
+
+[node name="NewCareer" type="Button" parent="MenuPanel/Menu"]
+layout_mode = 2
+text = "NOUVELLE CARRIÈRE   +"
+alignment = 0
+
+[node name="Load" type="Button" parent="MenuPanel/Menu"]
+layout_mode = 2
+text = "CHARGER UNE SAUVEGARDE"
+alignment = 0
+
+[node name="Settings" type="Button" parent="MenuPanel/Menu"]
+layout_mode = 2
+text = "PARAMÈTRES"
+alignment = 0
+
+[node name="Spacer" type="Control" parent="MenuPanel/Menu"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tip" type="Label" parent="MenuPanel/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.57, 0.6, 1)
+theme_override_font_sizes/font_size = 13
+text = "PROCHAINE SESSION  /  HORIZON RING\n18 TOURS  •  PISTE SÈCHE  •  24°C"
+
+[node name="CareerCard" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 1320.0
+offset_top = 735.0
+offset_right = 1832.0
+offset_bottom = 972.0
+
+[node name="Row" type="HBoxContainer" parent="CareerCard"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Trophy" type="TextureRect" parent="CareerCard/Row"]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+texture = ExtResource("5")
+expand_mode = 3
+stretch_mode = 5
+modulate = Color(0.18, 0.86, 0.79, 1)
+
+[node name="Data" type="VBoxContainer" parent="CareerCard/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Eyebrow" type="Label" parent="CareerCard/Row/Data"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19, 0.86, 0.79, 1)
+theme_override_font_sizes/font_size = 13
+text = "OBJECTIF DE SAISON"
+
+[node name="Goal" type="Label" parent="CareerCard/Row/Data"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "TOP 3 CONSTRUCTEURS"
+
+[node name="Progress" type="ProgressBar" parent="CareerCard/Row/Data"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+value = 68.0
+show_percentage = false
+
+[node name="Detail" type="Label" parent="CareerCard/Row/Data"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.64, 0.67, 1)
+theme_override_font_sizes/font_size = 14
+text = "P4  •  128 PTS  •  ÉCART 12 PTS"
+
+[node name="Footer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 1014.0
+offset_right = 1834.0
+offset_bottom = 1050.0
+
+[node name="Build" type="Label" parent="Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.38, 0.46, 0.48, 1)
+theme_override_font_sizes/font_size = 13
 text = "DEVELOPMENT BUILD  •  Commit: local"
-script = ExtResource("3")
+script = ExtResource("4")
+
+[node name="Controls" type="Label" parent="Footer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.57, 0.59, 1)
+theme_override_font_sizes/font_size = 13
+text = "CONFIRMER  ↵     RETOUR  ESC"
