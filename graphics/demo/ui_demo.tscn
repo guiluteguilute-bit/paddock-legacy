@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Theme" path="res://graphics/ui/paddock_theme.tres" id="1"]
 [ext_resource type="Texture2D" path="res://graphics/logos/logo_team_apex_nova.svg" id="2"]
+[ext_resource type="Script" path="res://web/build_info.gd" id="3"]
 
 [node name="MainMenuVisualDemo" type="Control"]
 layout_mode = 3
@@ -133,3 +134,14 @@ text = "Apex Nova Racing"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.682, 0.725, 0.788, 1)
 text = "Saison 2  •  Manche 4/10"
+
+[node name="DevelopmentBuild" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 1042.0
+offset_right = 470.0
+offset_bottom = 1070.0
+theme_override_colors/font_color = Color(0.55, 0.62, 0.68, 0.8)
+theme_override_font_sizes/font_size = 14
+text = "DEVELOPMENT BUILD  •  Commit: local"
+script = ExtResource("3")
