@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#07100d" />
+    <title>Paddock Legacy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-mark" aria-hidden="true">PL</div>
+        <div class="brand-copy"><span>PADDOCK</span><strong>LEGACY</strong></div>
+        <div class="season"><small>SAISON</small><strong id="season">01</strong></div>
+        <button class="icon-button" id="soundButton" aria-label="Activer ou désactiver le son">♪</button>
+      </header>
+
+      <section class="hero">
+        <div class="hero-track" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <div class="eyebrow"><span></span> PROCHAINE COURSE</div>
+          <h1>RIVIERA<br /><em>SPRINT</em></h1>
+          <div class="race-meta">
+            <span><b>03</b><small>TOURS</small></span><i></i>
+            <span><b>1.2</b><small>KM</small></span><i></i>
+            <span><b>SEC</b><small>PISTE</small></span>
+          </div>
+        </div>
+        <div class="kart" aria-label="Illustration d'un kart de course">
+          <div class="rear-wheel"></div><div class="front-wheel"></div>
+          <div class="kart-body"><span>27</span></div><div class="driver"></div><div class="spoiler"></div>
+        </div>
+        <div class="countdown"><span>INSCRIPTIONS</span><strong>02:18:44</strong></div>
+      </section>
+
+      <section class="content">
+        <div class="career-row">
+          <div><span class="label">VOTRE PILOTE</span><h2>NOA <em>MOREL</em></h2></div>
+          <div class="level"><span>NIV. 4</span><div><i></i></div><small>740 / 1000 XP</small></div>
+        </div>
+
+        <div class="stats-grid">
+          <article><span class="stat-icon">⚡</span><div><small>VITESSE</small><strong id="speed">68</strong></div><button data-upgrade="speed" aria-label="Améliorer la vitesse">+</button></article>
+          <article><span class="stat-icon">⌁</span><div><small>CONTRÔLE</small><strong id="control">61</strong></div><button data-upgrade="control" aria-label="Améliorer le contrôle">+</button></article>
+          <article><span class="stat-icon">◆</span><div><small>MENTAL</small><strong id="mental">74</strong></div><button data-upgrade="mental" aria-label="Améliorer le mental">+</button></article>
+        </div>
+
+        <div class="section-title"><h3>OBJECTIFS</h3><span>2 / 3</span></div>
+        <div class="objectives">
+          <article class="done"><span>✓</span><div><strong>Régler le kart</strong><small>Préparation terminée</small></div><b>+120 XP</b></article>
+          <article class="done"><span>✓</span><div><strong>Battre le chrono</strong><small>Record personnel : 48.21</small></div><b>+250 XP</b></article>
+          <article><span>03</span><div><strong>Terminer sur le podium</strong><small>Riviera Sprint</small></div><b>+500 XP</b></article>
+        </div>
+
+        <button class="race-button" id="raceButton"><span>LANCER LA COURSE</span><small>ÉNERGIE 3 / 5</small><i>›</i></button>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Navigation principale">
+        <button class="active" data-tab="garage"><span>⌂</span>GARAGE</button>
+        <button data-tab="career"><span>▰</span>CARRIÈRE</button>
+        <button data-tab="race" class="race-nav"><span>⚑</span>COURSE</button>
+        <button data-tab="team"><span>♟</span>ÉQUIPE</button>
+        <button data-tab="shop"><span>◇</span>BOUTIQUE</button>
+      </nav>
+    </main>
+
+    <dialog id="raceModal">
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Fermer">×</button>
+        <span class="modal-flag">🏁</span><small>RIVIERA SPRINT</small>
+        <h2 id="resultTitle">FEUX ÉTEINTS !</h2>
+        <p id="resultText">Votre kart est prêt. Faites chauffer les pneus.</p>
+        <div class="lights"><i></i><i></i><i></i></div>
+        <button id="startRace">PRENDRE LE DÉPART</button>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
