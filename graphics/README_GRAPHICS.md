@@ -72,3 +72,9 @@ Le générateur `graphics/source/generate_assets.py` recrée les SVG fondateurs.
 ## Règles de maintenance mobile
 
 Réutiliser thèmes, matériaux et props ; limiter les superpositions transparentes et les particules ; désactiver les effets hors écran ; préférer un atlas lorsque la bibliothèque grossira. Tester au minimum en 16:9 et sur un ratio mobile plus large, en respectant les safe areas. Aucun texte traduisible ne doit être rasterisé.
+
+## Mise à niveau Technical Theatre (2026-09)
+
+La référence artistique consolidée est [`ART_DIRECTION.md`](ART_DIRECTION.md). Le menu principal illustre le nouveau niveau de finition avec `ui/backgrounds/main_menu_garage.svg` et le thème `ui/paddock_theme.tres`. Les bibliothèques auparavant isolées sous `parallel/monoplaces` et `parallel/facilities` sont désormais résolues depuis le manifeste partagé ; leurs chemins locaux restent inchangés pour préserver les imports.
+
+Pour toute nouvelle interface : employer les tokens de schéma 2, un rayon technique de 4–6 px, une cible tactile minimale de 48 px et conserver le texte traduisible dans Godot. Pour toute livrée : préférer vues neutres + masques superposés plutôt qu'une texture complète par équipe.

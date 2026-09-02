@@ -34,6 +34,26 @@
     "type": "demo_scene",
     "version": 1
   },
+  "damage_front_wing": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/damage_front_wing.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "damage_smoke": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/damage_smoke.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "damage_sparks": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/damage_sparks.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "damage_wheel": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/damage_wheel.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
   "dashboard_demo": {
     "path": "res://graphics/demo/dashboard_demo.tscn",
     "type": "demo_scene",
@@ -232,6 +252,381 @@
   "flag_united_states": {
     "path": "res://graphics/flags/flag_united_states.svg",
     "type": "flag",
+    "version": 1
+  },
+  "future_car_apex_01_mask_accent": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_mask_accent.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_mask_primary": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_mask_primary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_mask_secondary": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_mask_secondary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_mask_sponsors": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_mask_sponsors.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_presentation": {
+    "path": "res://graphics/parallel/monoplaces/apex/preview/future_car_apex_01_presentation.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_race": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_race.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_side": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_side.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_01_top": {
+    "path": "res://graphics/parallel/monoplaces/apex/car/future_car_apex_01_top.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_variant_a": {
+    "path": "res://graphics/parallel/monoplaces/apex/variants/future_car_apex_variant_a.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_variant_b": {
+    "path": "res://graphics/parallel/monoplaces/apex/variants/future_car_apex_variant_b.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_apex_variant_c": {
+    "path": "res://graphics/parallel/monoplaces/apex/variants/future_car_apex_variant_c.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_mask_accent": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_mask_accent.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_mask_primary": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_mask_primary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_mask_secondary": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_mask_secondary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_mask_sponsors": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_mask_sponsors.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_presentation": {
+    "path": "res://graphics/parallel/monoplaces/f2/preview/future_car_f2_01_presentation.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_race": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_race.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_side": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_side.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f2_01_top": {
+    "path": "res://graphics/parallel/monoplaces/f2/car/future_car_f2_01_top.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_mask_accent": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_mask_accent.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_mask_primary": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_mask_primary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_mask_secondary": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_mask_secondary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_mask_sponsors": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_mask_sponsors.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_presentation": {
+    "path": "res://graphics/parallel/monoplaces/f3/preview/future_car_f3_01_presentation.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_race": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_race.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_side": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_side.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f3_01_top": {
+    "path": "res://graphics/parallel/monoplaces/f3/car/future_car_f3_01_top.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_mask_accent": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_mask_accent.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_mask_primary": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_mask_primary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_mask_secondary": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_mask_secondary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_mask_sponsors": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_mask_sponsors.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_presentation": {
+    "path": "res://graphics/parallel/monoplaces/f4/preview/future_car_f4_01_presentation.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_race": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_race.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_side": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_side.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_f4_01_top": {
+    "path": "res://graphics/parallel/monoplaces/f4/car/future_car_f4_01_top.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_mask_accent": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_mask_accent.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_mask_primary": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_mask_primary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_mask_secondary": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_mask_secondary.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_mask_sponsors": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_mask_sponsors.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_presentation": {
+    "path": "res://graphics/parallel/monoplaces/regional/preview/future_car_regional_01_presentation.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_race": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_race.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_side": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_side.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_car_regional_01_top": {
+    "path": "res://graphics/parallel/monoplaces/regional/car/future_car_regional_01_top.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "future_facility_academy_academy_levels": {
+    "path": "res://graphics/parallel/facilities/academy/academy_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_backgrounds_campus_day": {
+    "path": "res://graphics/parallel/facilities/backgrounds/campus_day.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_backgrounds_campus_night_overlay": {
+    "path": "res://graphics/parallel/facilities/backgrounds/campus_night_overlay.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_engineering_data_center_levels": {
+    "path": "res://graphics/parallel/facilities/engineering/data_center_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_engineering_engineering_levels": {
+    "path": "res://graphics/parallel/facilities/engineering/engineering_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_engineering_screen_library": {
+    "path": "res://graphics/parallel/facilities/engineering/screen_library.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_factory_campus_components": {
+    "path": "res://graphics/parallel/facilities/factory/campus_components.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_factory_construction_kit": {
+    "path": "res://graphics/parallel/facilities/factory/construction_kit.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_fitness_fitness_levels": {
+    "path": "res://graphics/parallel/facilities/fitness/fitness_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_garage_circuit_garage_levels": {
+    "path": "res://graphics/parallel/facilities/garage/circuit_garage_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_headquarters_headquarters_levels": {
+    "path": "res://graphics/parallel/facilities/headquarters/headquarters_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_headquarters_trophy_library": {
+    "path": "res://graphics/parallel/facilities/headquarters/trophy_library.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_headquarters_trophy_room_levels": {
+    "path": "res://graphics/parallel/facilities/headquarters/trophy_room_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_icons_department_icons": {
+    "path": "res://graphics/parallel/facilities/icons/department_icons.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_icons_facility_states": {
+    "path": "res://graphics/parallel/facilities/icons/facility_states.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_marketing_marketing_levels": {
+    "path": "res://graphics/parallel/facilities/marketing/marketing_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_paddock_paddock_kit": {
+    "path": "res://graphics/parallel/facilities/paddock/paddock_kit.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_paddock_pit_wall_levels": {
+    "path": "res://graphics/parallel/facilities/paddock/pit_wall_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_paddock_transporter_levels": {
+    "path": "res://graphics/parallel/facilities/paddock/transporter_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_pitcrew_pitcrew_levels": {
+    "path": "res://graphics/parallel/facilities/pitcrew/pitcrew_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_previews_career_journey": {
+    "path": "res://graphics/parallel/facilities/previews/career_journey.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_previews_facility_progression": {
+    "path": "res://graphics/parallel/facilities/previews/facility_progression.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_progression_facility_level_1": {
+    "path": "res://graphics/parallel/facilities/progression/facility_level_1.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_progression_facility_level_2": {
+    "path": "res://graphics/parallel/facilities/progression/facility_level_2.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_progression_facility_level_3": {
+    "path": "res://graphics/parallel/facilities/progression/facility_level_3.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_progression_facility_level_4": {
+    "path": "res://graphics/parallel/facilities/progression/facility_level_4.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_progression_facility_level_5": {
+    "path": "res://graphics/parallel/facilities/progression/facility_level_5.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_props_props_library": {
+    "path": "res://graphics/parallel/facilities/props/props_library.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_scouting_scouting_levels": {
+    "path": "res://graphics/parallel/facilities/scouting/scouting_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_simulator_simulator_levels": {
+    "path": "res://graphics/parallel/facilities/simulator/simulator_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_weather_weather_levels": {
+    "path": "res://graphics/parallel/facilities/weather/weather_levels.svg",
+    "type": "facility_visual",
+    "version": 1
+  },
+  "future_facility_workshop_workshop_levels": {
+    "path": "res://graphics/parallel/facilities/workshop/workshop_levels.svg",
+    "type": "facility_visual",
     "version": 1
   },
   "header_regional_kart_series": {
@@ -484,6 +879,26 @@
     "type": "vehicle_component",
     "version": 1
   },
+  "livery_center_stripe": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_center_stripe.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_diagonal": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_diagonal.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_double_stripe": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_double_stripe.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_geometric": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_geometric.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
   "livery_pattern_diagonal": {
     "path": "res://graphics/cars/placeholders/livery_pattern_diagonal.svg",
     "type": "mask",
@@ -517,6 +932,31 @@
   "livery_recolor": {
     "path": "res://graphics/shaders/livery_recolor.gdshader",
     "type": "shader",
+    "version": 1
+  },
+  "livery_solid": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_solid.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_speed": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_speed.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_split": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_split.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_team_examples": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_team_examples.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "livery_wave": {
+    "path": "res://graphics/parallel/monoplaces/common/liveries/livery_wave.svg",
+    "type": "vehicle_visual",
     "version": 1
   },
   "logo_regional_kart_series": {
@@ -644,9 +1084,39 @@
     "type": "team_logo",
     "version": 1
   },
+  "main_menu_garage": {
+    "path": "res://graphics/ui/backgrounds/main_menu_garage.svg",
+    "type": "ui_background",
+    "version": 1
+  },
+  "mobile_silhouette_check": {
+    "path": "res://graphics/parallel/monoplaces/comparison/mobile_silhouette_check.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "monoplane_progression_preview": {
+    "path": "res://graphics/parallel/monoplaces/comparison/monoplane_progression_preview.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "motion_blur": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/motion_blur.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
   "notifications_demo": {
     "path": "res://graphics/ui/components/notifications_demo.tscn",
     "type": "ui_component",
+    "version": 1
+  },
+  "number_example_27": {
+    "path": "res://graphics/parallel/monoplaces/common/numbers/number_example_27.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "number_plate_template": {
+    "path": "res://graphics/parallel/monoplaces/common/numbers/number_plate_template.svg",
+    "type": "vehicle_visual",
     "version": 1
   },
   "paddock_theme": {
@@ -874,6 +1344,16 @@
     "type": "demo_scene",
     "version": 2
   },
+  "rain_glow": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/rain_glow.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "rear_spray": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/rear_spray.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
   "season_end_demo": {
     "path": "res://graphics/demo/season_end_demo.tscn",
     "type": "demo_scene",
@@ -882,6 +1362,11 @@
   "selection_highlight": {
     "path": "res://graphics/shaders/selection_highlight.gdshader",
     "type": "shader",
+    "version": 1
+  },
+  "speed_lines": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/speed_lines.svg",
+    "type": "vehicle_visual",
     "version": 1
   },
   "sponsor_card": {
@@ -927,6 +1412,26 @@
   "ui_demo": {
     "path": "res://graphics/demo/ui_demo.tscn",
     "type": "demo_scene",
+    "version": 1
+  },
+  "vehicle_shadow": {
+    "path": "res://graphics/parallel/monoplaces/common/shadows/vehicle_shadow.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "wheel_apex": {
+    "path": "res://graphics/parallel/monoplaces/common/wheels/wheel_apex.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "wheel_junior": {
+    "path": "res://graphics/parallel/monoplaces/common/wheels/wheel_junior.svg",
+    "type": "vehicle_visual",
+    "version": 1
+  },
+  "wheel_professional": {
+    "path": "res://graphics/parallel/monoplaces/common/wheels/wheel_professional.svg",
+    "type": "vehicle_visual",
     "version": 1
   }
 }

@@ -1,6 +1,9 @@
 {
-  "schema_version": 1,
-  "reference_resolution": { "width": 1920, "height": 1080 },
+  "schema_version": 2,
+  "reference_resolution": {
+    "width": 1920,
+    "height": 1080
+  },
   "colors": {
     "background": "#090e17",
     "surface": "#111927",
@@ -15,14 +18,105 @@
     "warning": "#ffb547",
     "danger": "#ef5b67",
     "info": "#4db7ff",
-    "outline": "#2d3b50"
+    "outline": "#2d3b50",
+    "background_deep": "#05080d",
+    "surface_glass": "#0c1219f0",
+    "surface_technical": "#0f1d20",
+    "accent_bright": "#8ffff0",
+    "metal_edge": "#405961",
+    "telemetry_grid": "#9adbd40e"
   },
-  "spacing": { "xs": 4, "sm": 8, "md": 16, "lg": 24, "xl": 32, "2xl": 48, "3xl": 64 },
-  "radii": { "sm": 6, "md": 10, "lg": 16, "pill": 999 },
-  "borders": { "thin": 1, "strong": 2, "focus": 3 },
-  "shadows": { "panel_size": 12, "modal_size": 28, "opacity": 0.32, "offset_y": 8 },
-  "text_sizes": { "caption": 14, "body": 18, "button": 18, "subtitle": 24, "title": 36, "display": 64 },
-  "icon_sizes": { "sm": 20, "md": 28, "lg": 40, "xl": 64 },
-  "component_heights": { "button": 56, "button_compact": 44, "navigation": 76, "top_bar": 72, "input": 52 },
-  "opacity": { "disabled": 0.38, "secondary": 0.72, "scrim": 0.7, "hover_overlay": 0.08, "pressed_overlay": 0.16 }
+  "spacing": {
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32,
+    "2xl": 48,
+    "3xl": 64
+  },
+  "radii": {
+    "sm": 6,
+    "md": 10,
+    "lg": 16,
+    "pill": 999,
+    "technical": 4,
+    "panel": 6
+  },
+  "borders": {
+    "thin": 1,
+    "strong": 2,
+    "focus": 3
+  },
+  "shadows": {
+    "panel_size": 12,
+    "modal_size": 28,
+    "opacity": 0.32,
+    "offset_y": 8
+  },
+  "text_sizes": {
+    "caption": 14,
+    "body": 18,
+    "button": 18,
+    "subtitle": 24,
+    "title": 36,
+    "display": 64
+  },
+  "icon_sizes": {
+    "sm": 20,
+    "md": 28,
+    "lg": 40,
+    "xl": 64
+  },
+  "component_heights": {
+    "button": 56,
+    "button_compact": 44,
+    "navigation": 76,
+    "top_bar": 72,
+    "input": 52
+  },
+  "opacity": {
+    "disabled": 0.38,
+    "secondary": 0.72,
+    "scrim": 0.7,
+    "hover_overlay": 0.08,
+    "pressed_overlay": 0.16
+  },
+  "materials": {
+    "carbon": {
+      "base": "#080d10",
+      "highlight": "#273239",
+      "weave_opacity": 0.12
+    },
+    "paint": {
+      "base_sentinel": "#18d3c5",
+      "highlight": "#8ffff0",
+      "shadow": "#063c3b"
+    },
+    "rubber": {
+      "base": "#090b0e",
+      "edge": "#4f5960"
+    },
+    "glass": {
+      "base": "#0c2028",
+      "reflection": "#8ffff0",
+      "opacity": 0.28
+    },
+    "brushed_metal": {
+      "base": "#829398",
+      "shadow": "#313d42"
+    }
+  },
+  "motion": {
+    "fast_ms": 120,
+    "standard_ms": 220,
+    "slow_ms": 420,
+    "focus_pulse_ms": 1100,
+    "easing": "cubic_out"
+  },
+  "safe_area": {
+    "landscape_horizontal": 48,
+    "landscape_vertical": 24,
+    "minimum_touch_target": 48
+  }
 }
