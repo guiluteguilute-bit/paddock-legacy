@@ -1,4 +1,9 @@
 {
+  "badge_regional_level": {
+    "path": "res://graphics/championship/regional_kart_series/badge_regional_level.svg",
+    "type": "championship_badge",
+    "version": 1
+  },
   "car_f4_01": {
     "path": "res://graphics/cars/f4/car_f4_01.svg",
     "type": "vehicle",
@@ -7,11 +12,51 @@
   "car_kart_01": {
     "path": "res://graphics/cars/kart/car_kart_01.svg",
     "type": "vehicle",
+    "version": 2
+  },
+  "car_kart_02": {
+    "path": "res://graphics/cars/kart/car_kart_02.svg",
+    "type": "vehicle",
+    "version": 1
+  },
+  "car_kart_03": {
+    "path": "res://graphics/cars/kart/car_kart_03.svg",
+    "type": "vehicle",
+    "version": 1
+  },
+  "championship_card": {
+    "path": "res://graphics/ui/components/championship_card.tscn",
+    "type": "ui_component",
+    "version": 1
+  },
+  "championship_demo": {
+    "path": "res://graphics/demo/championship_demo.tscn",
+    "type": "demo_scene",
     "version": 1
   },
   "dashboard_demo": {
     "path": "res://graphics/demo/dashboard_demo.tscn",
     "type": "demo_scene",
+    "version": 1
+  },
+  "driver_background_01": {
+    "path": "res://graphics/portraits/components/driver_background_01.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_background_02": {
+    "path": "res://graphics/portraits/components/driver_background_02.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_background_03": {
+    "path": "res://graphics/portraits/components/driver_background_03.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_background_04": {
+    "path": "res://graphics/portraits/components/driver_background_04.svg",
+    "type": "portrait_component",
     "version": 1
   },
   "driver_hair_01": {
@@ -44,6 +89,26 @@
     "type": "portrait_component",
     "version": 1
   },
+  "driver_hair_07": {
+    "path": "res://graphics/portraits/components/driver_hair_07.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_08": {
+    "path": "res://graphics/portraits/components/driver_hair_08.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_09": {
+    "path": "res://graphics/portraits/components/driver_hair_09.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_10": {
+    "path": "res://graphics/portraits/components/driver_hair_10.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
   "driver_head_01": {
     "path": "res://graphics/portraits/components/driver_head_01.svg",
     "type": "portrait_component",
@@ -62,6 +127,31 @@
   "driver_head_04": {
     "path": "res://graphics/portraits/components/driver_head_04.svg",
     "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_05": {
+    "path": "res://graphics/portraits/components/driver_head_05.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_06": {
+    "path": "res://graphics/portraits/components/driver_head_06.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_07": {
+    "path": "res://graphics/portraits/components/driver_head_07.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_08": {
+    "path": "res://graphics/portraits/components/driver_head_08.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_profile_demo": {
+    "path": "res://graphics/demo/driver_profile_demo.tscn",
+    "type": "demo_scene",
     "version": 1
   },
   "driver_suit_01": {
@@ -97,6 +187,11 @@
   "effect_sparks": {
     "path": "res://graphics/effects/effect_sparks.tscn",
     "type": "effect",
+    "version": 1
+  },
+  "event_card": {
+    "path": "res://graphics/ui/components/event_card.tscn",
+    "type": "ui_component",
     "version": 1
   },
   "flag_australia": {
@@ -137,6 +232,51 @@
   "flag_united_states": {
     "path": "res://graphics/flags/flag_united_states.svg",
     "type": "flag",
+    "version": 1
+  },
+  "header_regional_kart_series": {
+    "path": "res://graphics/championship/regional_kart_series/header_regional_kart_series.svg",
+    "type": "championship_header",
+    "version": 1
+  },
+  "helmet_pattern_01": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_01.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_02": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_02.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_03": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_03.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_04": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_04.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_05": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_05.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_06": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_06.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_07": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_07.svg",
+    "type": "helmet_pattern",
+    "version": 1
+  },
+  "helmet_pattern_08": {
+    "path": "res://graphics/cars/kart/helmets/helmet_pattern_08.svg",
+    "type": "helmet_pattern",
     "version": 1
   },
   "icon_aero": {
@@ -304,6 +444,46 @@
     "type": "icon",
     "version": 1
   },
+  "kart_bodywork": {
+    "path": "res://graphics/cars/kart/components/kart_bodywork.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
+  "kart_chassis": {
+    "path": "res://graphics/cars/kart/components/kart_chassis.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
+  "kart_driver": {
+    "path": "res://graphics/cars/kart/components/kart_driver.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
+  "kart_engine": {
+    "path": "res://graphics/cars/kart/components/kart_engine.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
+  "kart_garage_demo": {
+    "path": "res://graphics/demo/kart_garage_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
+  "kart_helmet": {
+    "path": "res://graphics/cars/kart/components/kart_helmet.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
+  "kart_number_plate": {
+    "path": "res://graphics/cars/kart/components/kart_number_plate.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
+  "kart_wheels": {
+    "path": "res://graphics/cars/kart/components/kart_wheels.svg",
+    "type": "vehicle_component",
+    "version": 1
+  },
   "livery_pattern_diagonal": {
     "path": "res://graphics/cars/placeholders/livery_pattern_diagonal.svg",
     "type": "mask",
@@ -339,14 +519,29 @@
     "type": "shader",
     "version": 1
   },
+  "logo_regional_kart_series": {
+    "path": "res://graphics/championship/regional_kart_series/logo_regional_kart_series.svg",
+    "type": "championship_logo",
+    "version": 1
+  },
   "logo_sponsor_aegisure": {
     "path": "res://graphics/sponsors/logo_sponsor_aegisure.svg",
     "type": "icon",
     "version": 1
   },
+  "logo_sponsor_bluepulse": {
+    "path": "res://graphics/sponsors/logo_sponsor_bluepulse.svg",
+    "type": "sponsor_logo",
+    "version": 1
+  },
   "logo_sponsor_codeshift": {
     "path": "res://graphics/sponsors/logo_sponsor_codeshift.svg",
     "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_driftline_auto": {
+    "path": "res://graphics/sponsors/logo_sponsor_driftline_auto.svg",
+    "type": "sponsor_logo",
     "version": 1
   },
   "logo_sponsor_motivex": {
@@ -359,9 +554,19 @@
     "type": "icon",
     "version": 1
   },
+  "logo_sponsor_nova_energy": {
+    "path": "res://graphics/sponsors/logo_sponsor_nova_energy.svg",
+    "type": "sponsor_logo",
+    "version": 1
+  },
   "logo_sponsor_orbian": {
     "path": "res://graphics/sponsors/logo_sponsor_orbian.svg",
     "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_railbird": {
+    "path": "res://graphics/sponsors/logo_sponsor_railbird.svg",
+    "type": "sponsor_logo",
     "version": 1
   },
   "logo_sponsor_telvanta": {
@@ -384,9 +589,19 @@
     "type": "icon",
     "version": 1
   },
+  "logo_team_crimson_orbit": {
+    "path": "res://graphics/logos/logo_team_crimson_orbit.svg",
+    "type": "team_logo",
+    "version": 1
+  },
   "logo_team_ember_fox": {
     "path": "res://graphics/logos/logo_team_ember_fox.svg",
     "type": "icon",
+    "version": 1
+  },
+  "logo_team_helix_racing": {
+    "path": "res://graphics/logos/logo_team_helix_racing.svg",
+    "type": "team_logo",
     "version": 1
   },
   "logo_team_kinetic_arc": {
@@ -394,9 +609,24 @@
     "type": "icon",
     "version": 1
   },
+  "logo_team_lumen_motorsport": {
+    "path": "res://graphics/logos/logo_team_lumen_motorsport.svg",
+    "type": "team_logo",
+    "version": 1
+  },
+  "logo_team_meridian_kart": {
+    "path": "res://graphics/logos/logo_team_meridian_kart.svg",
+    "type": "team_logo",
+    "version": 1
+  },
   "logo_team_northstar": {
     "path": "res://graphics/logos/logo_team_northstar.svg",
     "type": "icon",
+    "version": 1
+  },
+  "logo_team_pulse_competition": {
+    "path": "res://graphics/logos/logo_team_pulse_competition.svg",
+    "type": "team_logo",
     "version": 1
   },
   "logo_team_silver_finch": {
@@ -407,6 +637,16 @@
   "logo_team_vector_peak": {
     "path": "res://graphics/logos/logo_team_vector_peak.svg",
     "type": "icon",
+    "version": 1
+  },
+  "logo_team_vertex_union": {
+    "path": "res://graphics/logos/logo_team_vertex_union.svg",
+    "type": "team_logo",
+    "version": 1
+  },
+  "notifications_demo": {
+    "path": "res://graphics/ui/components/notifications_demo.tscn",
+    "type": "ui_component",
     "version": 1
   },
   "paddock_theme": {
@@ -504,6 +744,91 @@
     "type": "prop",
     "version": 1
   },
+  "prop_regional_asphalt": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_asphalt.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_barrier": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_barrier.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_fence": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_fence.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_grandstand": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_grandstand.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_grass": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_grass.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_gravel": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_gravel.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_grid_marking": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_grid_marking.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_kerb": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_kerb.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_light": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_light.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_marshal": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_marshal.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_paddock": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_paddock.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_pitlane": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_pitlane.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_sign": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_sign.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_start_line": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_start_line.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_timing_building": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_timing_building.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_tree": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_tree.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
+  "prop_regional_tyres": {
+    "path": "res://graphics/circuits/environments/regional_kart_environment_01/prop_regional_tyres.svg",
+    "type": "environment_prop",
+    "version": 1
+  },
   "prop_sign": {
     "path": "res://graphics/circuits/props/prop_sign.svg",
     "type": "prop",
@@ -529,8 +854,28 @@
     "type": "prop",
     "version": 1
   },
+  "qualifying_demo": {
+    "path": "res://graphics/demo/qualifying_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
+  "race_preparation_demo": {
+    "path": "res://graphics/demo/race_preparation_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
+  "race_results_demo": {
+    "path": "res://graphics/demo/race_results_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
   "race_visual_demo": {
     "path": "res://graphics/demo/race_visual_demo.tscn",
+    "type": "demo_scene",
+    "version": 2
+  },
+  "season_end_demo": {
+    "path": "res://graphics/demo/season_end_demo.tscn",
     "type": "demo_scene",
     "version": 1
   },
@@ -539,9 +884,44 @@
     "type": "shader",
     "version": 1
   },
+  "sponsor_card": {
+    "path": "res://graphics/ui/components/sponsor_card.tscn",
+    "type": "ui_component",
+    "version": 1
+  },
+  "start_lights": {
+    "path": "res://graphics/ui/components/start_lights.tscn",
+    "type": "ui_component",
+    "version": 1
+  },
+  "team_creation_demo": {
+    "path": "res://graphics/demo/team_creation_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
   "test_track_01": {
     "path": "res://graphics/circuits/test_track/test_track_01.svg",
     "type": "track",
+    "version": 1
+  },
+  "track_kart_regional_01": {
+    "path": "res://graphics/circuits/regional/track_kart_regional_01.svg",
+    "type": "track",
+    "version": 1
+  },
+  "track_kart_regional_02": {
+    "path": "res://graphics/circuits/regional/track_kart_regional_02.svg",
+    "type": "track",
+    "version": 1
+  },
+  "track_kart_regional_03": {
+    "path": "res://graphics/circuits/regional/track_kart_regional_03.svg",
+    "type": "track",
+    "version": 1
+  },
+  "trophy_regional_kart_series": {
+    "path": "res://graphics/championship/regional_kart_series/trophy_regional_kart_series.svg",
+    "type": "trophy",
     "version": 1
   },
   "ui_demo": {

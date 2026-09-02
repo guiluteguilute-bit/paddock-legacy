@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Theme" path="res://graphics/ui/paddock_theme.tres" id="1"]
-[ext_resource type="Texture2D" path="res://graphics/circuits/test_track/test_track_01.svg" id="2"]
+[ext_resource type="Texture2D" path="res://graphics/circuits/regional/track_kart_regional_03.svg" id="2"]
 [ext_resource type="Texture2D" path="res://graphics/cars/kart/car_kart_01.svg" id="3"]
-[ext_resource type="Texture2D" path="res://graphics/icons/weather/icon_weather_light_rain.svg" id="4"]
-[ext_resource type="Texture2D" path="res://graphics/icons/tyres/icon_tyre_intermediate.svg" id="5"]
-[ext_resource type="Texture2D" path="res://graphics/icons/racing/icon_push.svg" id="6"]
+[ext_resource type="Texture2D" path="res://graphics/cars/kart/car_kart_02.svg" id="4"]
+[ext_resource type="Texture2D" path="res://graphics/cars/kart/car_kart_03.svg" id="5"]
+[ext_resource type="Texture2D" path="res://graphics/icons/weather/icon_weather_clear.svg" id="6"]
+[ext_resource type="Texture2D" path="res://graphics/icons/tyres/icon_tyre_soft.svg" id="7"]
+[ext_resource type="Texture2D" path="res://graphics/icons/racing/icon_push.svg" id="8"]
 
 [node name="RaceVisualDemo" type="Control"]
 layout_mode = 3
@@ -15,87 +17,194 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1")
-[node name="Track" type="TextureRect" parent="."]
+
+[node name="BroadcastView" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+clip_contents = true
+
+[node name="Track" type="TextureRect" parent="BroadcastView"]
+rotation = -0.018
+layout_mode = 0
+offset_left = -40.0
+offset_top = -35.0
+offset_right = 1985.0
+offset_bottom = 1125.0
 texture = ExtResource("2")
 expand_mode = 1
 stretch_mode = 6
-[node name="Kart1" type="TextureRect" parent="."]
+modulate = Color(0.88, 0.92, 0.96, 1)
+
+[node name="IdealLine" type="Line2D" parent="BroadcastView"]
+points = PackedVector2Array(430, 735, 610, 645, 830, 622, 1050, 695, 1320, 650, 1510, 495)
+width = 5.0
+default_color = Color(0.094, 0.827, 0.773, 0.18)
+
+[node name="Kart27" type="TextureRect" parent="BroadcastView"]
 layout_mode = 0
-offset_left = 750.0
-offset_top = 390.0
-offset_right = 1006.0
-offset_bottom = 518.0
+offset_left = 790.0
+offset_top = 525.0
+offset_right = 1110.0
+offset_bottom = 685.0
 texture = ExtResource("3")
 expand_mode = 1
-[node name="Kart2" type="TextureRect" parent="."]
-modulate = Color(1, 0.58, 0.65, 1)
+[node name="Number" type="Label" parent="BroadcastView/Kart27"]
 layout_mode = 0
-offset_left = 940.0
-offset_top = 610.0
-offset_right = 1196.0
-offset_bottom = 738.0
-texture = ExtResource("3")
+offset_left = 140.0
+offset_top = 78.0
+offset_right = 205.0
+offset_bottom = 125.0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.05, 0.08, 0.12, 1)
+text = "27"
+
+[node name="Kart11" type="TextureRect" parent="BroadcastView"]
+layout_mode = 0
+offset_left = 1080.0
+offset_top = 655.0
+offset_right = 1345.0
+offset_bottom = 788.0
+texture = ExtResource("4")
 expand_mode = 1
+modulate = Color(1, 0.67, 0.73, 1)
+[node name="Number" type="Label" parent="BroadcastView/Kart11"]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 64.0
+offset_right = 175.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 20
+text = "11"
+
+[node name="Kart44" type="TextureRect" parent="BroadcastView"]
+layout_mode = 0
+offset_left = 610.0
+offset_top = 705.0
+offset_right = 840.0
+offset_bottom = 820.0
+texture = ExtResource("5")
+expand_mode = 1
+modulate = Color(0.67, 0.77, 1, 1)
+[node name="Number" type="Label" parent="BroadcastView/Kart44"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 55.0
+offset_right = 150.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 18
+text = "44"
+
 [node name="TopHud" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_left = 32.0
+offset_left = 40.0
 offset_top = 28.0
-offset_right = 1888.0
-offset_bottom = 126.0
-[node name="Row" type="HBoxContainer" parent="TopHud"]
-layout_mode = 2
-theme_override_constants/separation = 28
-[node name="Position" type="Label" parent="TopHud/Row"]
-layout_mode = 2
+offset_right = 1880.0
+offset_bottom = 130.0
+[node name="Position" type="Label" parent="TopHud"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 255.0
+offset_bottom = 76.0
+theme_override_font_sizes/font_size = 31
+text = "P 02 / 20"
+[node name="Lap" type="Label" parent="TopHud"]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 26.0
+offset_right = 590.0
+offset_bottom = 70.0
+text = "TOUR  12 / 18"
+[node name="Timer" type="Label" parent="TopHud"]
+layout_mode = 0
+offset_left = 770.0
+offset_top = 17.0
+offset_right = 1080.0
+offset_bottom = 77.0
 theme_override_font_sizes/font_size = 30
-text = "P 03 / 18"
-[node name="Lap" type="Label" parent="TopHud/Row"]
+text = "14:28.661"
+[node name="WeatherIcon" type="TextureRect" parent="TopHud"]
+layout_mode = 0
+offset_left = 1310.0
+offset_top = 15.0
+offset_right = 1375.0
+offset_bottom = 80.0
+texture = ExtResource("6")
+expand_mode = 1
+[node name="Weather" type="Label" parent="TopHud"]
+layout_mode = 0
+offset_left = 1400.0
+offset_top = 27.0
+offset_right = 1770.0
+offset_bottom = 70.0
+text = "SEC  •  22°C"
+
+[node name="Leaderboard" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 165.0
+offset_right = 495.0
+offset_bottom = 650.0
+[node name="Rows" type="Label" parent="Leaderboard"]
 layout_mode = 2
-text = "TOUR  07 / 18"
-[node name="Weather" type="TextureRect" parent="TopHud/Row"]
-custom_minimum_size = Vector2(54, 54)
-layout_mode = 2
-texture = ExtResource("4")
-expand_mode = 3
-[node name="WeatherText" type="Label" parent="TopHud/Row"]
-layout_mode = 2
-text = "PLUIE LÉGÈRE  •  18°C"
-[node name="Gap" type="Label" parent="TopHud/Row"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "+1.284"
-horizontal_alignment = 2
+theme_override_font_sizes/font_size = 18
+text = "CLASSEMENT\n\n01  E. ROSSI          —\n02  N. MARTIN      +0.6\n03  L. BERNARD     +1.2\n04  M. WEBER       +2.1\n05  T. DUBOIS      +2.8\n06  A. COSTA       +4.0\n07  J. WILSON      +4.7\n08  S. MOREAU      +5.4"
+
 [node name="DriverHud" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_left = 32.0
-offset_top = 760.0
+offset_left = 40.0
+offset_top = 740.0
+offset_right = 700.0
+offset_bottom = 1038.0
+[node name="Name" type="Label" parent="DriverHud"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 16.0
+offset_right = 610.0
+offset_bottom = 58.0
+theme_override_font_sizes/font_size = 27
+text = "27  NOAH MARTIN"
+[node name="Data" type="Label" parent="DriverHud"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 75.0
 offset_right = 620.0
-offset_bottom = 1048.0
-[node name="Box" type="VBoxContainer" parent="DriverHud"]
+offset_bottom = 170.0
+text = "RYTHME       91%  ▲      ÉCART       +0.622\nMEILLEUR     48.201       DERNIER      48.490"
+[node name="Tyre" type="TextureRect" parent="DriverHud"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 185.0
+offset_right = 88.0
+offset_bottom = 248.0
+texture = ExtResource("7")
+expand_mode = 1
+[node name="Pace" type="TextureRect" parent="DriverHud"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 185.0
+offset_right = 168.0
+offset_bottom = 248.0
+texture = ExtResource("8")
+expand_mode = 1
+[node name="State" type="Label" parent="DriverHud"]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 196.0
+offset_right = 590.0
+offset_bottom = 240.0
+text = "SLICK TENDRE  •  POUSSER"
+
+[node name="FlagStatus" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 1490.0
+offset_top = 880.0
+offset_right = 1880.0
+offset_bottom = 1038.0
+[node name="Text" type="Label" parent="FlagStatus"]
 layout_mode = 2
-[node name="Name" type="Label" parent="DriverHud/Box"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "03  MILO ARDEN"
-[node name="Data" type="Label" parent="DriverHud/Box"]
-layout_mode = 2
-text = "RYTHME   88%     CARBURANT   42%\nMOTEUR   94%     FREINS      78%"
-[node name="Icons" type="HBoxContainer" parent="DriverHud/Box"]
-layout_mode = 2
-[node name="Tyre" type="TextureRect" parent="DriverHud/Box/Icons"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-texture = ExtResource("5")
-expand_mode = 3
-[node name="Pace" type="TextureRect" parent="DriverHud/Box/Icons"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-texture = ExtResource("6")
-expand_mode = 3
-[node name="State" type="Label" parent="DriverHud/Box/Icons"]
-layout_mode = 2
-text = "  INTERMÉDIAIRE  •  POUSSER"
+theme_override_font_sizes/font_size = 22
+text = "DRAPEAU VERT\nCOURSE EN COURS"
+horizontal_alignment = 1

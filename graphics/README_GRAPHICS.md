@@ -52,6 +52,12 @@ Les composants tête, coiffure et combinaison partagent un canevas 128 × 128 et
 
 `test_track_01.svg` est un tracé fictif compact. Les props 128 × 128 ou 256 × 128 permettent d'étendre la bibliothèque sans atlas gigantesque. Pluie, poussière, étincelles et fumée sont des scènes `GPUParticles2D`; le spray réutilise la fumée avec une couleur bleu-gris et une durée réduite. Le glow et le highlight doivent rester subtils ; `selection_highlight.gdshader` fournit l'état sélectionné. Les animations de notification sont à réaliser avec un `Tween` sur position/opacité, sans spritesheet.
 
+Le kit `regional_kart_environment_01` complète cette fondation avec 17 modules et trois tracés partageant la même palette. `track_kart_regional_01` est technique, `02` rapide et `03` mixte. Les modules peuvent être placés comme `TextureRect`/`Sprite2D` ou servir de référence à un futur TileMap piloté par Claude ; ils ne contiennent aucune collision ni donnée de simulation.
+
+## Kit carrière karting
+
+Les dix scènes de parcours, les composants réutilisables et les instructions de branchement sont indexés dans `graphics/CLAUDE_GRAPHICS_HANDOFF.md`. Les cartes événement et sponsor, les cinq notifications et les cinq feux de départ restent des scènes visuelles sans logique métier. Le kart V2 conserve les trois couleurs sentinelles et propose trois silhouettes ainsi que huit motifs de casque. Les portraits modulaires proposent désormais 8 têtes, 10 coiffures, 4 fonds et plusieurs combinaisons.
+
 ## Ajouter ou modifier un asset
 
 1. Nommer en `minuscules_avec_underscore`, avec préfixe (`icon_`, `car_`, `logo_`, `prop_`).
