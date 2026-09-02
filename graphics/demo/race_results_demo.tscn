@@ -1,0 +1,145 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Theme" path="res://graphics/ui/paddock_theme.tres" id="1"]
+
+[node name="RaceResultsDemo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1")
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.035, 0.055, 0.09, 1)
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 43.0
+offset_right = 700.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 42
+text = "RÉSULTATS"
+[node name="Meta" type="Label" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 112.0
+offset_right = 700.0
+offset_bottom = 150.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.094, 0.827, 0.773, 1)
+text = "MONTBRUN  •  MANCHE 03 / 06"
+[node name="Podium" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 190.0
+offset_right = 1120.0
+offset_bottom = 650.0
+[node name="P2" type="Label" parent="Podium"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 190.0
+offset_right = 350.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 25
+text = "P2
+NOAH MARTIN"
+[node name="P1" type="Label" parent="Podium"]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 110.0
+offset_right = 650.0
+offset_bottom = 225.0
+theme_override_font_sizes/font_size = 29
+text = "P1
+E. ROSSI"
+[node name="P3" type="Label" parent="Podium"]
+layout_mode = 0
+offset_left = 725.0
+offset_top = 235.0
+offset_right = 990.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 23
+text = "P3
+L. BERNARD"
+[node name="Second" type="ColorRect" parent="Podium"]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 300.0
+offset_right = 365.0
+offset_bottom = 430.0
+color = Color(0.42, 0.48, 0.57, 1)
+[node name="First" type="ColorRect" parent="Podium"]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 240.0
+offset_right = 690.0
+offset_bottom = 430.0
+color = Color(1, 0.71, 0.28, 1)
+[node name="Third" type="ColorRect" parent="Podium"]
+layout_mode = 0
+offset_left = 705.0
+offset_top = 330.0
+offset_right = 1015.0
+offset_bottom = 430.0
+color = Color(0.64, 0.39, 0.25, 1)
+[node name="Player" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 1160.0
+offset_top = 190.0
+offset_right = 1850.0
+offset_bottom = 650.0
+[node name="Title" type="Label" parent="Player"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 22.0
+offset_right = 600.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.094, 0.827, 0.773, 1)
+text = "VOTRE COURSE"
+[node name="Data" type="Label" parent="Player"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 92.0
+offset_right = 640.0
+offset_bottom = 400.0
+theme_override_font_sizes/font_size = 22
+text = "DÉPART              P5
+ARRIVÉE              P2   ▲3
+POINTS               +18
+ARGENT           +6 500 €
+EXPÉRIENCE           +420
+RÉPUTATION             +3"
+[node name="Full" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 690.0
+offset_right = 1850.0
+offset_bottom = 1025.0
+[node name="Title" type="Label" parent="Full"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 16.0
+offset_right = 500.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 18
+text = "CLASSEMENT COMPLET"
+[node name="Rows" type="Label" parent="Full"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 68.0
+offset_right = 900.0
+offset_bottom = 310.0
+theme_override_font_sizes/font_size = 19
+text = "04  T. DUBOIS          +5.882    12 pts
+05  A. COSTA           +7.104    10 pts
+06  J. WILSON          +9.551     8 pts
+07  S. MOREAU         +11.002     6 pts
+08  K. ITO            +12.430     4 pts
+09  P. GARCIA         +14.227     2 pts
+10  O. KLEIN          +15.880     1 pt"

@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Theme" path="res://graphics/ui/paddock_theme.tres" id="1"]
+[node name="NotificationsDemo" type="VBoxContainer"]
+custom_minimum_size = Vector2(680, 480)
+theme = ExtResource("1")
+theme_override_constants/separation = 12
+[node name="Information" type="PanelContainer" parent="."]
+layout_mode = 2
+[node name="Text" type="Label" parent="Information"]
+layout_mode = 2
+text = "ⓘ  INFORMATION  •  Nouvelle session disponible"
+[node name="Success" type="PanelContainer" parent="."]
+layout_mode = 2
+[node name="Text" type="Label" parent="Success"]
+layout_mode = 2
+text = "✓  SUCCÈS  •  Objectif atteint"
+[node name="Warning" type="PanelContainer" parent="."]
+layout_mode = 2
+[node name="Text" type="Label" parent="Warning"]
+layout_mode = 2
+text = "⚠  AVERTISSEMENT  •  Pneus usés"
+[node name="Error" type="PanelContainer" parent="."]
+layout_mode = 2
+[node name="Text" type="Label" parent="Error"]
+layout_mode = 2
+text = "×  ERREUR  •  Action indisponible"
+[node name="Offer" type="PanelContainer" parent="."]
+layout_mode = 2
+[node name="Text" type="Label" parent="Offer"]
+layout_mode = 2
+text = "★  NOUVELLE OFFRE  •  Contrat reçu"
