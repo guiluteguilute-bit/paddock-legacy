@@ -1,0 +1,135 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" path="res://graphics/ui/paddock_theme.tres" id="1"]
+[ext_resource type="Texture2D" path="res://graphics/logos/logo_team_apex_nova.svg" id="2"]
+
+[node name="MainMenuVisualDemo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.035, 0.055, 0.09, 1)
+mouse_filter = 2
+
+[node name="RacingLine" type="Line2D" parent="Background"]
+points = PackedVector2Array(930, 920, 1100, 710, 1280, 760, 1480, 470, 1920, 350)
+width = 8.0
+default_color = Color(0.094, 0.827, 0.773, 0.32)
+
+[node name="DataLine" type="Line2D" parent="Background"]
+points = PackedVector2Array(780, 1020, 1070, 780, 1290, 830, 1510, 535, 1920, 440)
+width = 2.0
+default_color = Color(0.239, 0.486, 1, 0.35)
+
+[node name="PaddockSilhouette" type="Polygon2D" parent="Background"]
+polygon = PackedVector2Array(720, 1080, 720, 790, 850, 790, 850, 720, 980, 720, 980, 850, 1140, 850, 1140, 660, 1340, 660, 1340, 810, 1500, 810, 1500, 590, 1740, 590, 1740, 740, 1920, 740, 1920, 1080)
+color = Color(0.055, 0.082, 0.125, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 112.0
+offset_top = 88.0
+offset_right = -112.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Columns" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 110
+
+[node name="Menu" type="VBoxContainer" parent="Content/Columns"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Eyebrow" type="Label" parent="Content/Columns/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.094, 0.827, 0.773, 1)
+theme_override_font_sizes/font_size = 18
+text = "MOTORSPORT MANAGEMENT"
+
+[node name="Title" type="Label" parent="Content/Columns/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "PADDOCK\nLEGACY"
+
+[node name="Rule" type="ColorRect" parent="Content/Columns/Menu"]
+custom_minimum_size = Vector2(128, 5)
+layout_mode = 2
+color = Color(0.094, 0.827, 0.773, 1)
+
+[node name="Spacer" type="Control" parent="Content/Columns/Menu"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+
+[node name="Continue" type="Button" parent="Content/Columns/Menu"]
+layout_mode = 2
+text = "Continuer"
+
+[node name="NewCareer" type="Button" parent="Content/Columns/Menu"]
+layout_mode = 2
+text = "Nouvelle carrière"
+
+[node name="Load" type="Button" parent="Content/Columns/Menu"]
+layout_mode = 2
+text = "Charger"
+
+[node name="Settings" type="Button" parent="Content/Columns/Menu"]
+layout_mode = 2
+text = "Paramètres"
+
+[node name="Visual" type="Control" parent="Content/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TeamCard" type="PanelContainer" parent="Content/Columns/Visual"]
+layout_mode = 0
+offset_left = 470.0
+offset_top = 580.0
+offset_right = 1000.0
+offset_bottom = 830.0
+
+[node name="Row" type="HBoxContainer" parent="Content/Columns/Visual/TeamCard"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Logo" type="TextureRect" parent="Content/Columns/Visual/TeamCard/Row"]
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+texture = ExtResource("2")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Info" type="VBoxContainer" parent="Content/Columns/Visual/TeamCard/Row"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Status" type="Label" parent="Content/Columns/Visual/TeamCard/Row/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.094, 0.827, 0.773, 1)
+text = "SAUVEGARDE ACTIVE"
+
+[node name="Team" type="Label" parent="Content/Columns/Visual/TeamCard/Row/Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Apex Nova Racing"
+
+[node name="Details" type="Label" parent="Content/Columns/Visual/TeamCard/Row/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.682, 0.725, 0.788, 1)
+text = "Saison 2  •  Manche 4/10"

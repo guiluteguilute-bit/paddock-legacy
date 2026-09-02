@@ -1,0 +1,552 @@
+{
+  "car_f4_01": {
+    "path": "res://graphics/cars/f4/car_f4_01.svg",
+    "type": "vehicle",
+    "version": 1
+  },
+  "car_kart_01": {
+    "path": "res://graphics/cars/kart/car_kart_01.svg",
+    "type": "vehicle",
+    "version": 1
+  },
+  "dashboard_demo": {
+    "path": "res://graphics/demo/dashboard_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
+  "driver_hair_01": {
+    "path": "res://graphics/portraits/components/driver_hair_01.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_02": {
+    "path": "res://graphics/portraits/components/driver_hair_02.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_03": {
+    "path": "res://graphics/portraits/components/driver_hair_03.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_04": {
+    "path": "res://graphics/portraits/components/driver_hair_04.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_05": {
+    "path": "res://graphics/portraits/components/driver_hair_05.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_hair_06": {
+    "path": "res://graphics/portraits/components/driver_hair_06.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_01": {
+    "path": "res://graphics/portraits/components/driver_head_01.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_02": {
+    "path": "res://graphics/portraits/components/driver_head_02.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_03": {
+    "path": "res://graphics/portraits/components/driver_head_03.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_head_04": {
+    "path": "res://graphics/portraits/components/driver_head_04.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_suit_01": {
+    "path": "res://graphics/portraits/components/driver_suit_01.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_suit_02": {
+    "path": "res://graphics/portraits/components/driver_suit_02.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "driver_suit_03": {
+    "path": "res://graphics/portraits/components/driver_suit_03.svg",
+    "type": "portrait_component",
+    "version": 1
+  },
+  "effect_dust": {
+    "path": "res://graphics/effects/effect_dust.tscn",
+    "type": "effect",
+    "version": 1
+  },
+  "effect_rain": {
+    "path": "res://graphics/effects/effect_rain.tscn",
+    "type": "effect",
+    "version": 1
+  },
+  "effect_smoke": {
+    "path": "res://graphics/effects/effect_smoke.tscn",
+    "type": "effect",
+    "version": 1
+  },
+  "effect_sparks": {
+    "path": "res://graphics/effects/effect_sparks.tscn",
+    "type": "effect",
+    "version": 1
+  },
+  "flag_australia": {
+    "path": "res://graphics/flags/flag_australia.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_france": {
+    "path": "res://graphics/flags/flag_france.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_germany": {
+    "path": "res://graphics/flags/flag_germany.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_italy": {
+    "path": "res://graphics/flags/flag_italy.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_japan": {
+    "path": "res://graphics/flags/flag_japan.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_spain": {
+    "path": "res://graphics/flags/flag_spain.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_united_kingdom": {
+    "path": "res://graphics/flags/flag_united_kingdom.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "flag_united_states": {
+    "path": "res://graphics/flags/flag_united_states.svg",
+    "type": "flag",
+    "version": 1
+  },
+  "icon_aero": {
+    "path": "res://graphics/icons/racing/icon_aero.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_attack": {
+    "path": "res://graphics/icons/racing/icon_attack.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_brakes": {
+    "path": "res://graphics/icons/racing/icon_brakes.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_calendar": {
+    "path": "res://graphics/icons/ui/icon_calendar.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_conserve": {
+    "path": "res://graphics/icons/racing/icon_conserve.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_damage": {
+    "path": "res://graphics/icons/racing/icon_damage.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_driver": {
+    "path": "res://graphics/icons/drivers/icon_driver.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_engine": {
+    "path": "res://graphics/icons/racing/icon_engine.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_gearbox": {
+    "path": "res://graphics/icons/racing/icon_gearbox.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_money": {
+    "path": "res://graphics/icons/finance/icon_money.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_normal": {
+    "path": "res://graphics/icons/racing/icon_normal.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_pit": {
+    "path": "res://graphics/icons/racing/icon_pit.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_push": {
+    "path": "res://graphics/icons/racing/icon_push.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_red_flag": {
+    "path": "res://graphics/icons/racing/icon_red_flag.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_reputation": {
+    "path": "res://graphics/icons/drivers/icon_reputation.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_safety_car": {
+    "path": "res://graphics/icons/racing/icon_safety_car.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_sponsor": {
+    "path": "res://graphics/icons/finance/icon_sponsor.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_suspension": {
+    "path": "res://graphics/icons/racing/icon_suspension.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_team": {
+    "path": "res://graphics/icons/teams/icon_team.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_trophy": {
+    "path": "res://graphics/icons/racing/icon_trophy.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_tyre_hard": {
+    "path": "res://graphics/icons/tyres/icon_tyre_hard.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_tyre_intermediate": {
+    "path": "res://graphics/icons/tyres/icon_tyre_intermediate.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_tyre_medium": {
+    "path": "res://graphics/icons/tyres/icon_tyre_medium.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_tyre_soft": {
+    "path": "res://graphics/icons/tyres/icon_tyre_soft.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_tyre_wet": {
+    "path": "res://graphics/icons/tyres/icon_tyre_wet.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_warning": {
+    "path": "res://graphics/icons/racing/icon_warning.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_weather_clear": {
+    "path": "res://graphics/icons/weather/icon_weather_clear.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_weather_cloudy": {
+    "path": "res://graphics/icons/weather/icon_weather_cloudy.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_weather_drying": {
+    "path": "res://graphics/icons/weather/icon_weather_drying.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_weather_heavy_rain": {
+    "path": "res://graphics/icons/weather/icon_weather_heavy_rain.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_weather_light_rain": {
+    "path": "res://graphics/icons/weather/icon_weather_light_rain.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_weather_rain": {
+    "path": "res://graphics/icons/weather/icon_weather_rain.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "icon_yellow_flag": {
+    "path": "res://graphics/icons/racing/icon_yellow_flag.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "livery_pattern_diagonal": {
+    "path": "res://graphics/cars/placeholders/livery_pattern_diagonal.svg",
+    "type": "mask",
+    "version": 1
+  },
+  "livery_pattern_double_stripe": {
+    "path": "res://graphics/cars/placeholders/livery_pattern_double_stripe.svg",
+    "type": "mask",
+    "version": 1
+  },
+  "livery_pattern_geometric": {
+    "path": "res://graphics/cars/placeholders/livery_pattern_geometric.svg",
+    "type": "mask",
+    "version": 1
+  },
+  "livery_pattern_gradient": {
+    "path": "res://graphics/cars/placeholders/livery_pattern_gradient.svg",
+    "type": "mask",
+    "version": 1
+  },
+  "livery_pattern_solid": {
+    "path": "res://graphics/cars/placeholders/livery_pattern_solid.svg",
+    "type": "mask",
+    "version": 1
+  },
+  "livery_pattern_stripe": {
+    "path": "res://graphics/cars/placeholders/livery_pattern_stripe.svg",
+    "type": "mask",
+    "version": 1
+  },
+  "livery_recolor": {
+    "path": "res://graphics/shaders/livery_recolor.gdshader",
+    "type": "shader",
+    "version": 1
+  },
+  "logo_sponsor_aegisure": {
+    "path": "res://graphics/sponsors/logo_sponsor_aegisure.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_codeshift": {
+    "path": "res://graphics/sponsors/logo_sponsor_codeshift.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_motivex": {
+    "path": "res://graphics/sponsors/logo_sponsor_motivex.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_nexora": {
+    "path": "res://graphics/sponsors/logo_sponsor_nexora.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_orbian": {
+    "path": "res://graphics/sponsors/logo_sponsor_orbian.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_telvanta": {
+    "path": "res://graphics/sponsors/logo_sponsor_telvanta.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_velocargo": {
+    "path": "res://graphics/sponsors/logo_sponsor_velocargo.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_sponsor_voltaris": {
+    "path": "res://graphics/sponsors/logo_sponsor_voltaris.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_team_apex_nova": {
+    "path": "res://graphics/logos/logo_team_apex_nova.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_team_ember_fox": {
+    "path": "res://graphics/logos/logo_team_ember_fox.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_team_kinetic_arc": {
+    "path": "res://graphics/logos/logo_team_kinetic_arc.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_team_northstar": {
+    "path": "res://graphics/logos/logo_team_northstar.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_team_silver_finch": {
+    "path": "res://graphics/logos/logo_team_silver_finch.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "logo_team_vector_peak": {
+    "path": "res://graphics/logos/logo_team_vector_peak.svg",
+    "type": "icon",
+    "version": 1
+  },
+  "paddock_theme": {
+    "path": "res://graphics/ui/paddock_theme.tres",
+    "type": "theme",
+    "version": 1
+  },
+  "placeholder_car": {
+    "path": "res://graphics/placeholders/placeholder_car.svg",
+    "type": "placeholder",
+    "version": 1
+  },
+  "placeholder_driver": {
+    "path": "res://graphics/placeholders/placeholder_driver.svg",
+    "type": "placeholder",
+    "version": 1
+  },
+  "placeholder_icon": {
+    "path": "res://graphics/placeholders/placeholder_icon.svg",
+    "type": "placeholder",
+    "version": 1
+  },
+  "placeholder_logo": {
+    "path": "res://graphics/placeholders/placeholder_logo.svg",
+    "type": "placeholder",
+    "version": 1
+  },
+  "placeholder_team": {
+    "path": "res://graphics/placeholders/placeholder_team.svg",
+    "type": "placeholder",
+    "version": 1
+  },
+  "placeholder_track": {
+    "path": "res://graphics/placeholders/placeholder_track.svg",
+    "type": "placeholder",
+    "version": 1
+  },
+  "portrait_driver_01": {
+    "path": "res://graphics/portraits/generated/portrait_driver_01.svg",
+    "type": "portrait",
+    "version": 1
+  },
+  "portrait_driver_02": {
+    "path": "res://graphics/portraits/generated/portrait_driver_02.svg",
+    "type": "portrait",
+    "version": 1
+  },
+  "portrait_driver_03": {
+    "path": "res://graphics/portraits/generated/portrait_driver_03.svg",
+    "type": "portrait",
+    "version": 1
+  },
+  "portrait_driver_04": {
+    "path": "res://graphics/portraits/generated/portrait_driver_04.svg",
+    "type": "portrait",
+    "version": 1
+  },
+  "prop_barrier": {
+    "path": "res://graphics/circuits/props/prop_barrier.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_cone": {
+    "path": "res://graphics/circuits/props/prop_cone.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_grandstand": {
+    "path": "res://graphics/circuits/props/prop_grandstand.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_grass": {
+    "path": "res://graphics/circuits/props/prop_grass.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_gravel": {
+    "path": "res://graphics/circuits/props/prop_gravel.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_kerb": {
+    "path": "res://graphics/circuits/props/prop_kerb.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_light": {
+    "path": "res://graphics/circuits/props/prop_light.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_paddock_building": {
+    "path": "res://graphics/circuits/props/prop_paddock_building.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_sign": {
+    "path": "res://graphics/circuits/props/prop_sign.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_start_line": {
+    "path": "res://graphics/circuits/props/prop_start_line.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_track_straight": {
+    "path": "res://graphics/circuits/props/prop_track_straight.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_tree": {
+    "path": "res://graphics/circuits/props/prop_tree.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "prop_tv_camera": {
+    "path": "res://graphics/circuits/props/prop_tv_camera.svg",
+    "type": "prop",
+    "version": 1
+  },
+  "race_visual_demo": {
+    "path": "res://graphics/demo/race_visual_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  },
+  "selection_highlight": {
+    "path": "res://graphics/shaders/selection_highlight.gdshader",
+    "type": "shader",
+    "version": 1
+  },
+  "test_track_01": {
+    "path": "res://graphics/circuits/test_track/test_track_01.svg",
+    "type": "track",
+    "version": 1
+  },
+  "ui_demo": {
+    "path": "res://graphics/demo/ui_demo.tscn",
+    "type": "demo_scene",
+    "version": 1
+  }
+}
