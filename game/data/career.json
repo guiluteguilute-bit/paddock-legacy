@@ -1,0 +1,43 @@
+{
+  "points": [25,18,15,12,10,8,6,4,2,1],
+  "kart_calendar": [
+    {"round":1,"track":"Valmont","date":"2027-03-08","laps":10,"weather":"SEC","weather_probability":0.10,"type":"MIXTE","rules":"kart"},
+    {"round":2,"track":"Saint-Roch","date":"2027-04-11","laps":12,"weather":"NUAGEUX","weather_probability":0.25,"type":"TECHNIQUE","rules":"kart"},
+    {"round":3,"track":"Belle-Rive","date":"2027-05-16","laps":12,"weather":"LIGHT RAIN","weather_probability":0.60,"type":"RAPIDE","rules":"kart"},
+    {"round":4,"track":"Grand-Lac","date":"2027-06-20","laps":14,"weather":"SEC","weather_probability":0.20,"type":"MIXTE","rules":"kart"},
+    {"round":5,"track":"Montbrun","date":"2027-08-08","laps":14,"weather":"RAIN","weather_probability":0.65,"type":"TECHNIQUE","rules":"kart"},
+    {"round":6,"track":"Valmont Finale","date":"2027-09-12","laps":16,"weather":"SEC","weather_probability":0.30,"type":"RAPIDE","rules":"kart"}
+  ],
+  "f4_calendar": [
+    {"round":1,"track":"Grand-Lac GP","date":"2028-04-09","laps":16,"weather":"SEC","weather_probability":0.20,"type":"RAPIDE","rules":"f4"},
+    {"round":2,"track":"Montbrun GP","date":"2028-05-14","laps":18,"weather":"LIGHT RAIN","weather_probability":0.55,"type":"TECHNIQUE","rules":"f4"},
+    {"round":3,"track":"Belle-Rive GP","date":"2028-06-18","laps":20,"weather":"DRYING","weather_probability":0.45,"type":"MIXTE","rules":"f4"}
+  ],
+  "rivals": [
+    {"id":"morel","name":"Lina Morel","nationality":"France","number":7,"team":"Nova Kart","speed":72,"control":68,"mental":66,"aggression":64,"consistency":71,"tyre_management":65,"potential":84,"strategy":"BALANCED"},
+    {"id":"rossi","name":"Enzo Rossi","nationality":"Italie","number":11,"team":"Riviera Motorsport","speed":74,"control":62,"mental":69,"aggression":78,"consistency":64,"tyre_management":58,"potential":88,"strategy":"AGGRESSIVE"},
+    {"id":"novak","name":"Mila Novak","nationality":"Allemagne","number":18,"team":"Falcon Junior","speed":69,"control":73,"mental":72,"aggression":55,"consistency":76,"tyre_management":72,"potential":86,"strategy":"CONSERVATIVE"},
+    {"id":"sato","name":"Ren Sato","nationality":"Japon","number":22,"team":"Vector Racing","speed":73,"control":70,"mental":65,"aggression":61,"consistency":69,"tyre_management":74,"potential":90,"strategy":"OPPORTUNIST"},
+    {"id":"garcia","name":"Iria Garcia","nationality":"Espagne","number":31,"team":"Atlas Competition","speed":68,"control":67,"mental":74,"aggression":59,"consistency":75,"tyre_management":70,"potential":82,"strategy":"BALANCED"},
+    {"id":"smith","name":"Jack Smith","nationality":"Royaume-Uni","number":44,"team":"Northstar Karting","speed":71,"control":64,"mental":63,"aggression":75,"consistency":62,"tyre_management":60,"potential":85,"strategy":"AGGRESSIVE"},
+    {"id":"klein","name":"Lea Klein","nationality":"Allemagne","number":5,"team":"Falcon Junior","speed":66,"control":72,"mental":71,"aggression":50,"consistency":77,"tyre_management":76,"potential":80,"strategy":"CONSERVATIVE"},
+    {"id":"costa","name":"Tiago Costa","nationality":"Portugal","number":16,"team":"Riviera Motorsport","speed":70,"control":65,"mental":67,"aggression":68,"consistency":66,"tyre_management":63,"potential":83,"strategy":"BALANCED"},
+    {"id":"wilson","name":"Amy Wilson","nationality":"Royaume-Uni","number":24,"team":"Northstar Karting","speed":65,"control":69,"mental":73,"aggression":54,"consistency":74,"tyre_management":71,"potential":79,"strategy":"OPPORTUNIST"},
+    {"id":"bernard","name":"Hugo Bernard","nationality":"France","number":33,"team":"Nova Kart","speed":67,"control":64,"mental":68,"aggression":66,"consistency":68,"tyre_management":65,"potential":81,"strategy":"BALANCED"},
+    {"id":"dubois","name":"Zoé Dubois","nationality":"France","number":77,"team":"Vector Racing","speed":64,"control":71,"mental":70,"aggression":52,"consistency":73,"tyre_management":75,"potential":82,"strategy":"CONSERVATIVE"}
+  ],
+  "teams": [
+    {"name":"Nova Kart","colors":["#35d6c2","#102a38"]},{"name":"Riviera Motorsport","colors":["#ff5b5b","#1d2633"]},{"name":"Falcon Junior","colors":["#ffcb52","#182130"]},{"name":"Vector Racing","colors":["#7857ff","#e9eff5"]},{"name":"Atlas Competition","colors":["#ff7a35","#17242c"]},{"name":"Northstar Karting","colors":["#47a9ff","#f5f7fa"]}
+  ],
+  "sponsors": [
+    {"id":"nova_energy","name":"NOVA ENERGY","fixed":8000,"bonus":1500,"objective":"podium","duration":6,"reputation":0},
+    {"id":"vector_tech","name":"VECTOR TECH","fixed":4000,"bonus":4000,"objective":"win","duration":6,"reputation":8},
+    {"id":"atlas_logistics","name":"ATLAS LOGISTICS","fixed":12000,"bonus":1000,"objective":"top8","duration":6,"reputation":0}
+  ],
+  "tyres": {
+    "SOFT":{"grip":1.05,"duration":55,"temperature":"OPTIMAL"},"MEDIUM":{"grip":1.0,"duration":75,"temperature":"OPTIMAL"},"HARD":{"grip":0.97,"duration":100,"temperature":"COLD"},"INTERMEDIATE":{"grip":1.0,"duration":70,"temperature":"OPTIMAL"},"WET":{"grip":0.96,"duration":85,"temperature":"COLD"}
+  },
+  "staff": [
+    {"role":"MÉCANICIEN","name":"Maya Laurent","skill":58,"salary":900,"contract":12},{"role":"INGÉNIEUR","name":"Luca Ferri","skill":61,"salary":1200,"contract":12},{"role":"STRATÈGE","name":"Anna Keller","skill":56,"salary":1000,"contract":12}
+  ]
+}

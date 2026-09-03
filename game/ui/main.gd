@@ -251,6 +251,9 @@ func finalize_creation() -> void:
 func show_dashboard() -> void:
 	if not GameState.has_career(): show_welcome(); return
 	set_navigation_enabled(true); clear("ACCUEIL")
+	if GameState.data.season_complete:
+		show_season_end()
+		return
 	var event: Dictionary = GameState.data.calendar[GameState.data.race_index] if int(GameState.data.race_index) < GameState.data.calendar.size() else {}
 	heading("PROCHAINE COURSE", 16)
 	var race_card := card(event.get("track", "SAISON TERMINÉE").to_upper(), "%d TOURS  •  KARTING  •  ☁ %d%%\nOBJECTIF TOP %d" % [event.get("laps", 0), int(event.get("weather_probability", 0.0) * 100), GameState.data.objectives.race.target], 150)
@@ -279,7 +282,7 @@ func choice_name(section:String,id:String)->String: return GameState.creation_co
 
 func show_more() -> void:
 	clear("PLUS"); heading("GESTION DE L'ÉCURIE", 24)
-	for item in [["VÉHICULE & DÉVELOPPEMENT", show_vehicle], ["FINANCES & SPONSORS", show_finance], ["CALENDRIER", show_calendar], ["CHAMPIONNAT", show_championship], ["PARAMÈTRES", show_settings]]: content.add_child(button(item[0] + "  ›", item[1]))
+	for item in [["DÉVELOPPEMENT PILOTE", show_driver_development], ["VÉHICULE & DÉVELOPPEMENT", show_vehicle], ["SPONSORS", show_sponsors], ["PERSONNEL & INFRASTRUCTURES", show_operations], ["FINANCES", show_finance], ["CALENDRIER", show_calendar], ["CHAMPIONNAT", show_championship], ["PALMARÈS", show_honours], ["PARAMÈTRES", show_settings]]: content.add_child(button(item[0] + "  ›", item[1]))
 
 func show_calendar() -> void:
 	clear("CALENDRIER"); heading("SAISON %d" % GameState.data.career_year, 24)
@@ -287,19 +290,30 @@ func show_calendar() -> void:
 		var e: Dictionary = GameState.data.calendar[i]; content.add_child(card("M%02d  •  %s" % [i + 1, e.track.to_upper()], "%s  •  %d TOURS  •  %s" % [e.date, e.laps, e.status], 80))
 
 func show_championship() -> void:
-	clear("CHAMPIONNAT"); heading("CLASSEMENT PILOTES", 24); var points := 0
-	for race in GameState.data.race_history: points += [25, 18, 15, 12, 10, 8, 6, 4, 2, 1][mini(int(race.position) - 1, 9)] if int(race.position) <= 10 else 0
-	content.add_child(card("VOTRE PILOTE", "%d PTS  •  %d COURSE(S)" % [points, GameState.data.race_history.size()], 100))
+	clear("CHAMPIONNAT"); heading("CLASSEMENT PILOTES", 24)
+	var rows:=GameState.sorted_standings()
+	for i in rows.size():
+		var row:Dictionary=rows[i]; content.add_child(card(("★ " if row.player else "")+"P%d  %s"%[i+1,str(row.name).to_upper()], "%d PTS  •  %d V  •  %d PODIUMS  •  %d MT"%[row.points,row.wins,row.podiums,row.fastest_laps], 82))
 
 func show_vehicle() -> void:
-	clear("VÉHICULE"); var kart: Dictionary = GameState.data.vehicles.kart; heading("KART N%d  •  FIABILITÉ %d%%" % [kart.level, kart.reliability], 23)
-	var image := LiveryPreview.new(); image.custom_minimum_size.y = 230; image.set_livery(GameState.data.team.get("colors", ["#19dcc6", "#102a38", "#ffcf4a"]), int(GameState.data.team.get("livery_pattern", 0))); content.add_child(image)
-	for component in ["engine", "chassis", "brakes"]:
-		var base_cost := 1500 * int(kart.components[component]); var shown_cost := GameState.effective_cost(base_cost, "development"); content.add_child(button("%s N%d → N%d  •  %s €" % [component.to_upper(), kart.components[component], int(kart.components[component]) + 1, money(shown_cost)], func(c = component, p = base_cost): buy_vehicle_upgrade(c, p)))
+	clear("VÉHICULE"); var vehicle:Dictionary=GameState.data.vehicles[GameState.data.category.to_lower()]; heading("%s N%d  •  CONDITION %d%%" % [GameState.data.category,vehicle.level,vehicle.condition], 23)
+	if GameState.data.category=="F4":
+		var f4:=TextureRect.new();f4.texture=load("res://graphics/cars/f4/car_f4_01.svg");f4.custom_minimum_size.y=230;f4.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;f4.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;content.add_child(f4)
+	else:
+		var image:=LiveryPreview.new();image.custom_minimum_size.y=230;image.set_livery(GameState.data.team.get("colors",["#19dcc6","#102a38","#ffcf4a"]),int(GameState.data.team.get("livery_pattern",0)));content.add_child(image)
+	label("FIABILITÉ %d%%"%vehicle.reliability,colors.accent,18)
+	content.add_child(button("RÉPARER",repair_from_vehicle))
+	for component in vehicle.components:
+		var base_cost:=1500*int(vehicle.components[component]);var shown_cost:=GameState.effective_cost(base_cost,"development");content.add_child(button("%s N%d → N%d  •  %s €  •  3 JOURS"%[component.to_upper(),vehicle.components[component],int(vehicle.components[component])+1,money(shown_cost)],func(c=component,p=base_cost):buy_vehicle_upgrade(c,p)))
+	for job in GameState.data.development_queue:label("EN COURS • %s • %d JOURS"%[job.component.to_upper(),job.days],colors.gold,14)
 
 func buy_vehicle_upgrade(component: String, cost: int) -> void:
 	if not GameState.buy_upgrade(component, cost): toast("Solde insuffisant")
 	else: show_vehicle()
+
+func repair_from_vehicle() -> void:
+	if GameState.repair_vehicle():show_vehicle()
+	else:toast("Réparation impossible")
 
 func show_finance() -> void:
 	clear("FINANCES"); heading("SOLDE  %s €" % money(GameState.data.money), 28)
@@ -307,13 +321,14 @@ func show_finance() -> void:
 
 func show_race_prep() -> void:
 	clear("COURSE")
-	if int(GameState.data.race_index) >= GameState.data.calendar.size(): heading("SAISON TERMINÉE", 28); return
+	if int(GameState.data.race_index) >= GameState.data.calendar.size(): show_season_end(); return
 	var event: Dictionary = GameState.data.calendar[GameState.data.race_index]; heading(event.track.to_upper(), 28); content.add_child(card("PROCHAINE MANCHE", "%d TOURS  •  PLUIE %d%%  •  OBJECTIF TOP %d" % [event.laps, int(event.weather_probability * 100), GameState.data.objectives.race.target], 110))
 	if int(GameState.data.energy) <= 0: label("ÉNERGIE INSUFFISANTE", colors.danger, 18); return
+	heading("ENTRE DEUX COURSES",16);var actions:=HBoxContainer.new();content.add_child(actions);for item in [["ENTRAÎNER",func():GameState.train_driver();show_race_prep()],["RÉPARER",func():GameState.repair_vehicle();show_race_prep()],["GARAGE",show_vehicle]]:var a:=button(item[0],item[1],true);a.size_flags_horizontal=Control.SIZE_EXPAND_FILL;actions.add_child(a)
 	content.add_child(button("OUVRIR LA SESSION  ›", func(): GameState.save_game(); open_race(event)))
 
 func open_race(event: Dictionary) -> void:
-	clear("LIVE • " + event.track.to_upper()); race_view = RaceView.new(); race_view.custom_minimum_size = Vector2(0, 570); race_view.setup(GameState.data.driver.first_name + " " + GameState.data.driver.last_name, event.laps, event.weather_probability); race_view.finished.connect(_race_finished); content.add_child(race_view)
+	clear("LIVE • " + event.track.to_upper()); race_view = RaceView.new(); race_view.custom_minimum_size = Vector2(0, 570); race_view.setup(GameState.data.driver.first_name + " " + GameState.data.driver.last_name, event.laps, event.weather_probability, GameState.data.category); race_view.finished.connect(_race_finished); content.add_child(race_view)
 	var camera := HBoxContainer.new(); content.add_child(camera)
 	for mode in ["TV", "PILOTE", "CIRCUIT"]: var b := button(mode, func(m = mode): race_view.set_camera(m), true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; camera.add_child(b)
 	var sessions := HBoxContainer.new(); content.add_child(sessions)
@@ -329,7 +344,55 @@ func open_pit_sheet() -> void:
 	for tyre in ["SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"]: var b := button(tyre, func(t = tyre): race_view.request_pit(t); sheet.queue_free(), true); v.add_child(b)
 
 func _race_finished(result: Dictionary) -> void:
-	GameState.complete_race(result); clear("RÉSULTATS"); heading("DRAPEAU À DAMIER", 18); heading("P%d" % result.position, 52); content.add_child(card("DÉPART P%d  →  ARRIVÉE P%d" % [12, result.position], "MEILLEUR TOUR %.3f s\nARGENT +%s €  •  XP +%d" % [money(maxi(250, 1800 - (int(result.position) - 1) * 150)), 120 + maxi(0, 11 - int(result.position)) * 20], 145)); content.add_child(button("CONTINUER", show_dashboard))
+	GameState.complete_race(result);var saved:Dictionary=GameState.data.race_history[-1];clear("RÉSULTATS");heading("DRAPEAU À DAMIER",18);heading("P%d"%saved.position,52);content.add_child(card("DÉPART P%d  →  ARRIVÉE P%d  •  %+d"%[saved.start_position,saved.position,saved.positions_gained],"MEILLEUR TOUR %.3f s  •  TEMPS %.1f s\nPNEUS %d%%  •  INCIDENTS %d\n%d PTS  •  +%s €  •  +%d XP  •  +%d RÉP."%[saved.best_lap,saved.get("total_time",0.0),saved.get("tyres_remaining",0),saved.incidents.size(),saved.points,money(saved.money),saved.xp,saved.reputation],190));content.add_child(button("CONTINUER",show_dashboard))
+
+func show_driver_development() -> void:
+	clear("DÉVELOPPEMENT PILOTE");heading("NIVEAU %d"%GameState.data.level,28);label("%d XP  •  %d POINT(S) DE COMPÉTENCE"%[GameState.data.experience,GameState.data.skill_points],colors.gold,18)
+	var estimate:=GameState.potential_estimate();content.add_child(card("POTENTIEL ESTIMÉ","%d — %d  •  précision scouting"%[estimate.x,estimate.y],85))
+	for stat in GameState.data.driver.stats:
+		content.add_child(button("%s  %d  •  +1 POINT"%[stat.to_upper(),GameState.data.driver.stats[stat]],func(s=stat):GameState.spend_skill(s);show_driver_development()))
+
+func show_sponsors() -> void:
+	clear("SPONSORS");heading("CONTRATS",26)
+	if not GameState.data.sponsor.is_empty():content.add_child(card(GameState.data.sponsor.name,"%d COURSE(S) • OBJECTIF %s • BONUS %s €"%[GameState.data.sponsor.remaining,GameState.data.sponsor.objective.to_upper(),money(GameState.data.sponsor.bonus)],105));return
+	for sponsor in GameState.career_config.sponsors:
+		content.add_child(button("%s\nFIXE %s €  •  BONUS %s €  •  %s"%[sponsor.name,money(sponsor.fixed),money(sponsor.bonus),sponsor.objective.to_upper()],func(id=sponsor.id):GameState.sign_sponsor(id);show_sponsors()))
+
+func show_operations() -> void:
+	clear("OPÉRATIONS");heading("PERSONNEL",24)
+	for employee in GameState.career_config.staff:content.add_child(card(employee.role+" • "+employee.name,"COMPÉTENCE %d • SALAIRE %s € • %d MOIS"%[employee.skill,money(employee.salary),employee.contract],80))
+	heading("INFRASTRUCTURES",24)
+	for kind in ["workshop","simulator","scouting","pit_crew"]:content.add_child(button("%s NIV. %d  •  AMÉLIORER"%[kind.to_upper(),GameState.data.facilities[kind]],func(k=kind):GameState.buy_facility(k);show_operations()))
+
+func show_honours() -> void:
+	clear("PALMARÈS");heading("TROPHÉES",26)
+	if GameState.data.trophies.is_empty():label("Aucun trophée pour le moment.",colors.muted,16)
+	for trophy in GameState.data.trophies:content.add_child(card("🏆  "+trophy.name,"%d  •  P%d"%[trophy.year,trophy.position],78))
+	heading("HISTORIQUE CARRIÈRE",22)
+	for season in GameState.data.career_history:content.add_child(card("%d  •  %s"%[season.year,season.championship],"P%d  •  %d PTS  •  %d VICTOIRE(S)"%[season.position,season.points,season.wins],85))
+
+func show_season_end() -> void:
+	clear("SAISON TERMINÉE")
+	var rows:=GameState.sorted_standings();var position:=1
+	for i in rows.size():
+		if rows[i].player:
+			position=i+1
+			break
+	var player:Dictionary=GameState.data.standings[0];heading("SAISON TERMINÉE",31)
+	if position<=3:
+		var trophy:=TextureRect.new();trophy.texture=load("res://graphics/championship/regional_kart_series/trophy_regional_kart_series.svg");trophy.custom_minimum_size.y=220;trophy.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;trophy.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;content.add_child(trophy)
+	content.add_child(card("CHAMPIONNAT • P%d"%position,"%d PTS • %d VICTOIRES • %d PODIUMS • %d MEILLEURS TOURS\n%s € GAGNÉS • %d XP • +%d RÉPUTATION"%[player.points,player.wins,player.podiums,player.fastest_laps,money(GameState.data.season_income),GameState.data.season_xp,GameState.data.season_reputation],155));content.add_child(button("VOIR LES OFFRES",show_offers))
+
+func show_offers() -> void:
+	clear("NOUVELLE OPPORTUNITÉ");heading("CHOIX DE CARRIÈRE",28)
+	for offer in GameState.data.offers:
+		var state:="DISPONIBLE" if offer.eligible else "CONDITIONS NON REMPLIES"
+		var b:=button(offer.title+"\n"+state+" • COÛT "+money(offer.cost)+" € • OBJECTIF "+offer.objective,func(id=offer.id):accept_career_offer(id));b.disabled=not offer.eligible;content.add_child(b)
+	content.add_child(button("REFUSER POUR LE MOMENT",show_dashboard))
+
+func accept_career_offer(id:String) -> void:
+	if GameState.accept_offer(id):show_dashboard()
+	else:toast("Offre indisponible ou solde insuffisant")
 
 func show_settings() -> void:
 	clear("PARAMÈTRES"); heading("AUDIO & JEU", 24)

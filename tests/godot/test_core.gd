@@ -1,56 +1,25 @@
 extends SceneTree
 
+func _result(state, player_position:int) -> Dictionary:
+	var rows:=[]
+	for i in state.career_config.rivals.size():
+		var position:=i+1
+		if position>=player_position:position+=1
+		rows.append({"name":state.career_config.rivals[i].name,"position":position,"best_lap":49.0+i,"fastest_lap":false})
+	return {"position":player_position,"start_position":8,"best_lap":48.2,"total_time":480.0,"tyres_remaining":72,"strategy":"NORMAL","incidents":[],"standings":rows,"track":"Test"}
+
 func _init() -> void:
-	var state = load("res://game/core/game_state.gd").new()
-	state.creation_config = state.load_creation_config()
-	state.data = state.defaults()
-	assert(state.data.save_version == 2)
-	assert(state.data.energy == 5)
-	var points = {"workshop":2,"technical":2,"simulator":2,"scouting":1,"marketing":1,"strategy":2}
-	var family = state.build_team_dna("family_garage","pure_performance","technician","reach_apex",points)
-	assert(family.modifiers.repair_cost == -0.10)
-	assert(family.modifiers.development_speed > 0.10)
-	assert(family.affinities.technical > 0.10)
-	state.new_career({"name":"Test Team","colors":["#112233","#445566","#778899"],"livery_pattern":1},{"first_name":"Ada","last_name":"Test","hidden_potential":88,"xp_multiplier":1.12,"stats":{"speed":54,"control":62,"mental":65}},family)
-	assert(state.data.money == 11500) # 12 000 €, then Kart Club entry.
-	assert(state.effective_cost(1000,"repair") == 900)
-	var initial_money: int = state.data.money
-	var displayed_cost := state.effective_cost(1500,"development")
-	assert(state.buy_upgrade("engine", 1500))
-	assert(state.data.money == initial_money - displayed_cost)
-	assert(state.data.vehicles.kart.components.engine == 2)
-	var before_xp: int = state.data.experience
-	state.add_xp(100)
-	assert(state.data.experience > before_xp + 100) # DNA and worker profile are both real multipliers.
-	var estimate := state.potential_estimate()
-	assert(estimate.x <= 88 and estimate.y >= 88)
-	state.data.calendar = state.make_calendar(4)
-	state.complete_race({"position":3,"best_lap":48.2,"strategy":"NORMAL","standings":[]})
-	assert(state.data.energy == 4)
-	assert(state.data.race_history.size() == 1)
-	assert(state.data.calendar[0].status == "COMPLETED")
-	assert(state.data.calendar[1].status == "AVAILABLE")
-	var legacy = state.migrate({"team":{"name":"Old Team"},"driver":{"first_name":"Old","last_name":"Save"}})
-	assert(legacy.team_dna.origin == "independent")
-	assert(legacy.driver.hidden_potential == 82)
-	# Replayability: the three mission scenarios produce distinct DNA and budgets.
-	var investor = state.build_team_dna("private_investor","financial_management","businessman","richest_team",points)
-	var academy = state.build_team_dna("youth_academy","driver_excellence","protector","train_champions",points)
-	assert(family.modifiers != investor.modifiers and investor.modifiers != academy.modifiers)
-	assert(state.creation_config.origins.private_investor.budget > state.creation_config.origins.youth_academy.budget)
-	var race = load("res://game/races/race_view.gd").new()
-	race.setup("Ada Test", 8, 0.7)
-	assert(race.racers.size() == 12)
-	assert(race.weather == "PLUIE")
-	race.start_race()
-	var start_progress: float = race.racers[0].progress
-	race._process(1.0)
-	assert(race.racers[0].progress > start_progress)
-	race.set_strategy("ATTACK")
-	assert(race.strategy == "ATTACK")
-	race.request_pit("WET")
-	assert(race.pit_requested)
-	race.set_camera("PILOTE")
-	assert(race.camera_mode == "PILOTE")
-	print("Core career and Team DNA checks passed")
-	quit(0)
+	var state=load("res://game/core/game_state.gd").new();state.creation_config=state.load_creation_config();state.career_config=state.load_career_config();state.data=state.defaults()
+	assert(state.data.save_version==3);assert(state.career_config.kart_calendar.size()==6);assert(state.career_config.rivals.size()==11);assert(state.points_for(1)==25 and state.points_for(10)==1 and state.points_for(11)==0)
+	var points={"workshop":2,"technical":2,"simulator":2,"scouting":1,"marketing":1,"strategy":2};var dna=state.build_team_dna("family_garage","pure_performance","technician","reach_apex",points)
+	state.new_career({"name":"Test Team","colors":["#112233","#445566","#778899"],"livery_pattern":1},{"first_name":"Ada","last_name":"Test","nationality":"France","number":27,"hidden_potential":88,"xp_multiplier":1.12,"stats":{"speed":54,"control":62,"mental":65}},dna)
+	assert(state.data.calendar.size()==6 and state.data.standings.size()==12);assert(state.data.calendar[0].status=="AVAILABLE" and state.data.calendar[1].status=="LOCKED")
+	assert(state.sign_sponsor("nova_energy"));var money_after_sponsor:int=state.data.money;assert(money_after_sponsor>11500)
+	for race in 6:state.complete_race(_result(state,1))
+	assert(state.data.season_complete);assert(state.data.race_history.size()==6);assert(state.data.standings[0].points==150);assert(state.data.trophies.size()==1);assert(state.data.career_history.size()==1);assert(state.data.offers.size()>=3)
+	state.data.reputation=35
+	# Regeneration verifies the explicit F4 gate before promotion.
+	state._generate_offers(1);assert(state.data.offers[2].eligible);state.data.money=50000;assert(state.accept_offer("f4"));assert(state.data.category=="F4" and state.data.calendar.size()==3);assert(state.data.vehicles.has("kart") and state.data.team.name=="Test Team")
+	assert(state.spend_skill("speed"));var race=load("res://game/races/race_view.gd").new();state.data.race_index=0;race.setup("Ada Test",3,0.7,"F4");assert(race.racers.size()==12 and race.weather=="RAIN" and race.tyre=="MEDIUM");race.request_pit("WET");assert(race.pit_requested and race.tyre=="WET")
+	assert(state.save_game());var reload=load("res://game/core/game_state.gd").new();reload.creation_config=state.creation_config;reload.career_config=state.career_config;assert(reload.load_game());assert(reload.data.category=="F4" and reload.data.team.name=="Test Team" and reload.data.career_history.size()==1)
+	print("Full kart-to-F4 career checks passed");quit(0)
