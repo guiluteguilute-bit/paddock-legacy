@@ -308,7 +308,7 @@ func open_race(event: Dictionary) -> void:
 	label("RYTHME", colors.muted, 12); var pace = HBoxContainer.new(); content.add_child(pace)
 	for mode in ["CONSERVE", "NORMAL", "PUSH", "ATTACK"]: var b = button(mode, func(m = mode): race_view.set_strategy(m), true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.add_theme_font_size_override("font_size", 11); pace.add_child(b)
 	var quick = HBoxContainer.new(); content.add_child(quick)
-	for item in [["OVERTAKE", func(): race_view.set_risk("HIGH")], ["DEFEND", func(): race_view.set_risk("LOW")], ["PIT", open_pit_sheet]]: var b = button(item[0], item[1], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; quick.add_child(b)
+	for item in [["OVERTAKE", func(): race_view.set_risk("HIGH")], ["DEFEND", func(): race_view.set_risk("LOW")], ["PIT", open_pit_sheet]]: var b = button(item[0], item[1], true); b.size_flags_horizontal=Control.SIZE_EXPAND_FILL; quick.add_child(b)
 
 func open_pit_sheet() -> void:
 	var sheet = PanelContainer.new(); sheet.name = "PitStrategySheet"; content.add_child(sheet); content.move_child(sheet, content.get_child_count() - 1)
@@ -390,6 +390,9 @@ func card(top: String, bottom: String, height: float) -> PanelContainer:
 	var v = VBoxContainer.new(); p.add_child(v); var a = Label.new(); a.text = top; a.add_theme_font_size_override("font_size", 18); a.add_theme_color_override("font_color", colors.text); a.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; v.add_child(a); var b = Label.new(); b.text = bottom; b.add_theme_font_size_override("font_size", 15); b.add_theme_color_override("font_color", colors.accent); b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; v.add_child(b); return p
 func toast(text: String) -> void: notice.text = text
 func money(value) -> String: return str(int(value))
+func rating_bar(value: int) -> String:
+	var filled := clampi(int(round(float(value) / 10.0)), 0, 10)
+	return "█".repeat(filled) + "░".repeat(10 - filled)
 func set_navigation_enabled(enabled: bool) -> void:
 	nav.visible = enabled
 	for child in nav.get_children(): child.disabled = not enabled
