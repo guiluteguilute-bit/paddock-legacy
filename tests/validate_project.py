@@ -47,7 +47,7 @@ main = (ROOT / "game/ui/main.gd").read_text()
 for feature in ("CREATION_STEPS", "creation_identity", "creation_foundation", "creation_driver", "creation_summary", "confirm_creation", "confirm_reset", "ADN DE L'ÉCURIE"):
     assert feature in main
 state = (ROOT / "game/core/game_state.gd").read_text()
-for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 3"):
+for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 4"):
     assert feature in state
 print("Team creation configuration, balance bounds and integration checks passed")
 
@@ -64,3 +64,24 @@ for feature in ("show_season_end", "show_offers", "show_driver_development", "sh
 for feature in ("start_lights", "tyre_temperature", "yellow_timer", "LIGHT RAIN", "pit_crew"):
     assert feature in race
 print("Kart season, economy, promotion, F4 rules and persistence checks passed")
+
+endurance = json.loads((ROOT / "game/data/endurance.json").read_text())
+assert [s["class"] for s in endurance["series"]] == ["GT4", "GT3", "MULTICLASS", "MULTICLASS"]
+assert endurance["series"][-1]["duration_minutes"] == 24 * 60
+assert endurance["series"][2]["grid"] == {"HYPERCAR": 8, "PROTOTYPE": 8, "GT3": 16}
+assert len([c for c in endurance["cars"] if c["class"] == "GT4"]) == 4
+assert len([c for c in endurance["cars"] if c["class"] in ("PROTOTYPE", "HYPERCAR")]) == 3
+assert len(endurance["circuits"]) == 7
+assert set(endurance["tyres"]) == {"SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"}
+assert all(set(c["bop"]) == {"weight_kg", "power_percent", "fuel_multiplier", "tank_litres"} for c in endurance["cars"])
+state = (ROOT / "game/core/game_state.gd").read_text()
+for field in ("career_path", "championship_class", "owned_gt_cars", "driver_roster", "endurance_results", "class_results", "prestige", "endurance_trophies"):
+    assert f'"{field}"' in state
+simulation = (ROOT / "game/core/endurance_simulator.gd").read_text()
+for feature in ("overall_position", "class_position", "fuel_laps", "fatigue", "FUEL SAVE", "HEAVY RAIN", "driver_change", "FULL"):
+    assert feature in simulation
+ui = (ROOT / "game/ui/main.gd").read_text()
+for feature in ("show_endurance_hub", "show_gt_dealership", "show_endurance_strategy", "SIMULATE TO NEXT EVENT", "PIT WINDOW"):
+    assert feature in ui
+assert (ROOT / "graphics/logos/logo_world_endurance_series.svg").is_file()
+print("GT/endurance data, multiclass simulation, persistence and portrait UI checks passed")

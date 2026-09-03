@@ -1,18 +1,21 @@
 extends Node
 
 signal changed
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 const SAVE_PATH := "user://career.json"
 const CREATION_DATA_PATH := "res://game/data/team_creation.json"
 const CAREER_DATA_PATH := "res://game/data/career.json"
+const ENDURANCE_DATA_PATH := "res://game/data/endurance.json"
 const DNA_DOMAINS := ["workshop", "technical", "simulator", "scouting", "marketing", "strategy"]
 var data: Dictionary = {}
 var creation_config: Dictionary = {}
 var career_config: Dictionary = {}
+var endurance_config: Dictionary = {}
 
 func _ready() -> void:
 	creation_config = _load_json(CREATION_DATA_PATH)
 	career_config = _load_json(CAREER_DATA_PATH)
+	endurance_config = _load_json(ENDURANCE_DATA_PATH)
 	if FileAccess.file_exists(SAVE_PATH): load_game()
 
 func _load_json(path: String) -> Variant:
@@ -20,9 +23,10 @@ func _load_json(path: String) -> Variant:
 	return parsed if parsed != null else {}
 func load_creation_config() -> Dictionary: return _load_json(CREATION_DATA_PATH)
 func load_career_config() -> Dictionary: return _load_json(CAREER_DATA_PATH)
+func load_endurance_config() -> Dictionary: return _load_json(ENDURANCE_DATA_PATH)
 
 func defaults() -> Dictionary:
-	return {"save_version":SAVE_VERSION,"career_year":2027,"career_date":"2027-03-01","category":"KART","championship":"kart_regional","season":1,"team":{},"driver":{},"team_dna":neutral_dna(),"calendar":[],"race_history":[],"standings":[],"money":12000,"reputation":0,"vehicles":{"kart":{"level":1,"reliability":92,"condition":100,"livery":{},"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"f4":{"level":1,"reliability":86,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}}},"upgrades":[],"development_queue":[],"facilities":{"workshop":1,"technical":0,"simulator":0,"scouting":0,"marketing":0,"strategy":0,"pit_crew":0},"personnel":[],"sponsor":{},"sponsors":[],"offers":[],"trophies":[],"career_history":[],"career_events":[],"culture":{"technical":0.0,"finance":0.0,"driver":0.0,"strategy":0.0,"innovation":0.0},"objectives":{"race":{"type":"finish_position","target":8,"completed":false},"season":{"type":"championship_position","target":5,"completed":false}},"experience":0,"level":1,"skill_points":0,"energy":5,"settings":{"master":80,"music":55,"sfx":80,"language":"fr","intro_seen":false},"transactions":[],"season_income":0,"season_expenses":0,"season_xp":0,"season_reputation":0,"race_index":0,"season_complete":false,"promotion_pending":false,"audio_buses":["KART_ENGINE","F4_ENGINE","TYRES","CONTACT","RAIN","PIT","UI"]}
+	return {"save_version":SAVE_VERSION,"career_year":2027,"career_date":"2027-03-01","category":"KART","championship":"kart_regional","career_path":"UNDECIDED","championship_class":"KART","owned_gt_cars":[],"driver_roster":[],"endurance_results":[],"class_results":[],"prestige":0,"endurance_trophies":[],"season":1,"team":{},"driver":{},"team_dna":neutral_dna(),"calendar":[],"race_history":[],"standings":[],"money":12000,"reputation":0,"vehicles":{"kart":{"level":1,"reliability":92,"condition":100,"livery":{},"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"f4":{"level":1,"reliability":86,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"gt4":{"level":1,"reliability":84,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}}},"upgrades":[],"development_queue":[],"facilities":{"workshop":1,"technical":0,"simulator":0,"scouting":0,"marketing":0,"strategy":0,"pit_crew":0},"personnel":[],"sponsor":{},"sponsors":[],"offers":[],"trophies":[],"career_history":[],"career_events":[],"culture":{"technical":0.0,"finance":0.0,"driver":0.0,"strategy":0.0,"innovation":0.0},"objectives":{"race":{"type":"finish_position","target":8,"completed":false},"season":{"type":"championship_position","target":5,"completed":false}},"experience":0,"level":1,"skill_points":0,"energy":5,"settings":{"master":80,"music":55,"sfx":80,"language":"fr","intro_seen":false},"transactions":[],"season_income":0,"season_expenses":0,"season_xp":0,"season_reputation":0,"race_index":0,"season_complete":false,"promotion_pending":false,"audio_buses":["KART_ENGINE","F4_ENGINE","GT_ENGINE","PROTOTYPE_ENGINE","TYRES","CONTACT","RAIN","PIT","UI"]}
 
 func neutral_dna() -> Dictionary:
 	var affinities := {}; var ratings := {}
@@ -51,6 +55,7 @@ func new_career(team:Dictionary, driver:Dictionary, dna:Dictionary={}) -> void:
 	data.money=int(origin.get("budget",12000)); data.objectives.race.target=6 if data.team_dna.origin=="private_investor" else 8
 	data.objectives.season.target=3 if data.team_dna.origin=="private_investor" else (8 if data.team_dna.origin=="passionate_amateur" else 5)
 	data.vehicles.kart.livery={"colors":team.get("colors",[]),"pattern":team.get("livery_pattern",0)}
+	data.driver_roster=[_endurance_driver(data.driver,"PRO")]
 	data.calendar=make_calendar("KART"); data.standings=make_standings(); transaction(-500,"Inscription Regional Kart Series"); save_game(); changed.emit()
 
 func _prepare_driver_stats() -> void:
@@ -58,6 +63,25 @@ func _prepare_driver_stats() -> void:
 	for key in ["speed","control","mental"]: stats[key]=int(stats.get(key,55))
 	for key in ["start","overtaking","defence","rain","tyre_management"]: stats[key]=int(stats.get(key,50))
 	data.driver.stats=stats
+
+func _endurance_driver(source:Dictionary,grade:String)->Dictionary:
+	return {"id":"player","name":str(source.get("first_name","PILOTE"))+" "+str(source.get("last_name","")),"grade":grade,"fitness":int(source.get("stats",{}).get("mental",55)),"fatigue":0.0,"contract_months":12}
+
+func choose_career_path(path:String)->bool:
+	if path not in ["SINGLE_SEATER","GT_ENDURANCE"]:return false
+	data.career_path=path;save_game();changed.emit();return true
+
+func buy_gt_car(car_id:String)->bool:
+	if endurance_config.is_empty():endurance_config=load_endurance_config()
+	for car in endurance_config.get("cars",[]):
+		if car.id==car_id and car.class in ["GT4","GT3"]:
+			if data.owned_gt_cars.any(func(item):return item.id==car_id) or int(data.money)<int(car.price):return false
+			transaction(-int(car.price),"Achat — "+car.name);data.owned_gt_cars.append({"id":car.id,"name":car.name,"class":car.class,"condition":100,"mileage_km":0,"bop":car.bop.duplicate(true)});save_game();changed.emit();return true
+	return false
+
+func recruit_endurance_driver(candidate:Dictionary)->bool:
+	if data.driver_roster.size()>=3 or candidate.get("grade","") not in ["ELITE","PRO","SEMI-PRO","AMATEUR"]:return false
+	data.driver_roster.append(candidate.duplicate(true));save_game();changed.emit();return true
 
 func modifier(key:String)->float: return float(data.get("team_dna",{}).get("modifiers",{}).get(key,0.0))
 func effective_cost(base_cost:int, kind:String)->int:
@@ -177,6 +201,7 @@ func _generate_offers(position:int)->void:
 	data.offers=[{"id":"stay","title":"RESTER EN KART RÉGIONAL","category":"KART","eligible":true,"cost":1000,"objective":"Top 5"},{"id":"national","title":"KART NATIONAL","category":"KART","eligible":position<=8,"cost":2500,"objective":"Top 5"}]
 	var eligible:=int(data.reputation)>=35 and position<=3
 	data.offers.append({"id":"f4","title":"FORMULA JUNIOR 4","category":"F4","eligible":eligible,"cost":5000,"objective":"Top 8","prestige":5,"team":data.team.name})
+	data.offers.append({"id":"gt4","title":"CONTINENTAL GT4 CUP","category":"GT4","eligible":position<=8,"cost":18000,"objective":"Top 10","prestige":25,"team":data.team.name})
 func accept_offer(id:String)->bool:
 	var offer:Dictionary={}
 	for item in data.offers:
@@ -184,7 +209,7 @@ func accept_offer(id:String)->bool:
 			offer=item
 			break
 	if offer.is_empty() or not offer.eligible or int(data.money)<int(offer.cost):return false
-	transaction(-int(offer.cost),"Inscription — "+offer.title); data.category=offer.category; data.championship="formula_4" if offer.category=="F4" else ("kart_national" if id=="national" else "kart_regional"); data.season+=1;data.career_year+=1;data.career_date="%d-03-01"%data.career_year;data.calendar=make_calendar(data.category);data.race_index=0;data.race_history=[];data.standings=make_standings();data.season_complete=false;data.promotion_pending=false;data.offers=[];data.season_income=0;data.season_expenses=0;data.season_xp=0;data.season_reputation=0;save_game();changed.emit();return true
+	transaction(-int(offer.cost),"Inscription — "+offer.title); data.category=offer.category;data.career_path="GT_ENDURANCE" if offer.category=="GT4" else ("SINGLE_SEATER" if offer.category=="F4" else data.career_path);data.championship_class=offer.category; data.championship="continental_gt4_cup" if offer.category=="GT4" else ("formula_4" if offer.category=="F4" else ("kart_national" if id=="national" else "kart_regional")); data.season+=1;data.career_year+=1;data.career_date="%d-03-01"%data.career_year;data.calendar=make_calendar("KART" if offer.category=="GT4" else data.category);data.race_index=0;data.race_history=[];data.standings=make_standings();data.season_complete=false;data.promotion_pending=false;data.offers=[];data.season_income=0;data.season_expenses=0;data.season_xp=0;data.season_reputation=0;save_game();changed.emit();return true
 
 func save_game()->bool:
 	if data.is_empty():return false
