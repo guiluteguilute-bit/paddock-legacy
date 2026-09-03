@@ -75,19 +75,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 5m "${GODOT_BIN}" --headless --path . --editor --import --quit
+          timeout 5m "${GODOT_BIN}" --headless --path . --editor --import --quit 2>&1 | tee /tmp/godot-import.log
+          python3 tests/validate_godot_log.py /tmp/godot-import.log
 
       - name: Run Godot core tests
         shell: bash
         run: |
           set -euo pipefail
-          timeout 1m "${GODOT_BIN}" --headless --path . tests/godot/test_core.tscn
+          timeout 1m "${GODOT_BIN}" --headless --path . tests/godot/test_core.tscn 2>&1 | tee /tmp/godot-core.log
+          python3 tests/validate_godot_log.py /tmp/godot-core.log
 
       - name: Load main scene headlessly
         shell: bash
         run: |
           set -euo pipefail
-          timeout 2m "${GODOT_BIN}" --headless --path . --quit-after 2
+          timeout 2m "${GODOT_BIN}" --headless --path . --quit-after 2 2>&1 | tee /tmp/godot-main.log
+          python3 tests/validate_godot_log.py /tmp/godot-main.log
 
       - name: Export Web Preview
         shell: bash
@@ -95,7 +98,8 @@ jobs:
           set -euo pipefail
           rm -rf build/web
           mkdir -p build/web
-          timeout 10m "${GODOT_BIN}" --headless --verbose --path . --export-release "Web Preview" build/web/index.html
+          timeout 10m "${GODOT_BIN}" --headless --verbose --path . --export-release "Web Preview" build/web/index.html 2>&1 | tee /tmp/godot-export.log
+          python3 tests/validate_godot_log.py /tmp/godot-export.log
 
       - name: Validate Web artifact
         shell: bash
