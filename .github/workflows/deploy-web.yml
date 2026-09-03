@@ -48,6 +48,15 @@ jobs:
           cp -R /tmp/templates/templates/. "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
           "${GODOT_BIN}" --version
 
+      - name: Diagnose and validate Web export configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          template_dir="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          echo "Installed export templates:"
+          find "$HOME/.local/share/godot/export_templates" -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+          python3 tests/validate_web_export.py --templates "$template_dir"
+
       - name: Stamp development build
         shell: bash
         run: |
@@ -83,8 +92,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          rm -rf build/web
           mkdir -p build/web
-          timeout 10m "${GODOT_BIN}" --headless --path . --export-release "Web Preview" build/web/index.html
+          timeout 10m "${GODOT_BIN}" --headless --verbose --path . --export-release "Web Preview" build/web/index.html
 
       - name: Validate Web artifact
         shell: bash
