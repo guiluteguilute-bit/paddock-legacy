@@ -64,11 +64,12 @@ jobs:
           short_sha="${GITHUB_SHA:0:7}"
           sed -i "s/const BUILD_COMMIT := \"local\"/const BUILD_COMMIT := \"${short_sha}\"/" web/build_info.gd
 
-      - name: Validate project data
+      - name: Validate project data and UI catalog
         shell: bash
         run: |
           set -euo pipefail
           python3 tests/validate_project.py
+          python3 tests/validate_ui_catalog.py
 
       - name: Import Godot project
         shell: bash
