@@ -21,7 +21,8 @@ def main() -> None:
     assert "$GODOT_" not in html, "unexpanded Godot shell token in index.html"
     assert "alert(" not in html, "blocking JavaScript alert in index.html"
     assert "<canvas id=\"canvas\"" in html, "Godot canvas is absent"
-    assert "Godot" in html, "index.html does not look like a Godot Web export"
+    assert "new Engine(" in html, "Godot Web engine bootstrap is absent"
+    assert "engine.startGame(" in html, "Godot Web game startup is absent"
     assert (build / ".nojekyll").is_file(), ".nojekyll is absent"
     assert "README" not in html, "README content unexpectedly became the entry point"
     print("Godot Web artifact integrity checks passed")

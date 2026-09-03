@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "lab_query": "?ui_lab=1&screen=01",
+  "screens": [
+    {"id":"01","group":"ONBOARDING","name":"Choix du gérant","renderer":"creation","source":"main","method":"show_creation","step":0},
+    {"id":"02","group":"ONBOARDING","name":"Identité de l'écurie","renderer":"creation","source":"main","method":"show_creation","step":1},
+    {"id":"03","group":"ONBOARDING","name":"Résumé avant carrière","renderer":"creation","source":"main","method":"show_creation","step":2},
+    {"id":"04","group":"ACCUEIL","name":"Tableau de bord","renderer":"main","source":"main","method":"show_dashboard"},
+    {"id":"05","group":"CARRIÈRE","name":"Pyramide de carrière","renderer":"main","source":"main","method":"show_career"},
+    {"id":"06","group":"CARRIÈRE","name":"Hub GT / Endurance","renderer":"main","source":"main","method":"show_endurance_hub"},
+    {"id":"07","group":"CARRIÈRE","name":"Concession GT","renderer":"main","source":"main","method":"show_gt_dealership"},
+    {"id":"08","group":"CARRIÈRE","name":"Stratégie Endurance","renderer":"main","source":"main","method":"show_endurance_strategy"},
+    {"id":"09","group":"ÉCURIE","name":"Vue écurie","renderer":"main","source":"main","method":"show_team"},
+    {"id":"10","group":"ÉCURIE","name":"Menu Plus","renderer":"main","source":"main","method":"show_more"},
+    {"id":"11","group":"SAISON","name":"Calendrier","renderer":"main","source":"main","method":"show_calendar"},
+    {"id":"12","group":"SAISON","name":"Championnat","renderer":"main","source":"main","method":"show_championship"},
+    {"id":"13","group":"ÉCURIE","name":"Véhicule et développement","renderer":"main","source":"main","method":"show_vehicle"},
+    {"id":"14","group":"ÉCURIE","name":"Finances","renderer":"main","source":"main","method":"show_finance"},
+    {"id":"15","group":"COURSE","name":"Préparation de course","renderer":"main","source":"main","method":"show_race_prep"},
+    {"id":"16","group":"COURSE","name":"Session LIVE","renderer":"race","source":"main","method":"open_race"},
+    {"id":"17","group":"COURSE","name":"Feuille de stratégie Pit Stop","renderer":"lab","source":"lab","method":"_render_pit_preview"},
+    {"id":"18","group":"COURSE","name":"Résultats de course","renderer":"lab","source":"lab","method":"_render_race_results"},
+    {"id":"19","group":"PILOTE","name":"Développement pilote","renderer":"main","source":"main","method":"show_driver_development"},
+    {"id":"20","group":"ÉCURIE","name":"Sponsors","renderer":"main","source":"main","method":"show_sponsors"},
+    {"id":"21","group":"ÉCURIE","name":"Personnel et infrastructures","renderer":"main","source":"main","method":"show_operations"},
+    {"id":"22","group":"CARRIÈRE","name":"Palmarès","renderer":"main","source":"main","method":"show_honours"},
+    {"id":"23","group":"SAISON","name":"Fin de saison","renderer":"main","source":"main","method":"show_season_end"},
+    {"id":"24","group":"CARRIÈRE","name":"Offres de carrière","renderer":"main","source":"main","method":"show_offers"},
+    {"id":"25","group":"SYSTÈME","name":"Paramètres","renderer":"main","source":"main","method":"show_settings"}
+  ]
+}
