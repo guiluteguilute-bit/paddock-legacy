@@ -2,6 +2,8 @@
 """Fast repository checks that do not require a Godot binary."""
 import json
 from pathlib import Path
+import re
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 project = (ROOT / "project.godot").read_text()
@@ -13,6 +15,8 @@ shell = (ROOT / "web/shell.html").read_text()
 assert "alert(" not in shell
 assert "viewport-fit=cover" in shell
 assert "safe-area-inset-top" in shell
+assert "new Engine($GODOT_CONFIG)" in shell
+assert '<script src="$GODOT_URL"></script>' in shell
 championships = json.loads((ROOT / "game/data/championships.json").read_text())
 assert len(championships) == 9
 assert championships[0]["id"] == "kart_club"
@@ -20,6 +24,20 @@ assert championships[-1]["id"] == "formula_apex"
 assert all(c["points_system"] and c["race_count"] > 0 for c in championships)
 for required in ("game/core/game_state.gd", "game/races/race_view.gd", "game/ui/main.tscn"):
     assert (ROOT / required).is_file(), required
+
+# Catch Linux-only path/case failures and malformed data/art assets before Godot import.
+for source in ROOT.rglob("*"):
+    if not source.is_file() or any(part in {".git", ".godot", "build"} for part in source.parts):
+        continue
+    if source.suffix == ".json":
+        json.loads(source.read_text(encoding="utf-8"))
+    elif source.suffix == ".svg":
+        ET.parse(source)
+    if source.suffix in {".gd", ".tscn", ".tres", ".godot", ".cfg"}:
+        text = source.read_text(encoding="utf-8")
+        for resource_path in re.findall(r'res://[^"\s)]+', text):
+            target = ROOT / resource_path.removeprefix("res://")
+            assert target.exists(), f"missing/case-mismatched resource in {source}: {resource_path}"
 main = (ROOT / "game/ui/main.gd").read_text()
 race = (ROOT / "game/races/race_view.gd").read_text()
 for nav_item in ("ACCUEIL", "CARRIÈRE", "COURSE", "ÉCURIE", "PLUS"):
