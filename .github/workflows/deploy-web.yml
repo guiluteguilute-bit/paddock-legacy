@@ -78,6 +78,17 @@ jobs:
           touch build/web/.nojekyll
           find build/web -maxdepth 1 -type f -printf '%f %s bytes\n' | sort
 
+      - name: Select GitHub Actions as Pages source
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # The site was configured as a legacy branch build, which made Pages
+          # render the repository README instead of accepting this artifact.
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/pages" \
+            --field build_type=workflow
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
