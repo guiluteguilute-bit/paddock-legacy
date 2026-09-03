@@ -9,6 +9,7 @@ run/main_scene="res://game/ui/main.tscn"
 [autoload]
 GameState="*res://game/core/game_state.gd"
 AudioManager="*res://game/core/audio_manager.gd"
+ScreenLab="*res://game/core/screen_lab.gd"
 
 [display]
 window/size/viewport_width=1080
