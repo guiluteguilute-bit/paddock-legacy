@@ -1,0 +1,43 @@
+{
+  "series": [
+    {"id":"continental_gt4_cup","name":"Continental GT4 Cup","class":"GT4","prestige":25,"entry_cost":18000,"format":"DOUBLE SPRINT","duration_minutes":35,"minimum_reputation":18,"pro_am":false,"grid":{"GT4":20}},
+    {"id":"international_gt3_series","name":"International GT3 Series","class":"GT3","prestige":50,"entry_cost":65000,"format":"ENDURANCE COURTE","duration_minutes":60,"minimum_reputation":45,"pro_am":true,"grid":{"GT3":24}},
+    {"id":"world_endurance_series","name":"World Endurance Series","class":"MULTICLASS","prestige":70,"entry_cost":160000,"format":"ENDURANCE LONGUE","duration_minutes":360,"minimum_reputation":80,"pro_am":false,"grid":{"HYPERCAR":8,"PROTOTYPE":8,"GT3":16}},
+    {"id":"legacy_24","name":"Legacy 24","class":"MULTICLASS","prestige":100,"entry_cost":300000,"format":"24 HEURES","duration_minutes":1440,"minimum_reputation":120,"pro_am":false,"grid":{"HYPERCAR":8,"PROTOTYPE":8,"GT3":24}}
+  ],
+  "manufacturers": [
+    {"id":"aurelia","name":"Aurelia","trend":1.01,"support":82},
+    {"id":"veltor","name":"Veltor","trend":0.99,"support":76},
+    {"id":"northstar","name":"Northstar","trend":1.02,"support":71},
+    {"id":"arcadia","name":"Arcadia","trend":1.00,"support":88},
+    {"id":"korven","name":"Korven","trend":0.98,"support":84},
+    {"id":"mistral","name":"Mistral","trend":1.03,"support":68}
+  ],
+  "cars": [
+    {"id":"aurelia_vesta_gt4","name":"Aurelia Vesta GT4","manufacturer":"aurelia","class":"GT4","layout":"FRONT ENGINE / RWD","identity":"stable braking","price":180000,"power":74,"cornering":70,"tyre_care":76,"reliability":84,"difficulty":48,"bop":{"weight_kg":1425,"power_percent":98,"fuel_multiplier":1.00,"tank_litres":105}},
+    {"id":"veltor_flux_gt4","name":"Veltor Flux GT4","manufacturer":"veltor","class":"GT4","layout":"MID ENGINE / RWD","identity":"agile rotation","price":192000,"power":69,"cornering":80,"tyre_care":70,"reliability":78,"difficulty":61,"bop":{"weight_kg":1390,"power_percent":100,"fuel_multiplier":1.02,"tank_litres":102}},
+    {"id":"northstar_cinder_gt4","name":"Northstar Cinder GT4","manufacturer":"northstar","class":"GT4","layout":"REAR ENGINE / RWD","identity":"traction specialist","price":188000,"power":71,"cornering":75,"tyre_care":73,"reliability":80,"difficulty":58,"bop":{"weight_kg":1410,"power_percent":99,"fuel_multiplier":0.99,"tank_litres":104}},
+    {"id":"mistral_pico_gt4","name":"Mistral Pico GT4","manufacturer":"mistral","class":"GT4","layout":"COMPACT / RWD","identity":"lightweight momentum","price":165000,"power":65,"cornering":78,"tyre_care":83,"reliability":77,"difficulty":55,"bop":{"weight_kg":1320,"power_percent":103,"fuel_multiplier":0.97,"tank_litres":98}},
+    {"id":"aurelia_vesta_gt3","name":"Aurelia Vesta GT3","manufacturer":"aurelia","class":"GT3","layout":"FRONT ENGINE / RWD","identity":"straight-line speed","price":450000,"power":91,"cornering":77,"tyre_care":69,"reliability":79,"difficulty":70,"bop":{"weight_kg":1305,"power_percent":97,"fuel_multiplier":1.03,"tank_litres":118}},
+    {"id":"veltor_flux_gt3","name":"Veltor Flux GT3","manufacturer":"veltor","class":"GT3","layout":"MID ENGINE / RWD","identity":"cornering precision","price":475000,"power":79,"cornering":93,"tyre_care":72,"reliability":74,"difficulty":82,"bop":{"weight_kg":1320,"power_percent":100,"fuel_multiplier":1.00,"tank_litres":115}},
+    {"id":"arcadia_atlas_gt3","name":"Arcadia Atlas GT3","manufacturer":"arcadia","class":"GT3","layout":"FRONT ENGINE / RWD","identity":"tyre preservation","price":465000,"power":82,"cornering":82,"tyre_care":94,"reliability":83,"difficulty":59,"bop":{"weight_kg":1340,"power_percent":101,"fuel_multiplier":0.96,"tank_litres":112}},
+    {"id":"korven_kr3_gt3","name":"Korven KR3 GT3","manufacturer":"korven","class":"GT3","layout":"REAR ENGINE / RWD","identity":"endurance reliability","price":490000,"power":84,"cornering":80,"tyre_care":78,"reliability":96,"difficulty":64,"bop":{"weight_kg":1360,"power_percent":102,"fuel_multiplier":0.98,"tank_litres":120}},
+    {"id":"northstar_fury_gt3","name":"Northstar Fury GT3","manufacturer":"northstar","class":"GT3","layout":"MID ENGINE / RWD","identity":"aggressive peak pace","price":440000,"power":94,"cornering":88,"tyre_care":58,"reliability":67,"difficulty":94,"bop":{"weight_kg":1375,"power_percent":95,"fuel_multiplier":1.06,"tank_litres":110}},
+    {"id":"arcadia_nova_p2","name":"Arcadia Nova P2","manufacturer":"arcadia","class":"PROTOTYPE","layout":"MID ENGINE / RWD","identity":"accessible prototype","price":920000,"power":88,"cornering":91,"tyre_care":80,"reliability":87,"difficulty":79,"bop":{"weight_kg":950,"power_percent":100,"fuel_multiplier":1.00,"tank_litres":75}},
+    {"id":"korven_horizon_h","name":"Korven Horizon H","manufacturer":"korven","class":"HYPERCAR","layout":"HYBRID / AWD","identity":"reliable all-rounder","price":2400000,"power":94,"cornering":92,"tyre_care":86,"reliability":94,"difficulty":86,"bop":{"weight_kg":1040,"power_percent":98,"fuel_multiplier":0.98,"tank_litres":90}},
+    {"id":"mistral_tempest_h","name":"Mistral Tempest H","manufacturer":"mistral","class":"HYPERCAR","layout":"HYBRID / AWD","identity":"qualifying specialist","price":2250000,"power":99,"cornering":96,"tyre_care":70,"reliability":73,"difficulty":97,"bop":{"weight_kg":1065,"power_percent":95,"fuel_multiplier":1.04,"tank_litres":86}}
+  ],
+  "circuits": [
+    {"id":"ardenne_velocity","name":"Ardenne Velocity","style":"EUROPEAN FAST","length_km":7.1,"night":false,"weather":"CHANGEABLE"},
+    {"id":"cobalt_hills","name":"Cobalt Hills","style":"UNDULATING","length_km":5.4,"night":false,"weather":"CHANGEABLE"},
+    {"id":"nocturne_bay","name":"Nocturne Bay","style":"NIGHT STREET","length_km":5.0,"night":true,"weather":"DRY"},
+    {"id":"solara_dunes","name":"Solara Dunes","style":"DESERT","length_km":5.8,"night":true,"weather":"DRY"},
+    {"id":"liberty_park","name":"Liberty Park","style":"AMERICAN","length_km":6.2,"night":false,"weather":"STORMS"},
+    {"id":"hinode_ring","name":"Hinode Ring","style":"JAPANESE TECHNICAL","length_km":5.6,"night":false,"weather":"RAIN"},
+    {"id":"legacy_loop","name":"Legacy Loop","style":"24H GRAND CIRCUIT","length_km":8.4,"night":true,"weather":"DYNAMIC"}
+  ],
+  "tyres":["SOFT","MEDIUM","HARD","INTERMEDIATE","WET"],
+  "driver_grades":["ELITE","PRO","SEMI-PRO","AMATEUR"],
+  "time_scales":[1,2,4,8,16],
+  "damage":["AERO","SUSPENSION","ENGINE","GEARBOX","BRAKES","BODYWORK"]
+}

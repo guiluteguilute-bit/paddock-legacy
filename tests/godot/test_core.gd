@@ -10,7 +10,7 @@ func _result(state, player_position:int) -> Dictionary:
 
 func _init() -> void:
 	var state=load("res://game/core/game_state.gd").new();state.creation_config=state.load_creation_config();state.career_config=state.load_career_config();state.data=state.defaults()
-	assert(state.data.save_version==3);assert(state.career_config.kart_calendar.size()==6);assert(state.career_config.rivals.size()==11);assert(state.points_for(1)==25 and state.points_for(10)==1 and state.points_for(11)==0)
+	assert(state.data.save_version==4);assert(state.career_config.kart_calendar.size()==6);assert(state.career_config.rivals.size()==11);assert(state.points_for(1)==25 and state.points_for(10)==1 and state.points_for(11)==0)
 	var points={"workshop":2,"technical":2,"simulator":2,"scouting":1,"marketing":1,"strategy":2};var dna=state.build_team_dna("family_garage","pure_performance","technician","reach_apex",points)
 	state.new_career({"name":"Test Team","colors":["#112233","#445566","#778899"],"livery_pattern":1},{"first_name":"Ada","last_name":"Test","nationality":"France","number":27,"hidden_potential":88,"xp_multiplier":1.12,"stats":{"speed":54,"control":62,"mental":65}},dna)
 	assert(state.data.calendar.size()==6 and state.data.standings.size()==12);assert(state.data.calendar[0].status=="AVAILABLE" and state.data.calendar[1].status=="LOCKED")
@@ -22,4 +22,5 @@ func _init() -> void:
 	state._generate_offers(1);assert(state.data.offers[2].eligible);state.data.money=50000;assert(state.accept_offer("f4"));assert(state.data.category=="F4" and state.data.calendar.size()==3);assert(state.data.vehicles.has("kart") and state.data.team.name=="Test Team")
 	assert(state.spend_skill("speed"));var race=load("res://game/races/race_view.gd").new();state.data.race_index=0;race.setup("Ada Test",3,0.7,"F4");assert(race.racers.size()==12 and race.weather=="RAIN" and race.tyre=="MEDIUM");race.request_pit("WET");assert(race.pit_requested and race.tyre=="WET")
 	assert(state.save_game());var reload=load("res://game/core/game_state.gd").new();reload.creation_config=state.creation_config;reload.career_config=state.career_config;assert(reload.load_game());assert(reload.data.category=="F4" and reload.data.team.name=="Test Team" and reload.data.career_history.size()==1)
+	var endurance=load("res://game/core/endurance_simulator.gd").new();endurance.configure({"HYPERCAR":8,"PROTOTYPE":8,"GT3":16},360.0,77);assert(endurance.cars.size()==32);endurance.simulate(180.0);var gt=endurance.get_car("GT3_01");assert(gt.overall_position>0 and gt.class_position>0 and gt.drivers.size()==3);var stop=endurance.pit("GT3_01",{"fuel":true,"tyres":false,"driver_change":true,"repairs":"QUICK"});assert(stop>40.0 and gt.driver_index==1 and gt.fuel_laps==12.0)
 	print("Full kart-to-F4 career checks passed");quit(0)

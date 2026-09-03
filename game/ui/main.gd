@@ -256,7 +256,7 @@ func show_dashboard() -> void:
 		return
 	var event: Dictionary = GameState.data.calendar[GameState.data.race_index] if int(GameState.data.race_index) < GameState.data.calendar.size() else {}
 	heading("PROCHAINE COURSE", 16)
-	var race_card := card(event.get("track", "SAISON TERMINÉE").to_upper(), "%d TOURS  •  KARTING  •  ☁ %d%%\nOBJECTIF TOP %d" % [event.get("laps", 0), int(event.get("weather_probability", 0.0) * 100), GameState.data.objectives.race.target], 150)
+	var race_card := card(event.get("track", "SAISON TERMINÉE").to_upper(), "%d TOURS  •  %s  •  ☁ %d%%\nOBJECTIF TOP %d" % [event.get("laps", 0), GameState.data.category, int(event.get("weather_probability", 0.0) * 100), GameState.data.objectives.race.target], 150)
 	content.add_child(race_card)
 	heading("PILOTE", 16)
 	var driver_row := HBoxContainer.new(); content.add_child(driver_row)
@@ -266,10 +266,42 @@ func show_dashboard() -> void:
 	content.add_child(button("LANCER LA COURSE  ›", show_race_prep))
 
 func show_career() -> void:
-	clear("CARRIÈRE"); heading("PYRAMIDE DE CARRIÈRE", 24)
+	clear("CARRIÈRE"); heading("DEUX RÊVES. UNE LÉGENDE.", 24)
+	content.add_child(card("VOIE MONOPLACE","KART → F4 → REGIONAL → F3 → F2 → FORMULA APEX",92))
+	content.add_child(button("EXPLORER LA VOIE GT / ENDURANCE  ›",show_endurance_hub))
+	heading("PYRAMIDE MONOPLACE", 20)
 	var championships = JSON.parse_string(FileAccess.get_file_as_string("res://game/data/championships.json"))
 	for c in championships:
 		var unlocked := int(GameState.data.reputation) >= int(c.minimum_reputation); content.add_child(card(("DÉBLOQUÉ  •  " if unlocked else "VERROUILLÉ  •  ") + c.name, "RÉPUTATION %d  •  %s €" % [c.minimum_reputation, money(c.entry_cost)], 78))
+
+func show_endurance_hub() -> void:
+	clear("GT / ENDURANCE");heading("LA DEUXIÈME VOIE",28)
+	var logo:=TextureRect.new();logo.texture=load("res://graphics/logos/logo_world_endurance_series.svg");logo.custom_minimum_size.y=150;logo.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;logo.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;content.add_child(logo)
+	label("KART → GT4 → GT3 → WORLD ENDURANCE → HYPERCAR → LEGACY 24",colors.gold,16)
+	content.add_child(card("CARRIÈRE %s"%GameState.data.career_path,"PRESTIGE %d  •  %d VOITURE(S) GT  •  %d/3 PILOTES"%[GameState.data.prestige,GameState.data.owned_gt_cars.size(),GameState.data.driver_roster.size()],105))
+	var choose:=button("CHOISIR GT / ENDURANCE COMME OBJECTIF",func():GameState.choose_career_path("GT_ENDURANCE");show_endurance_hub());choose.disabled=GameState.data.career_path=="GT_ENDURANCE";content.add_child(choose)
+	heading("CHAMPIONNATS FICTIFS",19)
+	for series in GameState.endurance_config.series:
+		var unlocked:=int(GameState.data.reputation)>=int(series.minimum_reputation)
+		content.add_child(card(("DÉBLOQUÉ" if unlocked else "RÉP. %d REQUISE"%series.minimum_reputation)+"  •  "+series.name.to_upper(),"%s  •  %s MIN SIMULÉES  •  PRESTIGE %d"%[series.class,series.duration_minutes,series.prestige],88))
+	content.add_child(button("CONCESSION GT  ›",show_gt_dealership))
+	content.add_child(button("STRATÉGIE ENDURANCE  ›",show_endurance_strategy))
+
+func show_gt_dealership() -> void:
+	clear("CONCESSION GT");heading("PERFORMANCE BALANCE SYSTEM",22);label("Poids, puissance, consommation et réservoir sont pilotés par les données de chaque modèle.",colors.muted,14)
+	for car in GameState.endurance_config.cars:
+		if car.class not in ["GT4","GT3"]:continue
+		var owned:=GameState.data.owned_gt_cars.any(func(item):return item.id==car.id)
+		var text:=("✓ POSSÉDÉE  •  " if owned else "ACHETER  •  ")+car.name.to_upper()+"  •  "+money(car.price)+" €\n"+car.layout+"  •  "+car.identity.to_upper()+"\nPUI %d  VIR %d  PNEUS %d  FIAB %d"%[car.power,car.cornering,car.tyre_care,car.reliability]
+		var buy:=button(text,func(id=car.id):
+			if GameState.buy_gt_car(id):show_gt_dealership()
+			else:toast("Achat impossible : budget ou modèle déjà acquis"))
+		buy.disabled=owned;buy.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;buy.custom_minimum_size.y=125;content.add_child(buy)
+
+func show_endurance_strategy() -> void:
+	clear("STRATÉGIE ENDURANCE");heading("HUD PORTRAIT",24)
+	content.add_child(card("OVERALL P18  •  GT3 P2","DRIVER 1  •  STINT 35 LAPS  •  FATIGUE 42%\nFUEL 8.2 LAPS  •  MEDIUM 61%  •  PIT WINDOW 6–9",125))
+	for item in [["MÉTÉO & LUMIÈRE","JOUR → COUCHER → NUIT → AUBE • SEC → PLUIE → PISTE SÉCHANTE"],["PIT STOP","FUEL • TYRES / DOUBLE STINT • DRIVER CHANGE • QUICK / FULL REPAIR"],["NEUTRALISATION","YELLOW FLAG • FULL COURSE YELLOW • SAFETY CAR • PIT NOW ?"],["SIMULATION","x1 • x2 • x4 • x8 • x16 • SIMULATE TO NEXT EVENT"]]:content.add_child(card(item[0],item[1],82))
 
 func show_team() -> void:
 	clear("ÉCURIE"); heading(GameState.data.team.name.to_upper(), 25)
@@ -282,7 +314,7 @@ func choice_name(section:String,id:String)->String: return GameState.creation_co
 
 func show_more() -> void:
 	clear("PLUS"); heading("GESTION DE L'ÉCURIE", 24)
-	for item in [["DÉVELOPPEMENT PILOTE", show_driver_development], ["VÉHICULE & DÉVELOPPEMENT", show_vehicle], ["SPONSORS", show_sponsors], ["PERSONNEL & INFRASTRUCTURES", show_operations], ["FINANCES", show_finance], ["CALENDRIER", show_calendar], ["CHAMPIONNAT", show_championship], ["PALMARÈS", show_honours], ["PARAMÈTRES", show_settings]]: content.add_child(button(item[0] + "  ›", item[1]))
+	for item in [["GT / ENDURANCE",show_endurance_hub],["DÉVELOPPEMENT PILOTE", show_driver_development], ["VÉHICULE & DÉVELOPPEMENT", show_vehicle], ["SPONSORS", show_sponsors], ["PERSONNEL & INFRASTRUCTURES", show_operations], ["FINANCES", show_finance], ["CALENDRIER", show_calendar], ["CHAMPIONNAT", show_championship], ["PALMARÈS", show_honours], ["PARAMÈTRES", show_settings]]: content.add_child(button(item[0] + "  ›", item[1]))
 
 func show_calendar() -> void:
 	clear("CALENDRIER"); heading("SAISON %d" % GameState.data.career_year, 24)
