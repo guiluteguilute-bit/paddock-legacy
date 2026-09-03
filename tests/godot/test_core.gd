@@ -9,9 +9,9 @@ func _ready() -> void:
 
 
 func _result(state: Node, player_position: int) -> Dictionary:
-	var rows := []
-	for i in state.career_config.rivals.size():
-		var position := i + 1
+	var rows: Array = []
+	for i: int in range(state.career_config.rivals.size()):
+		var position: int = i + 1
 		if position >= player_position:
 			position += 1
 		rows.append({"name": state.career_config.rivals[i].name, "position": position, "best_lap": 49.0 + i, "fastest_lap": false})
@@ -27,7 +27,7 @@ func _check(condition: bool, message: String) -> void:
 func _run_tests() -> void:
 	# Use the actual project singleton. Loading this scene through the project is what
 	# makes GameState available while dependencies such as RaceView are compiled.
-	var state := GameState
+	var state = GameState
 	state.creation_config = state.load_creation_config()
 	state.career_config = state.load_career_config()
 	state.data = state.defaults()
@@ -36,7 +36,7 @@ func _run_tests() -> void:
 	_check(state.career_config.rivals.size() == 11, "rival count")
 	_check(state.points_for(1) == 25 and state.points_for(10) == 1 and state.points_for(11) == 0, "points table")
 
-	var points := {"workshop": 2, "technical": 2, "simulator": 2, "scouting": 1, "marketing": 1, "strategy": 2}
+	var points: Dictionary = {"workshop": 2, "technical": 2, "simulator": 2, "scouting": 1, "marketing": 1, "strategy": 2}
 	var dna: Dictionary = state.build_team_dna("family_garage", "pure_performance", "technician", "reach_apex", points)
 	state.new_career({"name": "Test Team", "colors": ["#112233", "#445566", "#778899"], "livery_pattern": 1}, {"first_name": "Ada", "last_name": "Test", "nationality": "France", "number": 27, "hidden_potential": 88, "xp_multiplier": 1.12, "stats": {"speed": 54, "control": 62, "mental": 65}}, dna)
 	_check(state.data.calendar.size() == 6 and state.data.standings.size() == 12, "new career grids")
@@ -58,7 +58,7 @@ func _run_tests() -> void:
 	_check(state.data.vehicles.has("kart") and state.data.team.name == "Test Team", "career continuity")
 	_check(state.spend_skill("speed"), "skill spending")
 
-	var race := RaceView.new()
+	var race: RaceView = RaceView.new()
 	add_child(race)
 	state.data.race_index = 0
 	race.setup("Ada Test", 3, 0.7, "F4")
@@ -68,14 +68,15 @@ func _run_tests() -> void:
 	race.queue_free()
 
 	_check(state.save_game(), "career save")
-	var reload := load("res://game/core/game_state.gd").new()
-	reload.creation_config = state.creation_config
-	reload.career_config = state.career_config
-	_check(reload.load_game(), "career reload")
-	_check(reload.data.category == "F4" and reload.data.team.name == "Test Team" and reload.data.career_history.size() == 1, "reloaded career data")
-	reload.free()
+	var game_state_script: Script = load("res://game/core/game_state.gd") as Script
+	var reloaded_state = game_state_script.new()
+	reloaded_state.creation_config = state.creation_config
+	reloaded_state.career_config = state.career_config
+	_check(reloaded_state.load_game(), "career reload")
+	_check(reloaded_state.data.category == "F4" and reloaded_state.data.team.name == "Test Team" and reloaded_state.data.career_history.size() == 1, "reloaded career data")
+	reloaded_state.free()
 
-	var endurance := EnduranceSimulator.new()
+	var endurance: EnduranceSimulator = EnduranceSimulator.new()
 	endurance.configure({"HYPERCAR": 8, "PROTOTYPE": 8, "GT3": 16}, 360.0, 77)
 	_check(endurance.cars.size() == 32, "endurance grid")
 	endurance.simulate(180.0)
