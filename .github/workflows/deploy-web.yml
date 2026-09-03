@@ -3,6 +3,8 @@ name: Deploy Web Preview
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -17,7 +19,7 @@ concurrency:
 env:
   GODOT_VERSION: 4.3
   GODOT_RELEASE: 4.3-stable
-  GODOT_BIN: godot
+  GODOT_BIN: ${{ github.workspace }}/.tools/godot
 
 jobs:
   build:
@@ -37,12 +39,13 @@ jobs:
           curl --fail --location --retry 3 \
             --output /tmp/templates.tpz \
             "${base_url}/Godot_v${GODOT_RELEASE}_export_templates.tpz"
+          mkdir -p "${GITHUB_WORKSPACE}/.tools"
           unzip -q /tmp/godot.zip -d /tmp/godot
-          install -m 0755 "/tmp/godot/Godot_v${GODOT_RELEASE}_linux.x86_64" "/usr/local/bin/${GODOT_BIN}"
+          install -m 0755 "/tmp/godot/Godot_v${GODOT_RELEASE}_linux.x86_64" "${GODOT_BIN}"
           mkdir -p "/tmp/templates" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
           unzip -q /tmp/templates.tpz -d /tmp/templates
           cp -R /tmp/templates/templates/. "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
-          godot --version
+          "${GODOT_BIN}" --version
 
       - name: Stamp development build
         shell: bash
@@ -55,49 +58,43 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --editor --import --quit
-          godot --headless --path . --script tests/godot/test_core.gd
+          python3 tests/validate_project.py
+          "${GODOT_BIN}" --headless --path . --editor --import --quit
+          "${GODOT_BIN}" --headless --path . --script tests/godot/test_core.gd
+
+      - name: Load main scene headlessly
+        shell: bash
+        run: |
+          set -euo pipefail
+          "${GODOT_BIN}" --headless --path . --quit-after 2
 
       - name: Export Web Preview
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build/web
-          godot --headless --path . --export-release "Web Preview" build/web/index.html
+          "${GODOT_BIN}" --headless --path . --export-release "Web Preview" build/web/index.html
 
       - name: Validate Web artifact
         shell: bash
         run: |
           set -euo pipefail
-          test -s build/web/index.html
-          find build/web -maxdepth 1 -type f -name '*.js' -size +0c | grep -q .
-          find build/web -maxdepth 1 -type f -name '*.wasm' -size +0c | grep -q .
-          find build/web -maxdepth 1 -type f -name '*.pck' -size +0c | grep -q .
-          ! grep -q '\$GODOT_' build/web/index.html
-          ! grep -R -E 'alert\s*\(' build/web --include='*.html' --include='*.js'
           touch build/web/.nojekyll
+          python3 tests/validate_web_build.py build/web
           find build/web -maxdepth 1 -type f -printf '%f %s bytes\n' | sort
 
-      - name: Select GitHub Actions as Pages source
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          # The site was configured as a legacy branch build, which made Pages
-          # render the repository README instead of accepting this artifact.
-          gh api --method PUT "repos/${GITHUB_REPOSITORY}/pages" \
-            --field build_type=workflow
-
       - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v5
 
       - name: Upload GitHub Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
   deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
