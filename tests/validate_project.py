@@ -47,7 +47,7 @@ main = (ROOT / "game/ui/main.gd").read_text()
 for feature in ("CREATION_STEPS", "creation_identity", "creation_foundation", "creation_driver", "creation_summary", "confirm_creation", "confirm_reset", "ADN DE L'ÉCURIE"):
     assert feature in main
 state = (ROOT / "game/core/game_state.gd").read_text()
-for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 4"):
+for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 5"):
     assert feature in state
 print("Team creation configuration, balance bounds and integration checks passed")
 
@@ -74,12 +74,18 @@ assert len([c for c in endurance["cars"] if c["class"] in ("PROTOTYPE", "HYPERCA
 assert len(endurance["circuits"]) == 7
 assert set(endurance["tyres"]) == {"SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"}
 assert all(set(c["bop"]) == {"weight_kg", "power_percent", "fuel_multiplier", "tank_litres"} for c in endurance["cars"])
+assert endurance["balance_system"]["name"] == "Performance Balance System"
+assert len(endurance["race_formats"]) == 7 and endurance["race_formats"][-1]["minutes"] == 1440
+assert endurance["pro_am_rule"]["required_grades"] == ["PRO", "AMATEUR"]
+assert len(endurance["career_bridges"]) == 4
 state = (ROOT / "game/core/game_state.gd").read_text()
 for field in ("career_path", "championship_class", "owned_gt_cars", "driver_roster", "endurance_results", "class_results", "prestige", "endurance_trophies"):
     assert f'"{field}"' in state
 simulation = (ROOT / "game/core/endurance_simulator.gd").read_text()
-for feature in ("overall_position", "class_position", "fuel_laps", "fatigue", "FUEL SAVE", "HEAVY RAIN", "driver_change", "FULL"):
+for feature in ("overall_position", "class_position", "fuel_laps", "fatigue", "FUEL SAVE", "HEAVY RAIN", "driver_change", "FULL", "simulate_to_next_event", "FULL COURSE YELLOW", "apply_damage", "traffic_loss"):
     assert feature in simulation
+for feature in ("can_enter_endurance_class", "complete_endurance_event", "24H WINNER"):
+    assert feature in state
 ui = (ROOT / "game/ui/main.gd").read_text()
 for feature in ("show_endurance_hub", "show_gt_dealership", "show_endurance_strategy", "SIMULATE TO NEXT EVENT", "PIT WINDOW"):
     assert feature in ui

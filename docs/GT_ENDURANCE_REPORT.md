@@ -10,13 +10,13 @@ L'**International GT3 Series** ajoute cinq modèles plus performants. Leurs iden
 
 ## Endurance, multiclass et Hypercar
 
-La **World Endurance Series** et la **Legacy 24** sont des marques entièrement fictives. Une grille de référence rassemble 8 Hypercars, 8 Prototypes et 16 GT3. Chaque concurrent conserve sa position générale et sa position de classe. Les prototypes perdent du temps dans le trafic GT plutôt que de traverser les voitures sans conséquence.
+La **World Endurance Series** et la **Legacy 24** sont des marques entièrement fictives. Une grille de référence rassemble 8 Hypercars, 8 Prototypes et 16 GT3. Chaque concurrent conserve sa position générale et sa position de classe. Les prototypes perdent du temps dans le trafic GT plutôt que de traverser les voitures sans conséquence; cette perte est désormais mesurée individuellement.
 
 Trois prototypes/Hypercars fictifs complètent les quatre GT4 du périmètre minimum. Sept tracés originaux décrivent les styles européen rapide, vallonné, nocturne, désertique, américain, japonais et grande boucle de 24 heures.
 
 ## Driver stints et fatigue
 
-Chaque voiture reçoit un équipage de trois pilotes classés Elite, Pro, Semi-Pro ou Amateur. La simulation suit pilote actif, tours du relais, fitness et fatigue. Un relais excessif dégrade progressivement la performance; un changement de pilote remet le compteur de relais à zéro sans effacer la fatigue individuelle.
+Chaque voiture reçoit un équipage de trois pilotes classés Elite, Pro, Semi-Pro ou Amateur. La simulation suit pilote actif, tours du relais, fitness et fatigue. Un relais excessif dégrade progressivement la performance; un changement de pilote remet le compteur de relais à zéro sans effacer la fatigue individuelle. Les équipages IA alternent des profils Fuel Save, Balanced et Push, puis réagissent au carburant bas et aux changements de météo.
 
 ## Pit, fuel et pneus
 
@@ -28,7 +28,7 @@ Une épreuve longue traverse jour, coucher du soleil, nuit, aube puis jour. Le s
 
 ## Career branch, prestige et sauvegarde
 
-La sauvegarde v4 ajoute `career_path`, `championship_class`, `owned_gt_cars`, `driver_roster`, `endurance_results`, `class_results`, `prestige` et `endurance_trophies`. L'écran Carrière présente désormais les deux rêves côte à côte, sans enfermer le joueur: les offres et données peuvent supporter les futures passerelles F3 → GT3, F2 → Hypercar et GT3 → test Formula Apex.
+La sauvegarde v5 conserve `career_path`, `championship_class`, `owned_gt_cars`, `driver_roster`, `endurance_results`, `class_results`, `prestige` et `endurance_trophies`. L'écran Carrière présente désormais les deux rêves côte à côte, sans enfermer le joueur: les offres et données peuvent supporter les futures passerelles F3 → GT3, F2 → Hypercar et GT3 → test Formula Apex.
 
 ## Tests
 
@@ -39,4 +39,4 @@ Les contrôles rapides valident le volume minimal, les grilles multiclasses, les
 - Ce vertical slice livre les données, l'économie, la sauvegarde, l'interface de découverte et le moteur déterministe, mais pas encore une saison GT complète jouable de bout en bout.
 - Les phares, carrosseries GT/Prototype/Hypercar, pluie nocturne et dépassements 2.5D détaillés restent à intégrer dans `RaceView`.
 - Les règles de temps de conduite, calendriers concurrents, évolution intersaison des constructeurs et IA opportuniste sous Safety Car sont préparés conceptuellement mais pas finalisés.
-- L'accélération x1 à x16 et « Simulate to next event » sont exposées dans le HUD de stratégie; leurs commandes live seront raccordées avec la vue de course endurance.
+- Le moteur accepte x1 à x16 et « Simulate to next event », mais la vue de course dédiée doit encore raccorder ces commandes live.
