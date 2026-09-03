@@ -433,7 +433,18 @@ func accept_career_offer(id:String) -> void:
 func show_settings() -> void:
 	clear("PARAMÈTRES"); heading("AUDIO & JEU", 24)
 	for key in ["master", "music", "sfx"]:
-		label(key.to_upper(), colors.muted, 12); var slider = HSlider.new(); slider.min_value = 0; slider.max_value = 100; slider.value = GameState.data.settings.get(key, 80); slider.custom_minimum_size.y = 48; slider.value_changed.connect(func(v, k = key): GameState.data.settings[k] = int(v); GameState.save_game()); content.add_child(slider)
+		label(key.to_upper(), colors.muted, 12)
+		var slider = HSlider.new()
+		slider.min_value = 0
+		slider.max_value = 100
+		slider.value = GameState.data.settings.get(key, 80)
+		slider.custom_minimum_size.y = 48
+		slider.value_changed.connect(func(v, k = key):
+			GameState.data.settings[k] = int(v)
+			GameState.save_game()
+			MenuMusic.refresh_volume()
+		)
+		content.add_child(slider)
 	content.add_child(button("NOUVELLE CARRIÈRE / EFFACER", confirm_reset))
 
 func confirm_reset() -> void:
