@@ -90,6 +90,10 @@ func _run_tests() -> void:
 	_check(endurance.simulate_to_next_event() > 0.0 and endurance.elapsed_minutes > before, "endurance next event")
 
 	state.endurance_config = state.load_endurance_config()
+	# Hypercar entry requires an eligible feeder category as well as reputation.
+	# Keep the production eligibility rules intact and give this focused test the
+	# GT3 career state it is intended to exercise.
+	state.data.category = "GT3"
 	state.data.reputation = 100
 	_check(state.can_enter_endurance_class("HYPERCAR"), "Hypercar eligibility")
 	_check(state.complete_endurance_event("legacy_24", 4, 1, "HYPERCAR"), "endurance event completion")
