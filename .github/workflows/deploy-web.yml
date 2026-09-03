@@ -24,6 +24,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -54,26 +55,36 @@ jobs:
           short_sha="${GITHUB_SHA:0:7}"
           sed -i "s/const BUILD_COMMIT := \"local\"/const BUILD_COMMIT := \"${short_sha}\"/" web/build_info.gd
 
-      - name: Import and validate Godot project
+      - name: Validate project data
         shell: bash
         run: |
           set -euo pipefail
           python3 tests/validate_project.py
-          "${GODOT_BIN}" --headless --path . --editor --import --quit
-          "${GODOT_BIN}" --headless --path . --script tests/godot/test_core.gd
+
+      - name: Import Godot project
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 5m "${GODOT_BIN}" --headless --path . --editor --import --quit
+
+      - name: Run Godot core tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 5m "${GODOT_BIN}" --headless --path . tests/godot/test_core.tscn
 
       - name: Load main scene headlessly
         shell: bash
         run: |
           set -euo pipefail
-          "${GODOT_BIN}" --headless --path . --quit-after 2
+          timeout 2m "${GODOT_BIN}" --headless --path . --quit-after 2
 
       - name: Export Web Preview
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build/web
-          "${GODOT_BIN}" --headless --path . --export-release "Web Preview" build/web/index.html
+          timeout 10m "${GODOT_BIN}" --headless --path . --export-release "Web Preview" build/web/index.html
 
       - name: Validate Web artifact
         shell: bash
@@ -99,6 +110,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: build
     steps:
       - name: Deploy to GitHub Pages
