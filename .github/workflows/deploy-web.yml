@@ -52,7 +52,11 @@ jobs:
           sed -i "s/const BUILD_COMMIT := \"local\"/const BUILD_COMMIT := \"${short_sha}\"/" web/build_info.gd
 
       - name: Import and validate Godot project
-        run: godot --headless --path . --editor --import --quit
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --editor --import --quit
+          godot --headless --path . --script tests/godot/test_core.gd
 
       - name: Export Web Preview
         shell: bash
@@ -70,6 +74,7 @@ jobs:
           find build/web -maxdepth 1 -type f -name '*.wasm' -size +0c | grep -q .
           find build/web -maxdepth 1 -type f -name '*.pck' -size +0c | grep -q .
           ! grep -q '\$GODOT_' build/web/index.html
+          ! grep -R -E 'alert\s*\(' build/web --include='*.html' --include='*.js'
           touch build/web/.nojekyll
           find build/web -maxdepth 1 -type f -printf '%f %s bytes\n' | sort
 
@@ -91,4 +96,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
