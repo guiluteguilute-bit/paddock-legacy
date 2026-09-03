@@ -47,6 +47,20 @@ main = (ROOT / "game/ui/main.gd").read_text()
 for feature in ("CREATION_STEPS", "creation_identity", "creation_foundation", "creation_driver", "creation_summary", "confirm_creation", "confirm_reset", "ADN DE L'ÉCURIE"):
     assert feature in main
 state = (ROOT / "game/core/game_state.gd").read_text()
-for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 2"):
+for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 3"):
     assert feature in state
 print("Team creation configuration, balance bounds and integration checks passed")
+
+career = json.loads((ROOT / "game/data/career.json").read_text())
+assert len(career["kart_calendar"]) == 6
+assert len(career["f4_calendar"]) >= 3
+assert len(career["rivals"]) == 11  # player + eleven persistent rivals = twelve-driver grid
+assert len(career["sponsors"]) >= 3
+assert career["points"] == [25,18,15,12,10,8,6,4,2,1]
+for feature in ("finish_season", "_generate_offers", "accept_offer", "sorted_standings", "sign_sponsor", "spend_skill", "repair_vehicle"):
+    assert feature in state
+for feature in ("show_season_end", "show_offers", "show_driver_development", "show_sponsors", "show_operations", "show_honours"):
+    assert feature in main
+for feature in ("start_lights", "tyre_temperature", "yellow_timer", "LIGHT RAIN", "pit_crew"):
+    assert feature in race
+print("Kart season, economy, promotion, F4 rules and persistence checks passed")
