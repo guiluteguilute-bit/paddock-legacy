@@ -31,3 +31,22 @@ for feature in ("_draw_car", "request_pit", "set_camera", "_near_car", "DRAPEAU 
 for legacy in ("app.js", "styles.css", "race/race-engine.js"):
     assert not (ROOT / legacy).exists(), f"legacy gameplay remains: {legacy}"
 print("Project structure, web shell, data and unification checks passed")
+
+creation = json.loads((ROOT / "game/data/team_creation.json").read_text())
+assert len(creation["origins"]) >= 6
+assert len(creation["philosophies"]) >= 6
+assert len(creation["manager_styles"]) >= 6
+assert len(creation["driver_archetypes"]) >= 6
+assert len(creation["goals"]) >= 6
+assert all(8000 <= item["budget"] <= 20000 for item in creation["origins"].values())
+for category in ("origins", "philosophies", "manager_styles"):
+    for choice in creation[category].values():
+        assert choice["advantages"] and choice["drawbacks"]
+        assert all(abs(value) <= .15 for value in choice.get("modifiers", {}).values())
+main = (ROOT / "game/ui/main.gd").read_text()
+for feature in ("CREATION_STEPS", "creation_identity", "creation_foundation", "creation_driver", "creation_summary", "confirm_creation", "confirm_reset", "ADN DE L'ÉCURIE"):
+    assert feature in main
+state = (ROOT / "game/core/game_state.gd").read_text()
+for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 2"):
+    assert feature in state
+print("Team creation configuration, balance bounds and integration checks passed")
