@@ -2,21 +2,42 @@ extends SceneTree
 
 func _init() -> void:
 	var state = load("res://game/core/game_state.gd").new()
+	state.creation_config = state.load_creation_config()
 	state.data = state.defaults()
-	assert(state.data.save_version == 1)
+	assert(state.data.save_version == 2)
 	assert(state.data.energy == 5)
+	var points = {"workshop":2,"technical":2,"simulator":2,"scouting":1,"marketing":1,"strategy":2}
+	var family = state.build_team_dna("family_garage","pure_performance","technician","reach_apex",points)
+	assert(family.modifiers.repair_cost == -0.10)
+	assert(family.modifiers.development_speed > 0.10)
+	assert(family.affinities.technical > 0.10)
+	state.new_career({"name":"Test Team","colors":["#112233","#445566","#778899"],"livery_pattern":1},{"first_name":"Ada","last_name":"Test","hidden_potential":88,"xp_multiplier":1.12,"stats":{"speed":54,"control":62,"mental":65}},family)
+	assert(state.data.money == 11500) # 12 000 €, then Kart Club entry.
+	assert(state.effective_cost(1000,"repair") == 900)
 	var initial_money: int = state.data.money
+	var displayed_cost := state.effective_cost(1500,"development")
 	assert(state.buy_upgrade("engine", 1500))
-	assert(state.data.money == initial_money - 1500)
+	assert(state.data.money == initial_money - displayed_cost)
 	assert(state.data.vehicles.kart.components.engine == 2)
-	state.data.team = {"name":"Test Team"}
-	state.data.driver = {"first_name":"Ada","last_name":"Test"}
+	var before_xp: int = state.data.experience
+	state.add_xp(100)
+	assert(state.data.experience > before_xp + 100) # DNA and worker profile are both real multipliers.
+	var estimate := state.potential_estimate()
+	assert(estimate.x <= 88 and estimate.y >= 88)
 	state.data.calendar = state.make_calendar(4)
 	state.complete_race({"position":3,"best_lap":48.2,"strategy":"NORMAL","standings":[]})
 	assert(state.data.energy == 4)
 	assert(state.data.race_history.size() == 1)
 	assert(state.data.calendar[0].status == "COMPLETED")
 	assert(state.data.calendar[1].status == "AVAILABLE")
+	var legacy = state.migrate({"team":{"name":"Old Team"},"driver":{"first_name":"Old","last_name":"Save"}})
+	assert(legacy.team_dna.origin == "independent")
+	assert(legacy.driver.hidden_potential == 82)
+	# Replayability: the three mission scenarios produce distinct DNA and budgets.
+	var investor = state.build_team_dna("private_investor","financial_management","businessman","richest_team",points)
+	var academy = state.build_team_dna("youth_academy","driver_excellence","protector","train_champions",points)
+	assert(family.modifiers != investor.modifiers and investor.modifiers != academy.modifiers)
+	assert(state.creation_config.origins.private_investor.budget > state.creation_config.origins.youth_academy.budget)
 	var race = load("res://game/races/race_view.gd").new()
 	race.setup("Ada Test", 8, 0.7)
 	assert(race.racers.size() == 12)
@@ -31,5 +52,5 @@ func _init() -> void:
 	assert(race.pit_requested)
 	race.set_camera("PILOTE")
 	assert(race.camera_mode == "PILOTE")
-	print("Core career checks passed")
+	print("Core career and Team DNA checks passed")
 	quit(0)
