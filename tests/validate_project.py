@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 project = (ROOT / "project.godot").read_text()
 assert 'run/main_scene="res://game/ui/main.tscn"' in project
 assert 'GameState="*res://game/core/game_state.gd"' in project
+assert 'AudioManager="*res://game/core/audio_manager.gd"' in project
 assert 'window/size/viewport_width=1080' in project
 assert 'window/size/viewport_height=1920' in project
 # The first public build deliberately uses Godot's official shell. Validate a
@@ -69,6 +70,9 @@ main = (ROOT / "game/ui/main.gd").read_text()
 for feature in ("CREATION_STEPS", "creation_manager", "creation_team", "creation_summary", "confirm_creation", "confirm_reset", "CHOISISSEZ VOTRE GÉRANT"):
     assert feature in main
 assert 'CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]' in main
+assert "show_welcome" not in main
+assert "BÂTISSEZ VOTRE LÉGENDE" not in main
+assert "AudioManager.set_music_volume" in main
 assert len(creation["managers"]) == 5
 for manager_id, manager in creation["managers"].items():
     assert (ROOT / "graphics/portraits/managers" / f"{manager_id}.svg").is_file()
@@ -79,6 +83,13 @@ state = (ROOT / "game/core/game_state.gd").read_text()
 for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 5"):
     assert feature in state
 print("Team creation configuration, balance bounds and integration checks passed")
+
+audio = (ROOT / "game/core/audio_manager.gd").read_text()
+for feature in ("MusicPlayerA", "MusicPlayerB", "MUSIC_CROSSFADE_DURATION := 5.0", "start_music_after_interaction", "music_enabled", "enter_race_music", "exit_race_music"):
+    assert feature in audio
+assert "ResourceLoader.exists" in audio
+assert (ROOT / "audio/music/README.md").is_file()
+print("Global, missing-file-safe ambient playlist checks passed")
 
 career = json.loads((ROOT / "game/data/career.json").read_text())
 assert len(career["kart_calendar"]) == 6

@@ -18,10 +18,19 @@ const TEAM_PALETTES := [["#19dcc6","#102a38","#ffcf4a"],["#ff4d5e","#25152f","#f
 var colors = {"bg": Color("071117"), "panel": Color("10232c"), "panel_2": Color("162f39"), "accent": Color("19dcc6"), "gold": Color("ffcc58"), "text": Color("eff7f5"), "muted": Color("91a8aa"), "danger": Color("ff6b65")}
 
 func _ready() -> void:
+	print("[BOOT] Paddock Legacy starting")
 	build_shell()
 	get_viewport().size_changed.connect(_apply_safe_area)
-	if GameState.has_career(): show_dashboard()
-	else: show_welcome()
+	if GameState.creation_config.is_empty() or GameState.career_config.is_empty():
+		show_boot_error("BOOT_DATA_001", "Configuration de carrière indisponible")
+		return
+	if GameState.has_career():
+		print("[BOOT] Onboarding state = dashboard")
+		show_dashboard()
+	else:
+		print("[BOOT] Onboarding state = manager_selection")
+		show_creation()
+	print("[BOOT] Main UI ready")
 
 func build_shell() -> void:
 	var bg = ColorRect.new(); bg.color = colors.bg; bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(bg)
@@ -60,12 +69,12 @@ func clear(page_title: String) -> void:
 	subtitle.text = page_title + (("  •  " + GameState.data.get("team", {}).get("name", "").to_upper()) if GameState.has_career() else "")
 	notice.text = ("SAISON %d  •  %s €  •  RÉP. %d  •  ÉNERGIE %s/5" % [GameState.data.get("career_year", 2026), money(GameState.data.get("money", 0)), GameState.data.get("reputation", 0), GameState.data.get("energy", 0)]) if GameState.has_career() else "GODOT • PORTRAIT • WEB"
 
-func show_welcome() -> void:
-	clear("BIENVENUE"); heading("CHAQUE LÉGENDE COMMENCE QUELQUE PART.", 22); heading("BÂTISSEZ VOTRE LÉGENDE", 31); label("DU KARTING À FORMULA APEX", colors.accent, 15)
-	var hero = TextureRect.new(); hero.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg"); hero.custom_minimum_size.y = 330; hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; content.add_child(hero)
-	label("Management automobile, stratégie et retransmission miniature 2.5D.", colors.muted, 17)
-	content.add_child(button("CRÉER UNE ÉCURIE", show_creation))
-	if FileAccess.file_exists(GameState.SAVE_PATH): content.add_child(button("REPRENDRE LA CARRIÈRE", func(): GameState.load_game(); show_dashboard()))
+func show_boot_error(error_id: String, detail: String) -> void:
+	push_error("[BOOT] %s: %s" % [error_id, detail])
+	clear("ERREUR %s" % error_id)
+	heading("IMPOSSIBLE DE CHARGER LE JEU.", 26)
+	label(detail, colors.danger, 15)
+	content.add_child(button("RÉESSAYER", func(): get_tree().reload_current_scene()))
 	set_navigation_enabled(false)
 
 func show_creation() -> void:
@@ -180,7 +189,7 @@ func add_kart_preview_transition() -> void:
 	heading("KARTING RÉGIONAL", 24)
 
 func show_dashboard() -> void:
-	if not GameState.has_career(): show_welcome(); return
+	if not GameState.has_career(): show_creation(); return
 	set_navigation_enabled(true); clear("ACCUEIL")
 	if GameState.data.season_complete:
 		show_season_end()
@@ -363,12 +372,15 @@ func accept_career_offer(id:String) -> void:
 
 func show_settings() -> void:
 	clear("PARAMÈTRES"); heading("AUDIO & JEU", 24)
-	for key in ["master", "music", "sfx"]:
+	for key in ["master", "sfx"]:
 		label(key.to_upper(), colors.muted, 12); var slider = HSlider.new(); slider.min_value = 0; slider.max_value = 100; slider.value = GameState.data.settings.get(key, 80); slider.custom_minimum_size.y = 48; slider.value_changed.connect(func(v, k = key): GameState.data.settings[k] = int(v); GameState.save_game()); content.add_child(slider)
+	label("MUSIQUE", colors.muted, 12)
+	var music_slider := HSlider.new(); music_slider.min_value = 0; music_slider.max_value = 100; music_slider.value = GameState.data.settings.get("music_volume", 55); music_slider.custom_minimum_size.y = 48; music_slider.value_changed.connect(AudioManager.set_music_volume); content.add_child(music_slider)
+	var music_toggle := CheckButton.new(); music_toggle.text = "MUSIQUE ON / OFF"; music_toggle.button_pressed = GameState.data.settings.get("music_enabled", true); music_toggle.toggled.connect(AudioManager.set_music_enabled); content.add_child(music_toggle)
 	content.add_child(button("NOUVELLE CARRIÈRE / EFFACER", confirm_reset))
 
 func confirm_reset() -> void:
-	var dialog =ConfirmationDialog.new(); dialog.title="NOUVELLE CARRIÈRE"; dialog.dialog_text="Toute la progression actuelle sera définitivement supprimée."; dialog.ok_button_text="EFFACER ET RECOMMENCER"; add_child(dialog); dialog.confirmed.connect(func():GameState.reset_save();creation_draft.clear();creation_step=0;show_welcome()); dialog.popup_centered(Vector2i(480,240))
+	var dialog =ConfirmationDialog.new(); dialog.title="NOUVELLE CARRIÈRE"; dialog.dialog_text="Toute la progression actuelle sera définitivement supprimée."; dialog.ok_button_text="EFFACER ET RECOMMENCER"; add_child(dialog); dialog.confirmed.connect(func():GameState.reset_save();creation_draft.clear();creation_step=0;show_creation()); dialog.popup_centered(Vector2i(480,240))
 
 func heading(text: String, size_px: int) -> Label: var l = label(text, colors.text, size_px); l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; return l
 func label(text: String, color: Color, size_px: int) -> Label: var l = Label.new(); l.text = text; l.add_theme_color_override("font_color", color); l.add_theme_font_size_override("font_size", size_px); l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; content.add_child(l); return l

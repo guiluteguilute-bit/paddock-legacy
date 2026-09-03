@@ -20,6 +20,7 @@
     #progress::-webkit-progress-value { background: #18d3c5; }
     #progress::-moz-progress-bar { background: #18d3c5; }
     #status-error { display: none; max-width: min(80vw, 560px); margin: 0; color: #ff6b71; white-space: pre-wrap; }
+    #retry { display: none; padding: 14px 24px; border: 1px solid #18d3c5; border-radius: 8px; background: #10232c; color: #f5f7fa; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -29,6 +30,7 @@
     <p id="status-text">Chargement…</p>
     <progress id="progress" max="1" value="0"></progress>
     <p id="status-error"></p>
+    <button id="retry" type="button">RÉESSAYER</button>
   </div>
   <noscript>JavaScript doit être activé pour lancer Paddock Legacy.</noscript>
   <script src="$GODOT_URL"></script>
@@ -38,6 +40,8 @@
     const statusText = document.getElementById('status-text');
     const statusError = document.getElementById('status-error');
     const progress = document.getElementById('progress');
+    const retry = document.getElementById('retry');
+    retry.addEventListener('click', () => window.location.reload());
 
     engine.startGame({
       onProgress(current, total) {
@@ -50,6 +54,7 @@
       progress.style.display = 'none';
       statusText.textContent = 'Le lancement a échoué';
       statusError.style.display = 'block';
+      retry.style.display = 'inline-block';
       statusError.textContent = error instanceof Error ? error.message : String(error);
       console.error(error);
     });
