@@ -10,7 +10,11 @@ var race_view: RaceView
 var creation_step = 0
 var creation_draft: Dictionary = {}
 var creation_controls: Dictionary = {}
-const CREATION_STEPS := ["IDENTITÉ", "ORIGINE", "PHILOSOPHIE", "DIRECTION", "FONDATION", "PILOTE", "OBJECTIF", "RÉCAPITULATIF"]
+const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
+const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
+const TEAM_LOGO_PATHS := ["res://graphics/logos/logo_team_apex_nova.svg", "res://graphics/logos/logo_team_crimson_orbit.svg", "res://graphics/logos/logo_team_ember_fox.svg", "res://graphics/logos/logo_team_helix_racing.svg", "res://graphics/logos/logo_team_kinetic_arc.svg", "res://graphics/logos/logo_team_lumen_motorsport.svg", "res://graphics/logos/logo_team_meridian_kart.svg", "res://graphics/logos/logo_team_northstar.svg", "res://graphics/logos/logo_team_pulse_competition.svg", "res://graphics/logos/logo_team_silver_finch.svg", "res://graphics/logos/logo_team_vector_peak.svg", "res://graphics/logos/logo_team_vertex_union.svg"]
+const MANAGER_PORTRAITS := {"alex_martin":"res://graphics/portraits/managers/alex_martin.svg", "maya_chen":"res://graphics/portraits/managers/maya_chen.svg", "sofia_reyes":"res://graphics/portraits/managers/sofia_reyes.svg", "idris_kone":"res://graphics/portraits/managers/idris_kone.svg", "victor_bauer":"res://graphics/portraits/managers/victor_bauer.svg"}
+const TEAM_PALETTES := [["#19dcc6","#102a38","#ffcf4a"],["#ff4d5e","#25152f","#f8f3e8"],["#5f7cff","#101b3d","#f7cc46"],["#ff7a35","#241910","#fff0d2"],["#b56cff","#211534","#53f3d3"],["#36c66d","#10291d","#f6dc5e"],["#eeeeee","#20252c","#e53636"],["#e9c46a","#153047","#f7f5ef"]]
 var colors = {"bg": Color("071117"), "panel": Color("10232c"), "panel_2": Color("162f39"), "accent": Color("19dcc6"), "gold": Color("ffcc58"), "text": Color("eff7f5"), "muted": Color("91a8aa"), "danger": Color("ff6b65")}
 
 func _ready() -> void:
@@ -66,187 +70,114 @@ func show_welcome() -> void:
 
 func show_creation() -> void:
 	if creation_draft.is_empty():
-		creation_draft = {"team_name":"Nova Kart Racing","short_name":"NOVA","country":"France","team_number":27,"colors":["#19dcc6","#102a38","#ffcf4a"],"logo_shape":0,"logo_symbol":0,"logo_outline":0,"livery_pattern":0,"origin":"family_garage","philosophy":"pure_performance","style":"technician","points":{"workshop":2,"technical":2,"simulator":2,"scouting":1,"marketing":1,"strategy":2},"driver_first":"Noa","driver_last":"Martin","driver_country":"France","driver_number":27,"driver_age":14,"driver_appearance":0,"helmet":0,"driver_profile":"worker","goal":"reach_apex"}
+		creation_draft = {"manager":"alex_martin","team_name":"Nova Racing","short_name":"NOVA","country":"France","team_number":27,"colors":TEAM_PALETTES[0].duplicate(),"logo_preset":0,"livery_pattern":0,"driver_variant":0}
+	creation_step = clampi(creation_step, 0, 2)
 	show_creation_step()
 
 func show_creation_step() -> void:
-	clear("ÉTAPE %d / 8  •  %s" % [creation_step + 1, CREATION_STEPS[creation_step]]); set_navigation_enabled(false); creation_controls.clear()
+	clear(creation_progress()); set_navigation_enabled(false); creation_controls.clear()
 	match creation_step:
-		0: creation_identity()
-		1: creation_choice("CHOISISSEZ VOTRE ORIGINE", "origins", "origin")
-		2: creation_choice("QUELLE EST VOTRE PHILOSOPHIE ?", "philosophies", "philosophy")
-		3: creation_choice("STYLE DE DIRECTION", "manager_styles", "style")
-		4: creation_foundation()
-		5: creation_driver()
-		6: creation_goal()
-		7: creation_summary()
-	if creation_step < 7: creation_navigation()
+		0: creation_manager()
+		1: creation_team()
+		2: creation_summary()
 
-func creation_identity() -> void:
-	heading("CRÉEZ VOTRE ÉCURIE", 28); label("Une identité qui vous suivra du karting à Formula Apex.", colors.muted, 14)
-	var preview = LiveryPreview.new(); preview.custom_minimum_size = Vector2(0, 220); preview.set_livery(creation_draft.colors, creation_draft.livery_pattern); content.add_child(preview); creation_controls.preview = preview
-	for field in [["team_name","NOM COMPLET",24],["short_name","NOM COURT",10],["country","PAYS",20],["team_number","NUMÉRO PRINCIPAL",3]]:
-		label(field[1],colors.muted,12); var edit =LineEdit.new(); edit.text=str(creation_draft[field[0]]); edit.max_length=field[2]; edit.custom_minimum_size.y=50; edit.text_changed.connect(func(value,k=field[0]): creation_draft[k]=int(value) if k=="team_number" else value); content.add_child(edit)
-	label("COULEURS DE L'ÉCURIE",colors.muted,12)
-	for i in 3:
-		var picker =ColorPickerButton.new(); picker.color=Color(creation_draft.colors[i]); picker.custom_minimum_size.y=48; picker.color_changed.connect(func(value,index=i): creation_draft.colors[index]=value.to_html(); preview.set_livery(creation_draft.colors,creation_draft.livery_pattern)); content.add_child(picker)
-	choice_buttons("MOTIF DE LIVRÉE", ["BANDE","DIAGONALE","GÉOMÉTRIQUE","DOUBLE BANDE","DÉGRADÉ","UNI"], "livery_pattern", func(): preview.set_livery(creation_draft.colors,creation_draft.livery_pattern))
-	choice_buttons("FORME DU LOGO", ["ÉCUSSON","CERCLE","HEXAGONE","AILE","BLASON","POINTE","OVALE","BOUCLIER","LOSANGE","ANNEAU","DRAPEAU","MONOGRAMME"], "logo_shape")
-	choice_buttons("SYMBOLE", ["ÉCLAIR","COURONNE","VOLANT","ÉTOILE","FAUCON","LION","FLÈCHE","PISTON","DAMIER","CASQUE","ROUE","AILE","TORO","COMÈTE","MONTAGNE","FEU","GRIFFE","NUMÉRO","MOTEUR","LAURIER"], "logo_symbol")
+func creation_progress() -> String:
+	var dots: Array[String] = []
+	for i in 3: dots.append("●" if i <= creation_step else "○")
+	return "  ".join(dots)
 
-func creation_choice(page_title: String, section: String, draft_key: String) -> void:
-	heading(page_title, 25)
-	var entries: Dictionary = GameState.creation_config.get(section, {})
-	for id in entries:
-		var option: Dictionary = entries[id]
-		var selected = creation_draft[draft_key] == id
-		var description = option.get("story", "") + "\n\nAVANTAGES\n• " + "\n• ".join(option.get("advantages", [])) + "\n\nINCONVÉNIENTS\n• " + "\n• ".join(option.get("drawbacks", []))
-		var select = func() -> void:
-			creation_draft[draft_key] = id
-			show_creation_step()
-		var choice = button(("✓  " if selected else "") + option.name.to_upper() + "\n" + description, select)
-		choice.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		choice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		choice.custom_minimum_size.y = 190
-		content.add_child(choice)
+func creation_manager() -> void:
+	heading("CHOISISSEZ VOTRE GÉRANT", 28)
+	label("Il dirigera votre écurie pendant toute votre aventure.", colors.muted, 14)
+	var managers: Dictionary = GameState.creation_config.get("managers", {})
+	var ids := managers.keys(); var selected := maxi(0, ids.find(creation_draft.manager)); var manager: Dictionary = managers[ids[selected]]
+	var stage = PanelContainer.new(); stage.custom_minimum_size.y = 430; content.add_child(stage)
+	var portrait = TextureRect.new(); portrait.texture = load(MANAGER_PORTRAITS[ids[selected]]); portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; stage.add_child(portrait)
+	var arrows = HBoxContainer.new(); content.add_child(arrows)
+	var previous = button("‹", func(): creation_draft.manager = ids[(selected - 1 + ids.size()) % ids.size()]; show_creation_step(), true); previous.custom_minimum_size.x = 80; arrows.add_child(previous)
+	var identity = VBoxContainer.new(); identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL; arrows.add_child(identity)
+	var manager_name = Label.new(); manager_name.text = manager.name.to_upper(); manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; manager_name.add_theme_font_size_override("font_size", 25); identity.add_child(manager_name)
+	var role = Label.new(); role.text = manager.title.to_upper(); role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; role.add_theme_color_override("font_color", colors.accent); identity.add_child(role)
+	var following = button("›", func(): creation_draft.manager = ids[(selected + 1) % ids.size()]; show_creation_step(), true); following.custom_minimum_size.x = 80; arrows.add_child(following)
+	label("%s  %s\n%s  %s\n%s  %s" % [manager.icons[0], stars(manager.ratings[0]), manager.icons[1], stars(manager.ratings[1]), manager.icons[2], stars(manager.ratings[2])], colors.text, 17)
+	label(manager.highlight, colors.gold, 18)
+	var manager_dots: Array[String] = []
+	for i in ids.size(): manager_dots.append("●" if i == selected else "○")
+	var dots = Label.new(); dots.text = "  ".join(manager_dots); dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; dots.add_theme_color_override("font_color", colors.accent); content.add_child(dots)
+	content.add_child(button("CHOISIR %s" % manager.first_name.to_upper(), func(): creation_step = 1; show_creation_step()))
 
-func creation_foundation() -> void:
-	heading("10 POINTS DE FONDATION",26); label("Niveau actuel et affinité sont distincts. Chaque domaine accepte 0 à 5 points.",colors.muted,14)
-	var used:int=foundation_total(); label("POINTS UTILISÉS  %d / 10" % used,colors.gold,19)
-	for domain in GameState.DNA_DOMAINS:
-		var row =HBoxContainer.new(); content.add_child(row); var name_label =Label.new(); name_label.text=domain.to_upper(); name_label.custom_minimum_size.x=240; row.add_child(name_label)
-		var decrease = func() -> void:
-			if creation_draft.points[domain] > 0:
-				creation_draft.points[domain] -= 1
-			show_creation_step()
-		var minus = button("−", decrease, true)
-		row.add_child(minus)
-		var value =Label.new(); value.text=str(creation_draft.points[domain]); value.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; value.custom_minimum_size.x=55; row.add_child(value)
-		var increase = func() -> void:
-			if creation_draft.points[domain] < 5 and foundation_total() < 10:
-				creation_draft.points[domain] += 1
-			show_creation_step()
-		var plus = button("+", increase, true)
-		row.add_child(plus)
-	var dna =draft_dna(); heading("SYNTHÈSE DYNAMIQUE",18)
-	for domain in GameState.DNA_DOMAINS:
-		var rating:int=dna.ratings[domain]; var tier ="FORCE" if rating>=60 else ("MOYEN" if rating>=45 else "FAIBLESSE"); label("%-11s  %s  %s  %d" % [domain.to_upper(),stars(creation_draft.points[domain]),tier,rating], colors.accent if tier=="FORCE" else colors.muted,14)
+func creation_team() -> void:
+	heading("CRÉEZ VOTRE ÉCURIE", 28)
+	add_kart_preview(300)
+	var edit = LineEdit.new(); edit.text = creation_draft.team_name; edit.placeholder_text = "NOM DE L'ÉCURIE"; edit.max_length = 24; edit.custom_minimum_size.y = 58; edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	edit.text_changed.connect(func(value): creation_draft.team_name = value; creation_draft.short_name = value.left(10).to_upper())
+	content.add_child(edit)
+	label("PALETTE", colors.muted, 12); var palette_grid = GridContainer.new(); palette_grid.columns = 4; content.add_child(palette_grid)
+	for i in TEAM_PALETTES.size():
+		var palette = TEAM_PALETTES[i]; var palette_button = button(("✓ " if creation_draft.colors == palette else "") + "● ● ●", func(): creation_draft.colors = TEAM_PALETTES[i].duplicate(); show_creation_step(), true)
+		palette_button.add_theme_color_override("font_color", Color(palette[0])); palette_grid.add_child(palette_button)
+	label("LOGO", colors.muted, 12); var logo_grid = GridContainer.new(); logo_grid.columns = 6; content.add_child(logo_grid)
+	for i in TEAM_LOGOS.size():
+		var logo_button = TextureButton.new(); logo_button.texture_normal = load(TEAM_LOGO_PATHS[i]); logo_button.ignore_texture_size = true; logo_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED; logo_button.custom_minimum_size = Vector2(76, 76); logo_button.modulate = colors.accent if i == int(creation_draft.logo_preset) else Color.WHITE
+		logo_button.pressed.connect(func(): creation_draft.logo_preset = i; show_creation_step()); logo_grid.add_child(logo_button)
+	choice_buttons("LIVRÉE", ["UNI","BANDE","DIAGONALE","RACING","GÉOMÉTRIQUE"], "livery_pattern")
+	var row = HBoxContainer.new(); content.add_child(row); var back = button("‹ RETOUR", func(): creation_step = 0; show_creation_step()); back.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(back)
+	var next = button("CONTINUER ›", func():
+		if not str(creation_draft.team_name).strip_edges().is_empty(): creation_step = 2; show_creation_step()
+		else: toast("Donnez un nom à votre écurie")); next.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(next)
 
-func creation_driver() -> void:
-	heading("CRÉEZ VOTRE PREMIER PILOTE",26)
-	for field in [["driver_first","PRÉNOM"],["driver_last","NOM"],["driver_country","PAYS"],["driver_number","NUMÉRO"],["driver_age","ÂGE (13–16)"]]:
-		label(field[1],colors.muted,12); var edit =LineEdit.new(); edit.text=str(creation_draft[field[0]]); edit.custom_minimum_size.y=48; edit.text_changed.connect(func(value,k=field[0]): creation_draft[k]=clampi(int(value),13,16) if k=="driver_age" else (int(value) if k=="driver_number" else value)); content.add_child(edit)
-	choice_buttons("APPARENCE",["PORTRAIT 1","PORTRAIT 2","PORTRAIT 3","PORTRAIT 4"],"driver_appearance")
-	choice_buttons("CASQUE",["CLASSIQUE","BANDE","ÉCLAIR","DAMIER","AILE","GRIFFE","GÉO","APEX"],"helmet")
-	heading("PROFIL DU PILOTE", 20)
-	var profiles: Dictionary = GameState.creation_config.driver_archetypes
-	for id in profiles:
-		var option: Dictionary = profiles[id]
-		var select = func() -> void:
-			creation_draft.driver_profile = id
-			show_creation_step()
-		var choice = button(("✓  " if creation_draft.driver_profile == id else "") + option.name.to_upper() + "\n+ " + " • ".join(option.advantages) + "\n− " + " • ".join(option.drawbacks), select)
-		choice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		choice.custom_minimum_size.y = 115
-		content.add_child(choice)
-
-func creation_goal() -> void:
-	heading("QUEL EST VOTRE OBJECTIF ?",26); label("Il guidera vos objectifs, événements, récompenses et succès — sans bonus automatique démesuré.",colors.muted,14)
-	for id in GameState.creation_config.goals:
-		var b =button(("✓  " if creation_draft.goal==id else "")+str(GameState.creation_config.goals[id]).to_upper(),func(key=id):creation_draft.goal=key;show_creation_step()); content.add_child(b)
+func add_kart_preview(height: int) -> void:
+	var preview = LiveryPreview.new(); preview.custom_minimum_size = Vector2(0, height); preview.set_livery(creation_draft.colors, creation_draft.livery_pattern); content.add_child(preview); creation_controls.preview = preview
 
 func creation_summary() -> void:
-	heading("VOTRE ÉCURIE EST PRÊTE", 29)
-	var dna = draft_dna()
-	var origin = GameState.creation_config.origins[creation_draft.origin]
-	var philosophy = GameState.creation_config.philosophies[creation_draft.philosophy]
-	var style = GameState.creation_config.manager_styles[creation_draft.style]
-	var profile = GameState.creation_config.driver_archetypes[creation_draft.driver_profile]
-	var preview = LiveryPreview.new()
-	preview.custom_minimum_size.y = 190
-	preview.set_livery(creation_draft.colors, creation_draft.livery_pattern)
-	content.add_child(preview)
-	content.add_child(card(creation_draft.team_name.to_upper(), creation_draft.country + "  •  FONDÉE EN 2027\nORIGINE : " + origin.name + "\nPHILOSOPHIE : " + philosophy.name + "\nFONDATEUR : " + style.name + "\nOBJECTIF : " + GameState.creation_config.goals[creation_draft.goal], 190))
-	heading("ADN DE L'ÉCURIE", 18)
-	for domain in GameState.DNA_DOMAINS:
-		label("%-11s  %d  %s" % [domain.to_upper(), dna.ratings[domain], rating_bar(dna.ratings[domain])], colors.accent, 14)
-	heading("AVANTAGES", 18)
-	label("• " + "\n• ".join(dna.advantages), colors.text, 14)
-	heading("INCONVÉNIENTS", 18)
-	label("• " + "\n• ".join(dna.drawbacks), colors.danger, 14)
-	var potential = profile.potential
-	content.add_child(card("PILOTE  •  %s %s" % [creation_draft.driver_first, creation_draft.driver_last], "%d ANS  •  #%d  •  %s\nPOTENTIEL ESTIMÉ %d — %d" % [creation_draft.driver_age, creation_draft.driver_number, profile.name, potential[0] - 5, potential[1]], 120))
-	content.add_child(button("‹  MODIFIER", func(): creation_step = 6; show_creation_step()))
-	content.add_child(button("COMMENCER LA CARRIÈRE", confirm_creation))
-
-func creation_navigation() -> void:
-	var row = HBoxContainer.new()
-	content.add_child(row)
-	if creation_step > 0:
-		var go_back = func() -> void:
-			creation_step -= 1
-			show_creation_step()
-		var back = button("‹ RETOUR", go_back)
-		back.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(back)
-	var go_next = func() -> void:
-		if validate_creation_step():
-			creation_step += 1
-			show_creation_step()
-	var next = button("CONTINUER ›", go_next)
-	next.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(next)
-
-func validate_creation_step() -> bool:
-	if creation_step == 0 and (str(creation_draft.team_name).strip_edges().is_empty() or str(creation_draft.short_name).strip_edges().is_empty()):
-		toast("Le nom complet et le nom court sont requis")
-		return false
-	if creation_step == 4 and foundation_total() != 10:
-		toast("Répartissez exactement 10 points")
-		return false
-	if creation_step == 5 and (str(creation_draft.driver_first).strip_edges().is_empty() or str(creation_draft.driver_last).strip_edges().is_empty()):
-		toast("Le nom du pilote est requis")
-		return false
-	return true
-
-func foundation_total() -> int:
-	var total = 0
-	for value in creation_draft.points.values():
-		total += int(value)
-	return total
+	var manager: Dictionary = GameState.creation_config.managers[creation_draft.manager]
+	heading("VOTRE AVENTURE COMMENCE", 27)
+	var portrait = TextureRect.new(); portrait.texture = load(MANAGER_PORTRAITS[creation_draft.manager]); portrait.custom_minimum_size.y = 245; portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; content.add_child(portrait)
+	heading(manager.name.to_upper(), 21)
+	var logo = TextureRect.new(); logo.texture = load(TEAM_LOGO_PATHS[int(creation_draft.logo_preset)]); logo.custom_minimum_size.y = 105; logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; content.add_child(logo)
+	heading(creation_draft.team_name.to_upper(), 28); add_kart_preview(225)
+	heading("VOTRE HISTOIRE COMMENCE ICI.", 22); label("Un petit garage. Un jeune pilote.\nUn rêve : atteindre les sommets.", colors.muted, 15)
+	content.add_child(card("OBJECTIF DE DÉPART", "TERMINER VOTRE PREMIÈRE SAISON", 82))
+	var row = HBoxContainer.new(); content.add_child(row); var back = button("‹ MODIFIER", func(): creation_step = 1; show_creation_step()); back.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(back)
+	var start = button("COMMENCER LA CARRIÈRE", confirm_creation); start.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(start)
 
 func draft_dna() -> Dictionary:
-	return GameState.build_team_dna(creation_draft.origin, creation_draft.philosophy, creation_draft.style, creation_draft.goal, creation_draft.points)
+	var manager: Dictionary = GameState.creation_config.managers[creation_draft.manager]
+	var dna := GameState.build_team_dna(manager.origin, manager.philosophy, manager.style, "reach_apex", manager.points)
+	# Keep legacy identity fields/save compatibility, while the five curated profiles own the balanced effects.
+	dna.modifiers = manager.modifiers.duplicate(true)
+	dna.advantages = manager.advantages.duplicate()
+	dna.drawbacks = manager.drawbacks.duplicate()
+	dna.manager_id = creation_draft.manager
+	return dna
 
 func stars(value: int) -> String:
 	return "★".repeat(value) + "☆".repeat(5 - value)
 
-func rating_bar(value: int) -> String:
-	var filled = clampi(int(value / 10.0), 1, 10)
-	return "▰".repeat(filled) + "▱".repeat(10 - filled)
-
 func choice_buttons(page_title: String, options: Array, key: String, callback: Callable = Callable()) -> void:
-	label(page_title, colors.muted, 12)
-	var grid = GridContainer.new()
-	grid.columns = 2
-	content.add_child(grid)
+	label(page_title, colors.muted, 12); var grid = GridContainer.new(); grid.columns = options.size(); content.add_child(grid)
 	for i in options.size():
 		var select = func() -> void:
 			creation_draft[key] = i
-			if callback.is_valid():
-				callback.call()
+			if callback.is_valid(): callback.call()
 			show_creation_step()
 		var choice = button(("✓ " if int(creation_draft[key]) == i else "") + options[i], select, true)
-		choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		grid.add_child(choice)
+		choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL; grid.add_child(choice)
 
 func confirm_creation() -> void:
-	var dialog =ConfirmationDialog.new(); dialog.title="COMMENCER LA CARRIÈRE"; dialog.dialog_text="Ces choix définiront définitivement l'histoire de votre écurie. Prêt pour le petit garage ?"; dialog.ok_button_text="COMMENCER"; dialog.cancel_button_text="RETOUR"; add_child(dialog); dialog.confirmed.connect(finalize_creation); dialog.popup_centered(Vector2i(480,260))
+	finalize_creation()
+
 func finalize_creation() -> void:
-	var profile:Dictionary=GameState.creation_config.driver_archetypes[creation_draft.driver_profile]; var rng =RandomNumberGenerator.new(); rng.randomize(); var hidden =rng.randi_range(int(profile.potential[0]),int(profile.potential[1]))
-	var team={"name":creation_draft.team_name,"short_name":creation_draft.short_name,"nationality":creation_draft.country,"country":creation_draft.country,"number":creation_draft.team_number,"colors":creation_draft.colors.duplicate(),"logo":{"shape":creation_draft.logo_shape,"symbol":creation_draft.logo_symbol,"outline":creation_draft.logo_outline},"livery_pattern":creation_draft.livery_pattern}
-	var driver={"first_name":creation_draft.driver_first,"last_name":creation_draft.driver_last,"nationality":creation_draft.driver_country,"number":creation_draft.driver_number,"age":creation_draft.driver_age,"appearance":creation_draft.driver_appearance,"helmet":creation_draft.helmet,"colors":creation_draft.colors.duplicate(),"profile":creation_draft.driver_profile,"hidden_potential":hidden,"xp_multiplier":profile.xp,"traits":profile.traits.duplicate(true),"stats":profile.stats.duplicate(true)}
-	GameState.new_career(team,driver,draft_dna()); creation_draft.clear(); creation_step=0; show_dashboard()
+	var starters = [{"first_name":"Noa","last_name":"Martin","stats":{"speed":62,"control":67,"mental":58}},{"first_name":"Lina","last_name":"Diallo","stats":{"speed":65,"control":61,"mental":63}},{"first_name":"Sacha","last_name":"Moreau","stats":{"speed":59,"control":65,"mental":66}}]
+	var starter: Dictionary = starters[int(creation_draft.driver_variant) % starters.size()]; var profile: Dictionary = GameState.creation_config.driver_archetypes.worker
+	var team = {"name":creation_draft.team_name.strip_edges(),"short_name":creation_draft.short_name,"nationality":"France","country":"France","number":27,"colors":creation_draft.colors.duplicate(),"logo":{"preset":creation_draft.logo_preset,"id":TEAM_LOGOS[int(creation_draft.logo_preset)]},"livery_pattern":creation_draft.livery_pattern,"manager_id":creation_draft.manager}
+	var driver = {"first_name":starter.first_name,"last_name":starter.last_name,"nationality":"France","number":27,"age":14,"appearance":int(creation_draft.driver_variant),"helmet":0,"colors":creation_draft.colors.duplicate(),"profile":"worker","hidden_potential":84,"xp_multiplier":profile.xp,"traits":profile.traits.duplicate(true),"stats":starter.stats.duplicate(true)}
+	GameState.new_career(team, driver, draft_dna()); creation_draft.clear(); creation_step = 0
+	clear("SAISON 1"); heading("LA PORTE DU GARAGE S'OUVRE…", 27); add_kart_preview_transition(); await get_tree().create_timer(0.7).timeout; show_dashboard()
+
+func add_kart_preview_transition() -> void:
+	var garage = TextureRect.new(); garage.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg"); garage.custom_minimum_size.y = 480; garage.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; garage.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; content.add_child(garage)
+	heading("KARTING RÉGIONAL", 24)
 
 func show_dashboard() -> void:
 	if not GameState.has_career(): show_welcome(); return
@@ -448,4 +379,5 @@ func card(top: String, bottom: String, height: float) -> PanelContainer:
 func toast(text: String) -> void: notice.text = text
 func money(value) -> String: return str(int(value))
 func set_navigation_enabled(enabled: bool) -> void:
+	nav.visible = enabled
 	for child in nav.get_children(): child.disabled = not enabled

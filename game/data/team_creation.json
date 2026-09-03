@@ -1,51 +1,822 @@
 {
   "origins": {
-    "family_garage": {"name":"Garage familial","story":"Peu de moyens, beaucoup de savoir-faire mécanique.","budget":12000,"affinities":{"workshop":0.10},"modifiers":{"repair_cost":-0.10,"staff_loyalty":0.10,"sponsor":-0.10},"advantages":["-10 % coût des réparations","+10 % progression atelier","+10 % fidélité du personnel"],"drawbacks":["-10 % revenus sponsors au départ"],"event":"family_mechanic"},
-    "private_investor": {"name":"Investisseur privé","story":"Une structure neuve financée par un investisseur ambitieux.","budget":20000,"affinities":{"marketing":0.05},"modifiers":{"facility_cost":-0.05,"staff_attraction":0.05,"operating_cost":0.05},"advantages":["Budget initial de 20 000 €","-5 % coût de lancement des infrastructures"],"drawbacks":["+5 % coûts de fonctionnement","Objectifs sportifs plus exigeants"],"event":"investor_target"},
-    "former_driver": {"name":"Ancien pilote","story":"L'écurie est fondée par un ancien compétiteur.","budget":13000,"affinities":{"simulator":0.10,"strategy":0.05},"modifiers":{"driver_xp":0.08,"development_cost":0.05},"advantages":["+8 % XP pilote","+5 % affinité stratégie"],"drawbacks":["+5 % coût de développement"],"event":"old_rival"},
-    "passionate_amateur": {"name":"Équipe amateur passionnée","story":"Une bande soudée veut bousculer les professionnels.","budget":8000,"affinities":{"workshop":0.05},"modifiers":{"morale":0.10,"surprise_reputation":0.12},"advantages":["+10 % moral initial","+12 % réputation lors d'une surprise"],"drawbacks":["Budget et infrastructures faibles"],"event":"volunteer_help"},
-    "youth_academy": {"name":"Académie de jeunes pilotes","story":"La formation des talents est au cœur du projet.","budget":11000,"affinities":{"scouting":0.12,"simulator":0.08},"modifiers":{"driver_xp":0.08,"training_cost":-0.10,"scouting_cost":-0.10},"advantages":["+12 % affinité scouting","+8 % XP pilote","-10 % coûts de formation"],"drawbacks":["Revenus initiaux et technique modestes"],"event":"academy_prospect"},
-    "small_constructor": {"name":"Petit constructeur","story":"Un atelier veut faire de la compétition son laboratoire.","budget":14000,"affinities":{"technical":0.12,"workshop":0.05},"modifiers":{"development_cost":0.10,"reliability":0.06,"commercial_growth":-0.08},"advantages":["+12 % affinité technique","+6 % fiabilité à long terme"],"drawbacks":["+10 % coût de développement","-8 % progression commerciale"],"event":"experimental_part"}
+    "family_garage": {
+      "name": "Garage familial",
+      "story": "Peu de moyens, beaucoup de savoir-faire mécanique.",
+      "budget": 12000,
+      "affinities": {
+        "workshop": 0.1
+      },
+      "modifiers": {
+        "repair_cost": -0.1,
+        "staff_loyalty": 0.1,
+        "sponsor": -0.1
+      },
+      "advantages": [
+        "-10 % coût des réparations",
+        "+10 % progression atelier",
+        "+10 % fidélité du personnel"
+      ],
+      "drawbacks": [
+        "-10 % revenus sponsors au départ"
+      ],
+      "event": "family_mechanic"
+    },
+    "private_investor": {
+      "name": "Investisseur privé",
+      "story": "Une structure neuve financée par un investisseur ambitieux.",
+      "budget": 20000,
+      "affinities": {
+        "marketing": 0.05
+      },
+      "modifiers": {
+        "facility_cost": -0.05,
+        "staff_attraction": 0.05,
+        "operating_cost": 0.05
+      },
+      "advantages": [
+        "Budget initial de 20 000 €",
+        "-5 % coût de lancement des infrastructures"
+      ],
+      "drawbacks": [
+        "+5 % coûts de fonctionnement",
+        "Objectifs sportifs plus exigeants"
+      ],
+      "event": "investor_target"
+    },
+    "former_driver": {
+      "name": "Ancien pilote",
+      "story": "L'écurie est fondée par un ancien compétiteur.",
+      "budget": 13000,
+      "affinities": {
+        "simulator": 0.1,
+        "strategy": 0.05
+      },
+      "modifiers": {
+        "driver_xp": 0.08,
+        "development_cost": 0.05
+      },
+      "advantages": [
+        "+8 % XP pilote",
+        "+5 % affinité stratégie"
+      ],
+      "drawbacks": [
+        "+5 % coût de développement"
+      ],
+      "event": "old_rival"
+    },
+    "passionate_amateur": {
+      "name": "Équipe amateur passionnée",
+      "story": "Une bande soudée veut bousculer les professionnels.",
+      "budget": 8000,
+      "affinities": {
+        "workshop": 0.05
+      },
+      "modifiers": {
+        "morale": 0.1,
+        "surprise_reputation": 0.12
+      },
+      "advantages": [
+        "+10 % moral initial",
+        "+12 % réputation lors d'une surprise"
+      ],
+      "drawbacks": [
+        "Budget et infrastructures faibles"
+      ],
+      "event": "volunteer_help"
+    },
+    "youth_academy": {
+      "name": "Académie de jeunes pilotes",
+      "story": "La formation des talents est au cœur du projet.",
+      "budget": 11000,
+      "affinities": {
+        "scouting": 0.12,
+        "simulator": 0.08
+      },
+      "modifiers": {
+        "driver_xp": 0.08,
+        "training_cost": -0.1,
+        "scouting_cost": -0.1
+      },
+      "advantages": [
+        "+12 % affinité scouting",
+        "+8 % XP pilote",
+        "-10 % coûts de formation"
+      ],
+      "drawbacks": [
+        "Revenus initiaux et technique modestes"
+      ],
+      "event": "academy_prospect"
+    },
+    "small_constructor": {
+      "name": "Petit constructeur",
+      "story": "Un atelier veut faire de la compétition son laboratoire.",
+      "budget": 14000,
+      "affinities": {
+        "technical": 0.12,
+        "workshop": 0.05
+      },
+      "modifiers": {
+        "development_cost": 0.1,
+        "reliability": 0.06,
+        "commercial_growth": -0.08
+      },
+      "advantages": [
+        "+12 % affinité technique",
+        "+6 % fiabilité à long terme"
+      ],
+      "drawbacks": [
+        "+10 % coût de développement",
+        "-8 % progression commerciale"
+      ],
+      "event": "experimental_part"
+    }
   },
   "philosophies": {
-    "pure_performance":{"name":"Performance pure","story":"Chaque décision vise le chronomètre.","affinities":{"technical":0.10},"modifiers":{"development_speed":0.10,"reliability":-0.06,"development_cost":0.05},"advantages":["+10 % vitesse de développement"],"drawbacks":["-6 % fiabilité","+5 % coût de développement"],"event":"aggressive_part"},
-    "reliability":{"name":"Fiabilité","story":"Finir d'abord, gagner ensuite.","affinities":{"workshop":0.10},"modifiers":{"reliability":0.10,"development_speed":-0.05},"advantages":["+10 % fiabilité et durabilité"],"drawbacks":["-5 % vitesse de développement"],"event":"maintenance_program"},
-    "driver_excellence":{"name":"Excellence pilote","story":"L'humain est le meilleur investissement.","affinities":{"simulator":0.12},"modifiers":{"driver_xp":0.10,"development_speed":-0.05},"advantages":["+10 % XP pilote"],"drawbacks":["-5 % développement véhicule"],"event":"driver_camp"},
-    "strategy":{"name":"Stratégie","story":"Une course se gagne avant le départ.","affinities":{"strategy":0.12},"modifiers":{"weather_info":0.12,"raw_performance":-0.04},"advantages":["+12 % qualité des informations course"],"drawbacks":["-4 % performance brute"],"event":"weather_software"},
-    "innovation":{"name":"Innovation","story":"Tester aujourd'hui ce que les autres copieront demain.","affinities":{"technical":0.08},"modifiers":{"development_speed":0.12,"development_cost":0.08,"development_failure":0.08},"advantages":["+12 % vitesse de développement"],"drawbacks":["+8 % coût et risque d'échec"],"event":"risky_prototype"},
-    "financial_management":{"name":"Gestion financière","story":"Chaque euro doit accélérer l'équipe.","affinities":{"marketing":0.12},"modifiers":{"sponsor":0.10,"repair_cost":-0.05,"development_speed":-0.05},"advantages":["+10 % revenus sponsors","-5 % réparations"],"drawbacks":["-5 % vitesse de développement"],"event":"sponsor_opportunity"}
+    "pure_performance": {
+      "name": "Performance pure",
+      "story": "Chaque décision vise le chronomètre.",
+      "affinities": {
+        "technical": 0.1
+      },
+      "modifiers": {
+        "development_speed": 0.1,
+        "reliability": -0.06,
+        "development_cost": 0.05
+      },
+      "advantages": [
+        "+10 % vitesse de développement"
+      ],
+      "drawbacks": [
+        "-6 % fiabilité",
+        "+5 % coût de développement"
+      ],
+      "event": "aggressive_part"
+    },
+    "reliability": {
+      "name": "Fiabilité",
+      "story": "Finir d'abord, gagner ensuite.",
+      "affinities": {
+        "workshop": 0.1
+      },
+      "modifiers": {
+        "reliability": 0.1,
+        "development_speed": -0.05
+      },
+      "advantages": [
+        "+10 % fiabilité et durabilité"
+      ],
+      "drawbacks": [
+        "-5 % vitesse de développement"
+      ],
+      "event": "maintenance_program"
+    },
+    "driver_excellence": {
+      "name": "Excellence pilote",
+      "story": "L'humain est le meilleur investissement.",
+      "affinities": {
+        "simulator": 0.12
+      },
+      "modifiers": {
+        "driver_xp": 0.1,
+        "development_speed": -0.05
+      },
+      "advantages": [
+        "+10 % XP pilote"
+      ],
+      "drawbacks": [
+        "-5 % développement véhicule"
+      ],
+      "event": "driver_camp"
+    },
+    "strategy": {
+      "name": "Stratégie",
+      "story": "Une course se gagne avant le départ.",
+      "affinities": {
+        "strategy": 0.12
+      },
+      "modifiers": {
+        "weather_info": 0.12,
+        "raw_performance": -0.04
+      },
+      "advantages": [
+        "+12 % qualité des informations course"
+      ],
+      "drawbacks": [
+        "-4 % performance brute"
+      ],
+      "event": "weather_software"
+    },
+    "innovation": {
+      "name": "Innovation",
+      "story": "Tester aujourd'hui ce que les autres copieront demain.",
+      "affinities": {
+        "technical": 0.08
+      },
+      "modifiers": {
+        "development_speed": 0.12,
+        "development_cost": 0.08,
+        "development_failure": 0.08
+      },
+      "advantages": [
+        "+12 % vitesse de développement"
+      ],
+      "drawbacks": [
+        "+8 % coût et risque d'échec"
+      ],
+      "event": "risky_prototype"
+    },
+    "financial_management": {
+      "name": "Gestion financière",
+      "story": "Chaque euro doit accélérer l'équipe.",
+      "affinities": {
+        "marketing": 0.12
+      },
+      "modifiers": {
+        "sponsor": 0.1,
+        "repair_cost": -0.05,
+        "development_speed": -0.05
+      },
+      "advantages": [
+        "+10 % revenus sponsors",
+        "-5 % réparations"
+      ],
+      "drawbacks": [
+        "-5 % vitesse de développement"
+      ],
+      "event": "sponsor_opportunity"
+    }
   },
   "manager_styles": {
-    "technician":{"name":"Technicien","affinities":{"technical":0.08},"modifiers":{"development_speed":0.06,"sponsor":-0.05},"advantages":["+6 % développement véhicule"],"drawbacks":["-5 % sponsors"],"event":"special_development"},
-    "businessman":{"name":"Businessman","affinities":{"marketing":0.10},"modifiers":{"sponsor":0.08,"staff_loyalty":-0.05},"advantages":["+8 % sponsors"],"drawbacks":["-5 % fidélité du personnel"],"event":"commercial_offer"},
-    "passionate":{"name":"Passionné","affinities":{"marketing":0.05},"modifiers":{"morale":0.08,"fan_reputation":0.10,"operating_cost":0.04},"advantages":["+8 % moral","+10 % réputation fans"],"drawbacks":["+4 % dépenses"],"event":"fan_gathering"},
-    "demanding":{"name":"Exigeant","affinities":{"technical":0.06},"modifiers":{"development_speed":0.08,"morale":-0.08},"advantages":["+8 % développement"],"drawbacks":["-8 % moral"],"event":"staff_tension"},
-    "protector":{"name":"Protecteur","affinities":{"simulator":0.05},"modifiers":{"morale":0.10,"staff_loyalty":0.10,"development_speed":-0.04},"advantages":["+10 % moral et fidélité"],"drawbacks":["-4 % développement"],"event":"post_race_support"},
-    "strategist":{"name":"Stratège","affinities":{"strategy":0.10},"modifiers":{"weather_info":0.10,"raw_performance":-0.04},"advantages":["+10 % stratégie et météo"],"drawbacks":["-4 % performance brute"],"event":"strategy_briefing"}
+    "technician": {
+      "name": "Technicien",
+      "affinities": {
+        "technical": 0.08
+      },
+      "modifiers": {
+        "development_speed": 0.06,
+        "sponsor": -0.05
+      },
+      "advantages": [
+        "+6 % développement véhicule"
+      ],
+      "drawbacks": [
+        "-5 % sponsors"
+      ],
+      "event": "special_development"
+    },
+    "businessman": {
+      "name": "Businessman",
+      "affinities": {
+        "marketing": 0.1
+      },
+      "modifiers": {
+        "sponsor": 0.08,
+        "staff_loyalty": -0.05
+      },
+      "advantages": [
+        "+8 % sponsors"
+      ],
+      "drawbacks": [
+        "-5 % fidélité du personnel"
+      ],
+      "event": "commercial_offer"
+    },
+    "passionate": {
+      "name": "Passionné",
+      "affinities": {
+        "marketing": 0.05
+      },
+      "modifiers": {
+        "morale": 0.08,
+        "fan_reputation": 0.1,
+        "operating_cost": 0.04
+      },
+      "advantages": [
+        "+8 % moral",
+        "+10 % réputation fans"
+      ],
+      "drawbacks": [
+        "+4 % dépenses"
+      ],
+      "event": "fan_gathering"
+    },
+    "demanding": {
+      "name": "Exigeant",
+      "affinities": {
+        "technical": 0.06
+      },
+      "modifiers": {
+        "development_speed": 0.08,
+        "morale": -0.08
+      },
+      "advantages": [
+        "+8 % développement"
+      ],
+      "drawbacks": [
+        "-8 % moral"
+      ],
+      "event": "staff_tension"
+    },
+    "protector": {
+      "name": "Protecteur",
+      "affinities": {
+        "simulator": 0.05
+      },
+      "modifiers": {
+        "morale": 0.1,
+        "staff_loyalty": 0.1,
+        "development_speed": -0.04
+      },
+      "advantages": [
+        "+10 % moral et fidélité"
+      ],
+      "drawbacks": [
+        "-4 % développement"
+      ],
+      "event": "post_race_support"
+    },
+    "strategist": {
+      "name": "Stratège",
+      "affinities": {
+        "strategy": 0.1
+      },
+      "modifiers": {
+        "weather_info": 0.1,
+        "raw_performance": -0.04
+      },
+      "advantages": [
+        "+10 % stratégie et météo"
+      ],
+      "drawbacks": [
+        "-4 % performance brute"
+      ],
+      "event": "strategy_briefing"
+    }
   },
   "driver_archetypes": {
-    "prodigy":{"name":"Le prodige","stats":{"speed":66,"control":56,"mental":51},"xp":1.00,"potential":[86,96],"traits":{"future_salary":0.12,"mental_variance":0.10},"advantages":["Vitesse initiale et potentiel élevés"],"drawbacks":["Mental variable, salaire futur exigeant"]},
-    "worker":{"name":"Le travailleur","stats":{"speed":54,"control":62,"mental":65},"xp":1.12,"potential":[78,91],"traits":{"loyalty":0.10},"advantages":["+12 % XP, régularité et fidélité"],"drawbacks":["Moins rapide au départ"]},
-    "aggressive":{"name":"L'agressif","stats":{"speed":63,"control":52,"mental":57},"xp":1.00,"potential":[76,93],"traits":{"overtaking":0.12,"accident_risk":0.10,"tyre_wear":0.08},"advantages":["+12 % dépassements et départs"],"drawbacks":["Accidents et usure pneus accrus"]},
-    "calculator":{"name":"Le calculateur","stats":{"speed":54,"control":66,"mental":65},"xp":1.02,"potential":[76,91],"traits":{"tyre_care":0.12,"strategy":0.10},"advantages":["Gestion pneus, régularité et stratégie"],"drawbacks":["Vitesse pure inférieure"]},
-    "versatile":{"name":"Le polyvalent","stats":{"speed":59,"control":59,"mental":59},"xp":1.00,"potential":[77,92],"traits":{},"advantages":["Profil équilibré"],"drawbacks":["Aucune spécialité dominante"]},
-    "gamble":{"name":"Le pari","stats":{"speed":57,"control":56,"mental":55},"xp":1.04,"potential":[68,98],"traits":{"uncertain":true},"advantages":["Potentiel possiblement exceptionnel"],"drawbacks":["Potentiel très imprévisible"]}
+    "prodigy": {
+      "name": "Le prodige",
+      "stats": {
+        "speed": 66,
+        "control": 56,
+        "mental": 51
+      },
+      "xp": 1.0,
+      "potential": [
+        86,
+        96
+      ],
+      "traits": {
+        "future_salary": 0.12,
+        "mental_variance": 0.1
+      },
+      "advantages": [
+        "Vitesse initiale et potentiel élevés"
+      ],
+      "drawbacks": [
+        "Mental variable, salaire futur exigeant"
+      ]
+    },
+    "worker": {
+      "name": "Le travailleur",
+      "stats": {
+        "speed": 54,
+        "control": 62,
+        "mental": 65
+      },
+      "xp": 1.12,
+      "potential": [
+        78,
+        91
+      ],
+      "traits": {
+        "loyalty": 0.1
+      },
+      "advantages": [
+        "+12 % XP, régularité et fidélité"
+      ],
+      "drawbacks": [
+        "Moins rapide au départ"
+      ]
+    },
+    "aggressive": {
+      "name": "L'agressif",
+      "stats": {
+        "speed": 63,
+        "control": 52,
+        "mental": 57
+      },
+      "xp": 1.0,
+      "potential": [
+        76,
+        93
+      ],
+      "traits": {
+        "overtaking": 0.12,
+        "accident_risk": 0.1,
+        "tyre_wear": 0.08
+      },
+      "advantages": [
+        "+12 % dépassements et départs"
+      ],
+      "drawbacks": [
+        "Accidents et usure pneus accrus"
+      ]
+    },
+    "calculator": {
+      "name": "Le calculateur",
+      "stats": {
+        "speed": 54,
+        "control": 66,
+        "mental": 65
+      },
+      "xp": 1.02,
+      "potential": [
+        76,
+        91
+      ],
+      "traits": {
+        "tyre_care": 0.12,
+        "strategy": 0.1
+      },
+      "advantages": [
+        "Gestion pneus, régularité et stratégie"
+      ],
+      "drawbacks": [
+        "Vitesse pure inférieure"
+      ]
+    },
+    "versatile": {
+      "name": "Le polyvalent",
+      "stats": {
+        "speed": 59,
+        "control": 59,
+        "mental": 59
+      },
+      "xp": 1.0,
+      "potential": [
+        77,
+        92
+      ],
+      "traits": {},
+      "advantages": [
+        "Profil équilibré"
+      ],
+      "drawbacks": [
+        "Aucune spécialité dominante"
+      ]
+    },
+    "gamble": {
+      "name": "Le pari",
+      "stats": {
+        "speed": 57,
+        "control": 56,
+        "mental": 55
+      },
+      "xp": 1.04,
+      "potential": [
+        68,
+        98
+      ],
+      "traits": {
+        "uncertain": true
+      },
+      "advantages": [
+        "Potentiel possiblement exceptionnel"
+      ],
+      "drawbacks": [
+        "Potentiel très imprévisible"
+      ]
+    }
   },
-  "goals": {"reach_apex":"Atteindre Formula Apex","train_champions":"Former des champions","constructor_reference":"Devenir constructeur de référence","richest_team":"Devenir l'écurie la plus riche","dominate":"Dominer le sport automobile","dynasty":"Construire une dynastie"},
+  "goals": {
+    "reach_apex": "Atteindre Formula Apex",
+    "train_champions": "Former des champions",
+    "constructor_reference": "Devenir constructeur de référence",
+    "richest_team": "Devenir l'écurie la plus riche",
+    "dominate": "Dominer le sport automobile",
+    "dynasty": "Construire une dynastie"
+  },
   "events": {
-    "family_mechanic":{"title":"Un coup de main familial","text":"Un ancien mécanicien de votre famille propose son aide.","choices":["RECRUTER","REFUSER"]},
-    "investor_target":{"title":"La pression monte","text":"Votre investisseur demande un Top 3 cette saison.","choices":["ACCEPTER","NÉGOCIER"]},
-    "academy_prospect":{"title":"Talent détecté","text":"Un jeune pilote particulièrement prometteur a été repéré.","choices":["OBSERVER","INVITER"]},
-    "experimental_part":{"title":"Pièce expérimentale","text":"Le bureau technique propose un composant encore risqué.","choices":["TESTER","ATTENDRE"]},
-    "aggressive_part":{"title":"À la limite","text":"Une nouvelle pièce agressive est prête.","choices":["MONTER","SÉCURISER"]},
-    "maintenance_program":{"title":"Programme maintenance","text":"L'atelier propose un contrôle préventif renforcé.","choices":["VALIDER","REPORTER"]},
-    "risky_prototype":{"title":"Prototype risqué","text":"Une innovation pourrait faire gagner du temps, ou échouer.","choices":["ESSAYER","ABANDONNER"]},
-    "sponsor_opportunity":{"title":"Opportunité sponsor","text":"Une marque locale souhaite discuter.","choices":["NÉGOCIER","DÉCLINER"]},
-    "weather_software":{"title":"Prévoir l'imprévisible","text":"Un logiciel météo expérimental est disponible.","choices":["INSTALLER","IGNORER"]},
-    "staff_tension":{"title":"Tension interne","text":"Vos exigences fatiguent une partie du personnel.","choices":["ÉCOUTER","MAINTENIR LE CAP"]},
-    "post_race_support":{"title":"Rester unis","text":"Après une mauvaise course, votre soutien rassure l'équipe.","choices":["RÉUNIR L'ÉQUIPE","CONTINUER"]},
-    "commercial_offer":{"title":"Offre commerciale","text":"Un partenaire propose une activation originale.","choices":["SIGNER","NÉGOCIER"]},
-    "special_development":{"title":"Idée du fondateur","text":"Vous identifiez une piste de développement spéciale.","choices":["DÉVELOPPER","CLASSER"]},
-    "fan_gathering":{"title":"Les premiers supporters","text":"Des fans souhaitent visiter le petit garage.","choices":["OUVRIR LES PORTES","REPORTER"]}
+    "family_mechanic": {
+      "title": "Un coup de main familial",
+      "text": "Un ancien mécanicien de votre famille propose son aide.",
+      "choices": [
+        "RECRUTER",
+        "REFUSER"
+      ]
+    },
+    "investor_target": {
+      "title": "La pression monte",
+      "text": "Votre investisseur demande un Top 3 cette saison.",
+      "choices": [
+        "ACCEPTER",
+        "NÉGOCIER"
+      ]
+    },
+    "academy_prospect": {
+      "title": "Talent détecté",
+      "text": "Un jeune pilote particulièrement prometteur a été repéré.",
+      "choices": [
+        "OBSERVER",
+        "INVITER"
+      ]
+    },
+    "experimental_part": {
+      "title": "Pièce expérimentale",
+      "text": "Le bureau technique propose un composant encore risqué.",
+      "choices": [
+        "TESTER",
+        "ATTENDRE"
+      ]
+    },
+    "aggressive_part": {
+      "title": "À la limite",
+      "text": "Une nouvelle pièce agressive est prête.",
+      "choices": [
+        "MONTER",
+        "SÉCURISER"
+      ]
+    },
+    "maintenance_program": {
+      "title": "Programme maintenance",
+      "text": "L'atelier propose un contrôle préventif renforcé.",
+      "choices": [
+        "VALIDER",
+        "REPORTER"
+      ]
+    },
+    "risky_prototype": {
+      "title": "Prototype risqué",
+      "text": "Une innovation pourrait faire gagner du temps, ou échouer.",
+      "choices": [
+        "ESSAYER",
+        "ABANDONNER"
+      ]
+    },
+    "sponsor_opportunity": {
+      "title": "Opportunité sponsor",
+      "text": "Une marque locale souhaite discuter.",
+      "choices": [
+        "NÉGOCIER",
+        "DÉCLINER"
+      ]
+    },
+    "weather_software": {
+      "title": "Prévoir l'imprévisible",
+      "text": "Un logiciel météo expérimental est disponible.",
+      "choices": [
+        "INSTALLER",
+        "IGNORER"
+      ]
+    },
+    "staff_tension": {
+      "title": "Tension interne",
+      "text": "Vos exigences fatiguent une partie du personnel.",
+      "choices": [
+        "ÉCOUTER",
+        "MAINTENIR LE CAP"
+      ]
+    },
+    "post_race_support": {
+      "title": "Rester unis",
+      "text": "Après une mauvaise course, votre soutien rassure l'équipe.",
+      "choices": [
+        "RÉUNIR L'ÉQUIPE",
+        "CONTINUER"
+      ]
+    },
+    "commercial_offer": {
+      "title": "Offre commerciale",
+      "text": "Un partenaire propose une activation originale.",
+      "choices": [
+        "SIGNER",
+        "NÉGOCIER"
+      ]
+    },
+    "special_development": {
+      "title": "Idée du fondateur",
+      "text": "Vous identifiez une piste de développement spéciale.",
+      "choices": [
+        "DÉVELOPPER",
+        "CLASSER"
+      ]
+    },
+    "fan_gathering": {
+      "title": "Les premiers supporters",
+      "text": "Des fans souhaitent visiter le petit garage.",
+      "choices": [
+        "OUVRIR LES PORTES",
+        "REPORTER"
+      ]
+    }
+  },
+  "managers": {
+    "alex_martin": {
+      "name": "Alex Martin",
+      "first_name": "Alex",
+      "title": "Le Technicien",
+      "personality": "Ingénieux et passionné de mécanique.",
+      "portrait": "alex_martin",
+      "icons": [
+        "🔧 TECHNIQUE",
+        "🧠 STRATÉGIE",
+        "💰 BUSINESS"
+      ],
+      "ratings": [
+        5,
+        3,
+        2
+      ],
+      "highlight": "🔧 +8 % DÉVELOPPEMENT",
+      "origin": "family_garage",
+      "philosophy": "pure_performance",
+      "style": "technician",
+      "points": {
+        "workshop": 2,
+        "technical": 3,
+        "simulator": 1,
+        "scouting": 1,
+        "marketing": 1,
+        "strategy": 2
+      },
+      "modifiers": {
+        "development_speed": 0.08,
+        "repair_cost": -0.05,
+        "sponsor": -0.05
+      },
+      "advantages": [
+        "+8 % développement véhicule",
+        "-5 % réparations"
+      ],
+      "drawbacks": [
+        "-5 % revenus sponsors"
+      ]
+    },
+    "maya_chen": {
+      "name": "Maya Chen",
+      "first_name": "Maya",
+      "title": "La Stratège",
+      "personality": "Calme et brillante sous pression.",
+      "portrait": "maya_chen",
+      "icons": [
+        "🧠 STRATÉGIE",
+        "🔧 TECHNIQUE",
+        "👥 ÉQUIPE"
+      ],
+      "ratings": [
+        5,
+        3,
+        3
+      ],
+      "highlight": "🧠 +10 % INFOS COURSE",
+      "origin": "former_driver",
+      "philosophy": "strategy",
+      "style": "strategist",
+      "points": {
+        "workshop": 1,
+        "technical": 2,
+        "simulator": 2,
+        "scouting": 1,
+        "marketing": 1,
+        "strategy": 3
+      },
+      "modifiers": {
+        "weather_info": 0.1,
+        "strategy_efficiency": 0.05,
+        "development_speed": -0.04
+      },
+      "advantages": [
+        "+10 % informations de course",
+        "+5 % efficacité stratégique"
+      ],
+      "drawbacks": [
+        "-4 % développement brut"
+      ]
+    },
+    "sofia_reyes": {
+      "name": "Sofia Reyes",
+      "first_name": "Sofia",
+      "title": "La Commerciale",
+      "personality": "Charismatique et redoutable négociatrice.",
+      "portrait": "sofia_reyes",
+      "icons": [
+        "💰 BUSINESS",
+        "👥 ÉQUIPE",
+        "🔧 TECHNIQUE"
+      ],
+      "ratings": [
+        5,
+        4,
+        2
+      ],
+      "highlight": "💰 +10 % SPONSORS",
+      "origin": "private_investor",
+      "philosophy": "financial_management",
+      "style": "businessman",
+      "points": {
+        "workshop": 1,
+        "technical": 1,
+        "simulator": 1,
+        "scouting": 1,
+        "marketing": 4,
+        "strategy": 2
+      },
+      "modifiers": {
+        "sponsor": 0.1,
+        "commercial_reputation": 0.05,
+        "development_speed": -0.05
+      },
+      "advantages": [
+        "+10 % revenus sponsors",
+        "+5 % réputation commerciale"
+      ],
+      "drawbacks": [
+        "-5 % développement technique"
+      ]
+    },
+    "idris_kone": {
+      "name": "Idris Koné",
+      "first_name": "Idris",
+      "title": "Le Formateur",
+      "personality": "Patient, exigeant et proche des jeunes.",
+      "portrait": "idris_kone",
+      "icons": [
+        "🏁 PILOTES",
+        "🔎 SCOUTING",
+        "🔧 TECHNIQUE"
+      ],
+      "ratings": [
+        5,
+        4,
+        2
+      ],
+      "highlight": "🏁 +10 % XP PILOTES",
+      "origin": "youth_academy",
+      "philosophy": "driver_excellence",
+      "style": "protector",
+      "points": {
+        "workshop": 1,
+        "technical": 1,
+        "simulator": 3,
+        "scouting": 3,
+        "marketing": 1,
+        "strategy": 1
+      },
+      "modifiers": {
+        "driver_xp": 0.1,
+        "scouting_efficiency": 0.08,
+        "development_speed": -0.05
+      },
+      "advantages": [
+        "+10 % XP pilotes",
+        "+8 % scouting"
+      ],
+      "drawbacks": [
+        "-5 % développement véhicule"
+      ]
+    },
+    "victor_bauer": {
+      "name": "Victor Bauer",
+      "first_name": "Victor",
+      "title": "Le Meneur",
+      "personality": "Énergique, loyal et fédérateur.",
+      "portrait": "victor_bauer",
+      "icons": [
+        "👥 ÉQUIPE",
+        "🔥 MORAL",
+        "💰 BUSINESS"
+      ],
+      "ratings": [
+        5,
+        5,
+        3
+      ],
+      "highlight": "👥 +10 % MORAL",
+      "origin": "passionate_amateur",
+      "philosophy": "reliability",
+      "style": "passionate",
+      "points": {
+        "workshop": 2,
+        "technical": 1,
+        "simulator": 1,
+        "scouting": 1,
+        "marketing": 3,
+        "strategy": 2
+      },
+      "modifiers": {
+        "morale": 0.1,
+        "staff_loyalty": 0.08,
+        "operating_cost": 0.04
+      },
+      "advantages": [
+        "+10 % moral",
+        "+8 % fidélité du personnel"
+      ],
+      "drawbacks": [
+        "+4 % coûts de fonctionnement"
+      ]
+    }
   }
 }
