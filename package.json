@@ -2,5 +2,7 @@
   "name": "paddock-legacy-godot-web-export",
   "private": true,
   "description": "The web application is generated exclusively from the Godot project.",
-  "scripts": { "test": "python3 tests/validate_project.py" }
+  "scripts": {
+    "test": "python3 tests/validate_project.py && python3 tests/validate_ui_catalog.py"
+  }
 }
