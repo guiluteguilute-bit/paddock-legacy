@@ -398,8 +398,12 @@ func show_operations() -> void:
 
 func show_honours() -> void:
 	clear("PALMARÈS");heading("TROPHÉES",26)
-	if GameState.data.trophies.is_empty():label("Aucun trophée pour le moment.",colors.muted,16)
+	if GameState.data.trophies.is_empty() and GameState.data.endurance_trophies.is_empty():label("Aucun trophée pour le moment.",colors.muted,16)
 	for trophy in GameState.data.trophies:content.add_child(card("🏆  "+trophy.name,"%d  •  P%d"%[trophy.year,trophy.position],78))
+	for trophy in GameState.data.endurance_trophies:content.add_child(card("🏆  "+str(trophy),"GT / ENDURANCE  •  PRESTIGE PERMANENT",78))
+	if not GameState.data.endurance_results.is_empty():
+		heading("PALMARÈS ENDURANCE",22)
+		for result in GameState.data.endurance_results:content.add_child(card("%d  •  %s"%[result.year,result.series],"OVERALL P%d  •  %s P%d  •  PRESTIGE +%d"%[result.overall_position,result.class,result.class_position,result.prestige],92))
 	heading("HISTORIQUE CARRIÈRE",22)
 	for season in GameState.data.career_history:content.add_child(card("%d  •  %s"%[season.year,season.championship],"P%d  •  %d PTS  •  %d VICTOIRE(S)"%[season.position,season.points,season.wins],85))
 

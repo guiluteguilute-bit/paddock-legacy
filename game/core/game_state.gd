@@ -1,7 +1,7 @@
 extends Node
 
 signal changed
-const SAVE_VERSION := 4
+const SAVE_VERSION := 5
 const SAVE_PATH := "user://career.json"
 const CREATION_DATA_PATH := "res://game/data/team_creation.json"
 const CAREER_DATA_PATH := "res://game/data/career.json"
@@ -82,6 +82,35 @@ func buy_gt_car(car_id:String)->bool:
 func recruit_endurance_driver(candidate:Dictionary)->bool:
 	if data.driver_roster.size()>=3 or candidate.get("grade","") not in ["ELITE","PRO","SEMI-PRO","AMATEUR"]:return false
 	data.driver_roster.append(candidate.duplicate(true));save_game();changed.emit();return true
+
+func can_enter_endurance_class(target_class: String) -> bool:
+	if endurance_config.is_empty(): endurance_config = load_endurance_config()
+	if target_class == "GT4" and data.category in ["KART", "GT4"]: return int(data.reputation) >= 18
+	if target_class == "GT3" and data.category in ["F3", "GT4", "GT3"]: return int(data.reputation) >= 45
+	if target_class == "HYPERCAR" and data.category in ["F2", "GT3", "HYPERCAR"]: return int(data.reputation) >= 80
+	return false
+
+func complete_endurance_event(series_id: String, overall_position: int, class_position: int, car_class: String) -> bool:
+	if endurance_config.is_empty(): endurance_config = load_endurance_config()
+	var selected: Dictionary = {}
+	for series in endurance_config.get("series", []):
+		if series.id == series_id:
+			selected = series
+			break
+	if selected.is_empty() or overall_position < 1 or class_position < 1:
+		return false
+	var result := {"year": data.career_year, "series_id": series_id, "series": selected.name, "class": car_class, "overall_position": overall_position, "class_position": class_position, "prestige": int(selected.prestige)}
+	data.endurance_results.append(result)
+	data.class_results.append({"series_id": series_id, "class": car_class, "position": class_position})
+	var prestige_gain := maxi(1, int(round(float(selected.prestige) * (1.0 if class_position == 1 else 0.25))))
+	data.prestige += prestige_gain
+	if class_position == 1:
+		var trophy_name := "24H WINNER" if series_id == "legacy_24" else ("%s CHAMPION" % car_class)
+		if trophy_name not in data.endurance_trophies:
+			data.endurance_trophies.append(trophy_name)
+	data.career_path = "GT_ENDURANCE"
+	data.championship_class = car_class
+	save_game(); changed.emit(); return true
 
 func modifier(key:String)->float: return float(data.get("team_dna",{}).get("modifiers",{}).get(key,0.0))
 func effective_cost(base_cost:int, kind:String)->int:
