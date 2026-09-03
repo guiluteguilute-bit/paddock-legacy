@@ -71,7 +71,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 5m "${GODOT_BIN}" --headless --path . tests/godot/test_core.tscn
+          timeout 1m "${GODOT_BIN}" --headless --path . tests/godot/test_core.tscn
 
       - name: Load main scene headlessly
         shell: bash
