@@ -29,21 +29,21 @@ func defaults() -> Dictionary:
 	return {"save_version":SAVE_VERSION,"career_year":2027,"career_date":"2027-03-01","category":"KART","championship":"kart_regional","career_path":"UNDECIDED","championship_class":"KART","owned_gt_cars":[],"driver_roster":[],"endurance_results":[],"class_results":[],"prestige":0,"endurance_trophies":[],"season":1,"team":{},"driver":{},"team_dna":neutral_dna(),"calendar":[],"race_history":[],"standings":[],"money":12000,"reputation":0,"vehicles":{"kart":{"level":1,"reliability":92,"condition":100,"livery":{},"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"f4":{"level":1,"reliability":86,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"gt4":{"level":1,"reliability":84,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}}},"upgrades":[],"development_queue":[],"facilities":{"workshop":1,"technical":0,"simulator":0,"scouting":0,"marketing":0,"strategy":0,"pit_crew":0},"personnel":[],"sponsor":{},"sponsors":[],"offers":[],"trophies":[],"career_history":[],"career_events":[],"culture":{"technical":0.0,"finance":0.0,"driver":0.0,"strategy":0.0,"innovation":0.0},"objectives":{"race":{"type":"finish_position","target":8,"completed":false},"season":{"type":"championship_position","target":5,"completed":false}},"experience":0,"level":1,"skill_points":0,"energy":5,"settings":{"master":80,"music":55,"sfx":80,"language":"fr","intro_seen":false},"transactions":[],"season_income":0,"season_expenses":0,"season_xp":0,"season_reputation":0,"race_index":0,"season_complete":false,"promotion_pending":false,"audio_buses":["KART_ENGINE","F4_ENGINE","GT_ENGINE","PROTOTYPE_ENGINE","TYRES","CONTACT","RAIN","PIT","UI"]}
 
 func neutral_dna() -> Dictionary:
-	var affinities := {}; var ratings := {}
+	var affinities = {}; var ratings = {}
 	for domain in DNA_DOMAINS: affinities[domain] = 0.0; ratings[domain] = 40
 	return {"origin":"independent","philosophy":"balanced","management_style":"neutral","long_term_goal":"reach_apex","foundation_points":{"workshop":2,"technical":2,"simulator":2,"scouting":1,"marketing":1,"strategy":2},"affinities":affinities,"ratings":ratings,"modifiers":{},"advantages":[],"drawbacks":[],"founded_year":2027,"initial_influence":1.0}
 
 func has_career() -> bool: return not data.get("team", {}).is_empty() and not data.get("driver", {}).is_empty()
 func build_team_dna(origin_id:String, philosophy_id:String, style_id:String, goal_id:String, points:Dictionary)->Dictionary:
 	if creation_config.is_empty(): creation_config=load_creation_config()
-	var dna:=neutral_dna(); dna.origin=origin_id; dna.philosophy=philosophy_id; dna.management_style=style_id; dna.long_term_goal=goal_id; dna.foundation_points=points.duplicate(true)
+	var dna =neutral_dna(); dna.origin=origin_id; dna.philosophy=philosophy_id; dna.management_style=style_id; dna.long_term_goal=goal_id; dna.foundation_points=points.duplicate(true)
 	var advantages:Array=[]; var drawbacks:Array=[]; var modifiers:Dictionary={}; var affinities:Dictionary=dna.affinities
 	for pair in [["origins",origin_id],["philosophies",philosophy_id],["manager_styles",style_id]]:
 		var choice:Dictionary=creation_config.get(pair[0],{}).get(pair[1],{})
 		advantages.append_array(choice.get("advantages",[])); drawbacks.append_array(choice.get("drawbacks",[]))
 		for key in choice.get("modifiers",{}): modifiers[key]=float(modifiers.get(key,0.0))+float(choice.modifiers[key])
 		for key in choice.get("affinities",{}): affinities[key]=float(affinities.get(key,0.0))+float(choice.affinities[key])
-	var ratings:={}
+	var ratings ={}
 	for domain in DNA_DOMAINS: ratings[domain]=clampi(30+int(points.get(domain,0))*9+int(float(affinities.get(domain,0.0))*50.0),20,90)
 	dna.affinities=affinities; dna.ratings=ratings; dna.modifiers=modifiers; dna.advantages=advantages; dna.drawbacks=drawbacks
 	return dna
@@ -99,13 +99,13 @@ func complete_endurance_event(series_id: String, overall_position: int, class_po
 			break
 	if selected.is_empty() or overall_position < 1 or class_position < 1:
 		return false
-	var result := {"year": data.career_year, "series_id": series_id, "series": selected.name, "class": car_class, "overall_position": overall_position, "class_position": class_position, "prestige": int(selected.prestige)}
+	var result = {"year": data.career_year, "series_id": series_id, "series": selected.name, "class": car_class, "overall_position": overall_position, "class_position": class_position, "prestige": int(selected.prestige)}
 	data.endurance_results.append(result)
 	data.class_results.append({"series_id": series_id, "class": car_class, "position": class_position})
-	var prestige_gain := maxi(1, int(round(float(selected.prestige) * (1.0 if class_position == 1 else 0.25))))
+	var prestige_gain = maxi(1, int(round(float(selected.prestige) * (1.0 if class_position == 1 else 0.25))))
 	data.prestige += prestige_gain
 	if class_position == 1:
-		var trophy_name := "24H WINNER" if series_id == "legacy_24" else ("%s CHAMPION" % car_class)
+		var trophy_name = "24H WINNER" if series_id == "legacy_24" else ("%s CHAMPION" % car_class)
 		if trophy_name not in data.endurance_trophies:
 			data.endurance_trophies.append(trophy_name)
 	data.career_path = "GT_ENDURANCE"
@@ -114,25 +114,25 @@ func complete_endurance_event(series_id: String, overall_position: int, class_po
 
 func modifier(key:String)->float: return float(data.get("team_dna",{}).get("modifiers",{}).get(key,0.0))
 func effective_cost(base_cost:int, kind:String)->int:
-	var value:=float(base_cost)
+	var value =float(base_cost)
 	if kind=="repair": value*=1.0+modifier("repair_cost")-float(data.facilities.get("workshop",1)-1)*0.05
 	elif kind=="development": value*=1.0+modifier("development_cost")
 	elif kind=="facility": value*=1.0+modifier("facility_cost")
 	return maxi(1,int(round(value*(1.0+modifier("operating_cost")))))
 func potential_estimate()->Vector2i:
-	var potential:=int(data.get("driver",{}).get("hidden_potential",80)); var scouting:=int(data.facilities.get("scouting",0))*10+int(data.get("team_dna",{}).get("ratings",{}).get("scouting",40)); var width:=clampi(22-scouting/5,4,18)
+	var potential =int(data.get("driver",{}).get("hidden_potential",80)); var scouting =int(data.facilities.get("scouting",0))*10+int(data.get("team_dna",{}).get("ratings",{}).get("scouting",40)); var width =clampi(22-scouting/5,4,18)
 	return Vector2i(maxi(50,potential-width),mini(99,potential+width))
 
 func make_calendar(category:Variant="KART") -> Array:
 	if category is int: category="KART" # compatibility with v2 tests
 	if career_config.is_empty(): career_config=load_career_config()
-	var source:Array=career_config.get("f4_calendar" if category=="F4" else "kart_calendar",[]); var result:=[]
+	var source:Array=career_config.get("f4_calendar" if category=="F4" else "kart_calendar",[]); var result =[]
 	for i in source.size():
 		var event:Dictionary=source[i].duplicate(true); event.status="AVAILABLE" if i==0 else "LOCKED"; event.results=[]; result.append(event)
 	return result
 func make_standings()->Array:
 	if career_config.is_empty(): career_config=load_career_config()
-	var rows:=[]; rows.append({"id":"player","name":str(data.driver.get("first_name","PILOTE"))+" "+str(data.driver.get("last_name","")),"team":data.team.get("name","Legacy"),"nationality":data.driver.get("nationality","France"),"number":data.driver.get("number",27),"points":0,"wins":0,"podiums":0,"fastest_laps":0,"finishes":[],"player":true})
+	var rows =[]; rows.append({"id":"player","name":str(data.driver.get("first_name","PILOTE"))+" "+str(data.driver.get("last_name","")),"team":data.team.get("name","Legacy"),"nationality":data.driver.get("nationality","France"),"number":data.driver.get("number",27),"points":0,"wins":0,"podiums":0,"fastest_laps":0,"finishes":[],"player":true})
 	for rival in career_config.get("rivals",[]): var row:Dictionary=rival.duplicate(true); row.points=0; row.wins=0; row.podiums=0; row.fastest_laps=0; row.finishes=[]; row.player=false; rows.append(row)
 	return rows
 func points_for(position:int)->int:
@@ -141,14 +141,14 @@ func points_for(position:int)->int:
 func _standing_less(a:Dictionary,b:Dictionary)->bool:
 	if int(a.points)!=int(b.points): return int(a.points)>int(b.points)
 	for place in [1,2,3]:
-		var ac:=a.finishes.count(place); var bc:=b.finishes.count(place)
+		var ac =a.finishes.count(place); var bc =b.finishes.count(place)
 		if ac!=bc: return ac>bc
 	var count:int=mini(a.finishes.size(),b.finishes.size())
 	for offset in count:
 		var ar:int=a.finishes[a.finishes.size()-1-offset]; var br:int=b.finishes[b.finishes.size()-1-offset]
 		if ar!=br:return ar<br
 	return str(a.name)<str(b.name)
-func sorted_standings()->Array: var rows:=data.standings.duplicate(true); rows.sort_custom(_standing_less); return rows
+func sorted_standings()->Array: var rows =data.standings.duplicate(true); rows.sort_custom(_standing_less); return rows
 
 func transaction(amount:int,label:String)->void:
 	data.money=int(data.get("money",0))+amount
@@ -156,19 +156,19 @@ func transaction(amount:int,label:String)->void:
 	else:data.season_expenses=int(data.get("season_expenses",0))-amount
 	data.transactions.push_front({"amount":amount,"label":label,"date":data.get("career_date","")}); data.transactions.resize(mini(50,data.transactions.size()))
 func advance_days(days:int)->void:
-	var date:=Time.get_datetime_dict_from_datetime_string(data.career_date,false); var unix:=Time.get_unix_time_from_datetime_dict(date)+days*86400; data.career_date=Time.get_datetime_string_from_unix_time(unix).left(10)
+	var date =Time.get_datetime_dict_from_datetime_string(data.career_date,false); var unix =Time.get_unix_time_from_datetime_dict(date)+days*86400; data.career_date=Time.get_datetime_string_from_unix_time(unix).left(10)
 	for job in data.development_queue: job.days=maxi(0,int(job.days)-days)
 	for job in data.development_queue.duplicate():
 		if int(job.days)==0: data.vehicles[data.category.to_lower()].components[job.component]+=1; data.development_queue.erase(job)
 func buy_upgrade(component:String,base_cost:int)->bool:
-	var cost:=effective_cost(base_cost,"development"); if int(data.money)<cost:return false
+	var cost =effective_cost(base_cost,"development"); if int(data.money)<cost:return false
 	var vehicle:Dictionary=data.vehicles[data.category.to_lower()]; if data.development_queue.any(func(j):return j.component==component):return false
 	transaction(-cost,"Développement %s"%component.capitalize()); data.development_queue.append({"component":component,"cost":cost,"days":3,"effect":"performance +2"}); data.upgrades.append({"category":data.category,"component":component,"cost":cost}); save_game(); changed.emit(); return true
 func repair_vehicle()->bool:
-	var vehicle:Dictionary=data.vehicles[data.category.to_lower()]; var missing:=100-int(vehicle.condition); var cost:=effective_cost(missing*45,"repair"); if missing<=0 or int(data.money)<cost:return false
+	var vehicle:Dictionary=data.vehicles[data.category.to_lower()]; var missing =100-int(vehicle.condition); var cost =effective_cost(missing*45,"repair"); if missing<=0 or int(data.money)<cost:return false
 	transaction(-cost,"Réparation %s"%data.category); vehicle.condition=100; advance_days(1); save_game(); changed.emit(); return true
 func train_driver()->bool:
-	var cost:=effective_cost(600,"development"); if int(data.money)<cost:return false
+	var cost =effective_cost(600,"development"); if int(data.money)<cost:return false
 	transaction(-cost,"Entraînement pilote"); add_xp(180); advance_days(2); data.energy=maxi(0,int(data.energy)-1); save_game(); changed.emit(); return true
 func spend_skill(stat:String)->bool:
 	if int(data.skill_points)<=0 or not data.driver.stats.has(stat):return false
@@ -179,14 +179,14 @@ func sign_sponsor(id:String)->bool:
 		if sponsor.id==id and int(data.reputation)>=int(sponsor.reputation): data.sponsor=sponsor.duplicate(true); data.sponsor.remaining=int(sponsor.duration); transaction(int(round(float(sponsor.fixed)*(1.0+modifier("sponsor")))),"Contrat sponsor — "+sponsor.name); save_game(); changed.emit(); return true
 	return false
 func buy_facility(kind:String)->bool:
-	var next_level:=int(data.facilities.get(kind,0))+1; var cost:=effective_cost(5000*next_level,"facility"); if int(data.money)<cost:return false
+	var next_level =int(data.facilities.get(kind,0))+1; var cost =effective_cost(5000*next_level,"facility"); if int(data.money)<cost:return false
 	transaction(-cost,"%s niveau %d"%[kind.capitalize(),next_level]); data.facilities[kind]=next_level; advance_days(5); save_game(); changed.emit(); return true
 
 func complete_race(result:Dictionary)->void:
-	var index:=int(data.race_index); if index>=data.calendar.size():return
-	var start_position:=int(result.get("start_position",12)); var position:=int(result.position); var incidents:Array=result.get("incidents",[])
-	var enriched:=result.duplicate(true); enriched.start_position=start_position; enriched.positions_gained=start_position-position; enriched.points=points_for(position)
-	var prize:=maxi(350,2200-(position-1)*160); var xp:=140+maxi(0,11-position)*20; var rep:=maxi(1,12-position)
+	var index =int(data.race_index); if index>=data.calendar.size():return
+	var start_position =int(result.get("start_position",12)); var position =int(result.position); var incidents:Array=result.get("incidents",[])
+	var enriched =result.duplicate(true); enriched.start_position=start_position; enriched.positions_gained=start_position-position; enriched.points=points_for(position)
+	var prize =maxi(350,2200-(position-1)*160); var xp =140+maxi(0,11-position)*20; var rep =maxi(1,12-position)
 	enriched.money=prize; enriched.xp=xp; enriched.reputation=rep; enriched.race_objective=position<=int(data.objectives.race.target)
 	data.race_history.append(enriched); data.calendar[index].status="COMPLETED"; data.calendar[index].results=enriched.get("standings",[]); data.race_index=index+1
 	if data.race_index<data.calendar.size():data.calendar[data.race_index].status="AVAILABLE"
@@ -198,7 +198,7 @@ func complete_race(result:Dictionary)->void:
 	save_game(); changed.emit()
 func _update_standings(result:Dictionary)->void:
 	for row in data.standings:
-		var finish:=0; var fastest:=false
+		var finish =0; var fastest =false
 		if row.player: finish=int(result.position); fastest=bool(result.get("player_fastest_lap",false))
 		else:
 			for entry in result.get("standings",[]):
@@ -211,12 +211,12 @@ func _apply_sponsor_bonus(position:int)->void:
 	if achieved:transaction(int(data.sponsor.bonus),"Bonus sponsor — "+data.sponsor.name)
 	data.sponsor.remaining=maxi(0,int(data.sponsor.remaining)-1)
 func add_xp(amount:int)->void:
-	var gained:=int(round(amount*(1.0+modifier("driver_xp"))*float(data.get("driver",{}).get("xp_multiplier",1.0)))); data.experience+=gained; data.season_xp+=gained
+	var gained =int(round(amount*(1.0+modifier("driver_xp"))*float(data.get("driver",{}).get("xp_multiplier",1.0)))); data.experience+=gained; data.season_xp+=gained
 	while int(data.experience)>=int(data.level)*500:data.experience-=int(data.level)*500;data.level+=1;data.skill_points+=1
 
 func finish_season()->void:
 	if data.season_complete:return
-	data.season_complete=true; var table:=sorted_standings(); var position:=1
+	data.season_complete=true; var table =sorted_standings(); var position =1
 	for i in table.size():
 		if table[i].player:
 			position=i+1
@@ -228,7 +228,7 @@ func finish_season()->void:
 	_generate_offers(position); data.promotion_pending=true
 func _generate_offers(position:int)->void:
 	data.offers=[{"id":"stay","title":"RESTER EN KART RÉGIONAL","category":"KART","eligible":true,"cost":1000,"objective":"Top 5"},{"id":"national","title":"KART NATIONAL","category":"KART","eligible":position<=8,"cost":2500,"objective":"Top 5"}]
-	var eligible:=int(data.reputation)>=35 and position<=3
+	var eligible =int(data.reputation)>=35 and position<=3
 	data.offers.append({"id":"f4","title":"FORMULA JUNIOR 4","category":"F4","eligible":eligible,"cost":5000,"objective":"Top 8","prestige":5,"team":data.team.name})
 	data.offers.append({"id":"gt4","title":"CONTINENTAL GT4 CUP","category":"GT4","eligible":position<=8,"cost":18000,"objective":"Top 10","prestige":25,"team":data.team.name})
 func accept_offer(id:String)->bool:
@@ -242,16 +242,16 @@ func accept_offer(id:String)->bool:
 
 func save_game()->bool:
 	if data.is_empty():return false
-	data.save_version=SAVE_VERSION; var file:=FileAccess.open(SAVE_PATH,FileAccess.WRITE); if file==null:return false
+	data.save_version=SAVE_VERSION; var file =FileAccess.open(SAVE_PATH,FileAccess.WRITE); if file==null:return false
 	file.store_string(JSON.stringify(data,"\t"));return true
 func load_game()->bool:
-	var file:=FileAccess.open(SAVE_PATH,FileAccess.READ)
+	var file =FileAccess.open(SAVE_PATH,FileAccess.READ)
 	if file==null:return false
 	var parsed=JSON.parse_string(file.get_as_text())
 	if not parsed is Dictionary:return false
 	data=migrate(parsed);changed.emit();return true
 func migrate(old:Dictionary)->Dictionary:
-	var fresh:=defaults();for key in old:fresh[key]=old[key]
+	var fresh =defaults();for key in old:fresh[key]=old[key]
 	if not old.has("team_dna"):fresh.team_dna=neutral_dna()
 	if not fresh.driver.has("hidden_potential"):fresh.driver.hidden_potential=82;fresh.driver.profile="versatile";fresh.driver.xp_multiplier=1.0
 	if not fresh.team.has("short_name"):fresh.team.short_name=str(fresh.team.get("name","Legacy Team")).left(12)

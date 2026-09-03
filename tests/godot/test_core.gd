@@ -1,9 +1,9 @@
 extends SceneTree
 
 func _result(state, player_position:int) -> Dictionary:
-	var rows:=[]
+	var rows =[]
 	for i in state.career_config.rivals.size():
-		var position:=i+1
+		var position =i+1
 		if position>=player_position:position+=1
 		rows.append({"name":state.career_config.rivals[i].name,"position":position,"best_lap":49.0+i,"fastest_lap":false})
 	return {"position":player_position,"start_position":8,"best_lap":48.2,"total_time":480.0,"tyres_remaining":72,"strategy":"NORMAL","incidents":[],"standings":rows,"track":"Test"}
