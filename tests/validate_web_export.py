@@ -64,6 +64,11 @@ def main() -> None:
     non_empty(ROOT / scene_match.group(1), "main scene")
     if 'renderer/rendering_method="gl_compatibility"' not in project:
         fail("project.godot must use the gl_compatibility renderer")
+    if 'textures/vram_compression/import_etc2_astc=true' not in project:
+        fail(
+            "mobile Web texture compression requires "
+            "Rendering > Textures > VRAM Compression > Import ETC2 ASTC"
+        )
 
     scripts = sorted(ROOT.rglob("*.gd"))
     if not scripts:
@@ -79,7 +84,10 @@ def main() -> None:
             if not target.exists():
                 fail(f"missing resource {resource} referenced by {source.relative_to(ROOT)}")
         checked += 1
-    print(f"Web export preflight passed: preset, 2 templates, project, main scene and {checked} scripts")
+    print(
+        "Web export preflight passed: preset, 2 templates, mobile texture "
+        f"compression, project, main scene and {checked} scripts"
+    )
 
 
 if __name__ == "__main__":
