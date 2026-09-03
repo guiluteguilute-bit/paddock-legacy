@@ -1,0 +1,11 @@
+[
+  {"id":"kart_club","name":"Kart Club","category":"KART","prestige":1,"entry_cost":500,"race_count":4,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":0,"minimum_age":13,"prize_money":2500,"ruleset":"kart_basic"},
+  {"id":"kart_regional","name":"Kart Régional","category":"KART","prestige":2,"entry_cost":2500,"race_count":6,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":8,"minimum_age":14,"prize_money":8000,"ruleset":"kart_basic"},
+  {"id":"kart_national","name":"Kart National","category":"KART","prestige":3,"entry_cost":6500,"race_count":8,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":20,"minimum_age":15,"prize_money":18000,"ruleset":"kart_advanced"},
+  {"id":"kart_international","name":"Kart International","category":"KART","prestige":4,"entry_cost":14000,"race_count":10,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":35,"minimum_age":15,"prize_money":35000,"ruleset":"kart_advanced"},
+  {"id":"formula_4","name":"Formula 4","category":"F4","prestige":5,"entry_cost":30000,"race_count":10,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":50,"minimum_age":16,"prize_money":75000,"ruleset":"formula_junior"},
+  {"id":"formula_regional","name":"Formula Regional","category":"REGIONAL","prestige":6,"entry_cost":70000,"race_count":12,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":70,"minimum_age":16,"prize_money":150000,"ruleset":"formula_junior"},
+  {"id":"formula_3","name":"Formula 3","category":"F3","prestige":7,"entry_cost":160000,"race_count":14,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":100,"minimum_age":17,"prize_money":350000,"ruleset":"formula_pro"},
+  {"id":"formula_2","name":"Formula 2","category":"F2","prestige":8,"entry_cost":350000,"race_count":16,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":140,"minimum_age":18,"prize_money":750000,"ruleset":"formula_pro"},
+  {"id":"formula_apex","name":"Formula Apex","category":"APEX","prestige":10,"entry_cost":1000000,"race_count":20,"points_system":[25,18,15,12,10,8,6,4,2,1],"minimum_reputation":200,"minimum_age":18,"prize_money":3000000,"ruleset":"apex"}
+]
