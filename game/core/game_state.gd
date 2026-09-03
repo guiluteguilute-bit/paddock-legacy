@@ -13,10 +13,14 @@ var career_config: Dictionary = {}
 var endurance_config: Dictionary = {}
 
 func _ready() -> void:
+	print("[BOOT] GameState loading")
 	creation_config = _load_json(CREATION_DATA_PATH)
 	career_config = _load_json(CAREER_DATA_PATH)
 	endurance_config = _load_json(ENDURANCE_DATA_PATH)
-	if FileAccess.file_exists(SAVE_PATH): load_game()
+	if FileAccess.file_exists(SAVE_PATH):
+		if not load_game(): push_error("[BOOT] SAVE_INVALID: career save could not be loaded")
+	print("[BOOT] GameState ready")
+	print("[BOOT] Save checked: %s" % ("valid career" if has_career() else "no career"))
 
 func _load_json(path: String) -> Variant:
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
@@ -26,7 +30,7 @@ func load_career_config() -> Dictionary: return _load_json(CAREER_DATA_PATH)
 func load_endurance_config() -> Dictionary: return _load_json(ENDURANCE_DATA_PATH)
 
 func defaults() -> Dictionary:
-	return {"save_version":SAVE_VERSION,"career_year":2027,"career_date":"2027-03-01","category":"KART","championship":"kart_regional","career_path":"UNDECIDED","championship_class":"KART","owned_gt_cars":[],"driver_roster":[],"endurance_results":[],"class_results":[],"prestige":0,"endurance_trophies":[],"season":1,"team":{},"driver":{},"team_dna":neutral_dna(),"calendar":[],"race_history":[],"standings":[],"money":12000,"reputation":0,"vehicles":{"kart":{"level":1,"reliability":92,"condition":100,"livery":{},"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"f4":{"level":1,"reliability":86,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"gt4":{"level":1,"reliability":84,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}}},"upgrades":[],"development_queue":[],"facilities":{"workshop":1,"technical":0,"simulator":0,"scouting":0,"marketing":0,"strategy":0,"pit_crew":0},"personnel":[],"sponsor":{},"sponsors":[],"offers":[],"trophies":[],"career_history":[],"career_events":[],"culture":{"technical":0.0,"finance":0.0,"driver":0.0,"strategy":0.0,"innovation":0.0},"objectives":{"race":{"type":"finish_position","target":8,"completed":false},"season":{"type":"championship_position","target":5,"completed":false}},"experience":0,"level":1,"skill_points":0,"energy":5,"settings":{"master":80,"music":55,"sfx":80,"language":"fr","intro_seen":false},"transactions":[],"season_income":0,"season_expenses":0,"season_xp":0,"season_reputation":0,"race_index":0,"season_complete":false,"promotion_pending":false,"audio_buses":["KART_ENGINE","F4_ENGINE","GT_ENGINE","PROTOTYPE_ENGINE","TYRES","CONTACT","RAIN","PIT","UI"]}
+	return {"save_version":SAVE_VERSION,"career_year":2027,"career_date":"2027-03-01","category":"KART","championship":"kart_regional","career_path":"UNDECIDED","championship_class":"KART","owned_gt_cars":[],"driver_roster":[],"endurance_results":[],"class_results":[],"prestige":0,"endurance_trophies":[],"season":1,"team":{},"driver":{},"team_dna":neutral_dna(),"calendar":[],"race_history":[],"standings":[],"money":12000,"reputation":0,"vehicles":{"kart":{"level":1,"reliability":92,"condition":100,"livery":{},"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"f4":{"level":1,"reliability":86,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}},"gt4":{"level":1,"reliability":84,"condition":100,"aero":1,"components":{"engine":1,"chassis":1,"brakes":1,"reliability":1}}},"upgrades":[],"development_queue":[],"facilities":{"workshop":1,"technical":0,"simulator":0,"scouting":0,"marketing":0,"strategy":0,"pit_crew":0},"personnel":[],"sponsor":{},"sponsors":[],"offers":[],"trophies":[],"career_history":[],"career_events":[],"culture":{"technical":0.0,"finance":0.0,"driver":0.0,"strategy":0.0,"innovation":0.0},"objectives":{"race":{"type":"finish_position","target":8,"completed":false},"season":{"type":"championship_position","target":5,"completed":false}},"experience":0,"level":1,"skill_points":0,"energy":5,"settings":{"master":80,"music":55,"music_volume":55,"music_enabled":true,"sfx":80,"language":"fr"},"transactions":[],"season_income":0,"season_expenses":0,"season_xp":0,"season_reputation":0,"race_index":0,"season_complete":false,"promotion_pending":false,"audio_buses":["KART_ENGINE","F4_ENGINE","GT_ENGINE","PROTOTYPE_ENGINE","TYRES","CONTACT","RAIN","PIT","UI"]}
 
 func neutral_dna() -> Dictionary:
 	var affinities = {}; var ratings = {}

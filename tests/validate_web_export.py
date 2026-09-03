@@ -47,7 +47,7 @@ def main() -> None:
         ("preset.0.options", "variant/thread_support"): "false",
         ("preset.0.options", "vram_texture_compression/for_desktop"): "true",
         ("preset.0.options", "vram_texture_compression/for_mobile"): "true",
-        ("preset.0.options", "html/custom_html_shell"): '""',
+        ("preset.0.options", "html/custom_html_shell"): '"res://web/shell.html"',
     }
     for (section, key), expected in required.items():
         actual = config.get(section, key, fallback=None)
