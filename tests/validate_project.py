@@ -66,8 +66,15 @@ for category in ("origins", "philosophies", "manager_styles"):
         assert choice["advantages"] and choice["drawbacks"]
         assert all(abs(value) <= .15 for value in choice.get("modifiers", {}).values())
 main = (ROOT / "game/ui/main.gd").read_text()
-for feature in ("CREATION_STEPS", "creation_identity", "creation_foundation", "creation_driver", "creation_summary", "confirm_creation", "confirm_reset", "ADN DE L'ÉCURIE"):
+for feature in ("CREATION_STEPS", "creation_manager", "creation_team", "creation_summary", "confirm_creation", "confirm_reset", "CHOISISSEZ VOTRE GÉRANT"):
     assert feature in main
+assert 'CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]' in main
+assert len(creation["managers"]) == 5
+for manager_id, manager in creation["managers"].items():
+    assert (ROOT / "graphics/portraits/managers" / f"{manager_id}.svg").is_file()
+    assert sum(manager["points"].values()) == 10
+    assert len(manager["ratings"]) == 3
+assert len(re.findall(r'res://graphics/logos/logo_team_[a-z_]+\.svg', main)) >= 12
 state = (ROOT / "game/core/game_state.gd").read_text()
 for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 5"):
     assert feature in state
