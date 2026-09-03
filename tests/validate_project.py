@@ -7,9 +7,12 @@ ROOT = Path(__file__).resolve().parents[1]
 project = (ROOT / "project.godot").read_text()
 assert 'run/main_scene="res://game/ui/main.tscn"' in project
 assert 'GameState="*res://game/core/game_state.gd"' in project
+assert 'window/size/viewport_width=1080' in project
+assert 'window/size/viewport_height=1920' in project
 shell = (ROOT / "web/shell.html").read_text()
 assert "alert(" not in shell
 assert "viewport-fit=cover" in shell
+assert "safe-area-inset-top" in shell
 championships = json.loads((ROOT / "game/data/championships.json").read_text())
 assert len(championships) == 9
 assert championships[0]["id"] == "kart_club"
@@ -17,6 +20,14 @@ assert championships[-1]["id"] == "formula_apex"
 assert all(c["points_system"] and c["race_count"] > 0 for c in championships)
 for required in ("game/core/game_state.gd", "game/races/race_view.gd", "game/ui/main.tscn"):
     assert (ROOT / required).is_file(), required
+main = (ROOT / "game/ui/main.gd").read_text()
+race = (ROOT / "game/races/race_view.gd").read_text()
+for nav_item in ("ACCUEIL", "CARRIÈRE", "COURSE", "ÉCURIE", "PLUS"):
+    assert nav_item in main
+for feature in ("MobileBottomNavigation", "get_display_safe_area", "PitStrategySheet"):
+    assert feature in main
+for feature in ("_draw_car", "request_pit", "set_camera", "_near_car", "DRAPEAU À DAMIER"):
+    assert feature in race
 for legacy in ("app.js", "styles.css", "race/race-engine.js"):
     assert not (ROOT / legacy).exists(), f"legacy gameplay remains: {legacy}"
 print("Project structure, web shell, data and unification checks passed")
