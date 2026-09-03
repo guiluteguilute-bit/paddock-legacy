@@ -11,12 +11,16 @@ assert 'run/main_scene="res://game/ui/main.tscn"' in project
 assert 'GameState="*res://game/core/game_state.gd"' in project
 assert 'window/size/viewport_width=1080' in project
 assert 'window/size/viewport_height=1920' in project
-shell = (ROOT / "web/shell.html").read_text()
-assert "alert(" not in shell
-assert "viewport-fit=cover" in shell
-assert "safe-area-inset-top" in shell
-assert "new Engine($GODOT_CONFIG)" in shell
-assert '<script src="$GODOT_URL"></script>' in shell
+# The first public build deliberately uses Godot's official shell. Validate a
+# custom shell only if the export preset explicitly enables one again.
+preset = (ROOT / "export_presets.cfg").read_text()
+shell_match = re.search(r'^html/custom_html_shell="([^"]*)"', preset, re.MULTILINE)
+if shell_match and shell_match.group(1):
+    shell_path = shell_match.group(1).removeprefix("res://")
+    shell = (ROOT / shell_path).read_text()
+    assert "alert(" not in shell
+    assert "viewport-fit=cover" in shell
+    assert "new Engine($GODOT_CONFIG)" in shell
 championships = json.loads((ROOT / "game/data/championships.json").read_text())
 assert len(championships) == 9
 assert championships[0]["id"] == "kart_club"

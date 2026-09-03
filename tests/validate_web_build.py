@@ -20,8 +20,8 @@ def main() -> None:
     require_non_empty(build, "*.pck")
     assert "$GODOT_" not in html, "unexpanded Godot shell token in index.html"
     assert "alert(" not in html, "blocking JavaScript alert in index.html"
-    assert "PADDOCK LEGACY" in html, "custom loading screen is absent"
     assert "<canvas id=\"canvas\"" in html, "Godot canvas is absent"
+    assert "Godot" in html, "index.html does not look like a Godot Web export"
     assert (build / ".nojekyll").is_file(), ".nojekyll is absent"
     assert "README" not in html, "README content unexpectedly became the entry point"
     print("Godot Web artifact integrity checks passed")
