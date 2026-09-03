@@ -88,7 +88,6 @@ func _run_tests() -> void:
 	_check(endurance.set_time_scale(16) and not endurance.set_time_scale(3), "endurance time scale")
 	var before: float = endurance.elapsed_minutes
 	_check(endurance.simulate_to_next_event() > 0.0 and endurance.elapsed_minutes > before, "endurance next event")
-	endurance.free()
 
 	state.endurance_config = state.load_endurance_config()
 	state.data.reputation = 100
