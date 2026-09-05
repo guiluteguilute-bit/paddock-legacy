@@ -285,5 +285,15 @@
   "vehicle_shadow": "vehicle_shadow",
   "wheel_apex": "wheel_apex",
   "wheel_junior": "wheel_junior",
-  "wheel_professional": "wheel_professional"
+  "wheel_professional": "wheel_professional",
+  "manager_alex_avatar": "manager_alex_avatar",
+  "manager_alex_presentation": "manager_alex_presentation",
+  "manager_maya_avatar": "manager_maya_avatar",
+  "manager_maya_presentation": "manager_maya_presentation",
+  "manager_ethan_avatar": "manager_ethan_avatar",
+  "manager_ethan_presentation": "manager_ethan_presentation",
+  "manager_sofia_avatar": "manager_sofia_avatar",
+  "manager_sofia_presentation": "manager_sofia_presentation",
+  "manager_marcus_avatar": "manager_marcus_avatar",
+  "manager_marcus_presentation": "manager_marcus_presentation"
 }
