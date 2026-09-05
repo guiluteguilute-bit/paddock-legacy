@@ -12,6 +12,7 @@ var creation_draft: Dictionary = {}
 var creation_controls: Dictionary = {}
 var manager_swipe_start_x: float = -1.0
 var manager_preview_mode: bool = false
+var manager_reveal_tween: Tween
 var shell_background: TextureRect
 var shell_tint: ColorRect
 const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_card.gd")
@@ -88,6 +89,9 @@ func _apply_safe_area() -> void:
 	safe.add_theme_constant_override("margin_left", side); safe.add_theme_constant_override("margin_right", side); safe.add_theme_constant_override("margin_top", top); safe.add_theme_constant_override("margin_bottom", bottom)
 
 func clear(page_title: String) -> void:
+	if manager_reveal_tween != null:
+		manager_reveal_tween.kill()
+		manager_reveal_tween = null
 	_set_manager_background(false)
 	content.add_theme_constant_override("separation", 12)
 	if GameState.has_career() and GameState.data.team.get("colors", []).size() >= 3:
@@ -201,8 +205,8 @@ func creation_manager() -> void:
 		frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		stage.add_child(frame)
-	var reveal := create_tween()
-	reveal.tween_property(presentation, "modulate", Color.WHITE, 0.18)
+	manager_reveal_tween = create_tween()
+	manager_reveal_tween.tween_property(presentation, "modulate", Color.WHITE, 0.18)
 
 	var arrows := HBoxContainer.new()
 	arrows.add_theme_constant_override("separation", 10)
@@ -401,6 +405,9 @@ func show_dashboard() -> void:
 	content.add_child(button("LANCER LA COURSE  ›", show_race_prep))
 
 func show_career() -> void:
+	if not GameState.has_career():
+		show_creation()
+		return
 	clear("CARRIÈRE"); heading("DEUX RÊVES. UNE LÉGENDE.", 24)
 	content.add_child(card("VOIE MONOPLACE","KART → F4 → REGIONAL → F3 → F2 → FORMULA APEX",92))
 	content.add_child(button("EXPLORER LA VOIE GT / ENDURANCE  ›",show_endurance_hub))
@@ -439,7 +446,10 @@ func show_endurance_strategy() -> void:
 	for item in [["MÉTÉO & LUMIÈRE","JOUR → COUCHER → NUIT → AUBE • SEC → PLUIE → PISTE SÉCHANTE"],["PIT STOP","FUEL • TYRES / DOUBLE STINT • DRIVER CHANGE • QUICK / FULL REPAIR"],["NEUTRALISATION","YELLOW FLAG • FULL COURSE YELLOW • SAFETY CAR • PIT NOW ?"],["SIMULATION","x1 • x2 • x4 • x8 • x16 • SIMULATE TO NEXT EVENT"]]:content.add_child(card(item[0],item[1],82))
 
 func show_team() -> void:
-	clear("ÉCURIE"); heading(GameState.data.team.name.to_upper(), 25)
+	if not GameState.has_career():
+		show_creation()
+		return
+	clear("ÉCURIE"); heading(str(GameState.data.get("team", {}).get("name", "ÉCURIE")).to_upper(), 25)
 	var image = TextureRect.new(); image.texture = load("res://graphics/parallel/facilities/backgrounds/campus_day.svg"); image.custom_minimum_size.y = 300; image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; content.add_child(image)
 	content.add_child(card("ATELIER N%d" % GameState.data.facilities.workshop, "SIMULATEUR N%d  •  PIT CREW N%d" % [GameState.data.facilities.simulator, GameState.data.facilities.pit_crew], 86))
 	var dna:Dictionary=GameState.data.team_dna; heading("HISTORIQUE",18); content.add_child(card("FONDÉE EN %d" % dna.founded_year,"ORIGINE : %s\nPHILOSOPHIE : %s\nFONDATEUR : %s" % [choice_name("origins",dna.origin),choice_name("philosophies",dna.philosophy),choice_name("manager_styles",dna.management_style)],125)); heading("ADN DE L'ÉCURIE",18)
