@@ -242,20 +242,18 @@ func creation_manager() -> void:
 		effect_label.add_theme_color_override("font_color", effect[1])
 		effects.add_child(effect_label)
 
-	var manager_dots: Array[String] = []
-	for i in ids.size(): manager_dots.append("●" if i == selected else "○")
 	var dots := Label.new()
-	dots.text = "  ".join(manager_dots)
+	dots.text = "%d / %d" % [selected + 1, ids.size()]
 	dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dots.add_theme_color_override("font_color", colors.accent)
+	dots.add_theme_color_override("font_color", colors.gold)
 	content.add_child(dots)
-	var choose: Button
+	var choose_text := "RETOUR AUX PARAMÈTRES" if manager_preview_mode else "CHOISIR %s" % str(manager.first_name).to_upper()
+	var choose := MANAGER_UI_HELPERS.game_button(choose_text, 78)
+	choose.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if manager_preview_mode:
-		choose = button("RETOUR AUX PARAMÈTRES", func(): manager_preview_mode = false; show_settings())
+		choose.pressed.connect(func(): manager_preview_mode = false; show_settings())
 	else:
-		choose = button("CHOISIR %s" % str(manager.first_name).to_upper(), func(): creation_step = 1; show_creation_step())
-	choose.custom_minimum_size.y = 72
-	choose.add_theme_font_size_override("font_size", 20)
+		choose.pressed.connect(func(): creation_step = 1; show_creation_step())
 	content.add_child(choose)
 
 func _cycle_manager(delta: int) -> void:
