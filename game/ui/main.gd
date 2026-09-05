@@ -17,6 +17,7 @@ var shell_tint: ColorRect
 const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_card.gd")
 const MANAGER_STATS_CARD := preload("res://game/ui/components/manager_stats_card.gd")
 const MANAGER_UI_HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
+const UI_ICON_ATLAS := preload("res://game/ui/components/ui_icon_atlas.gd")
 const MANAGER_UI_DIR := "res://graphics/ui/manager_selection/cartoon/"
 const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
 const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
@@ -67,8 +68,11 @@ func build_shell() -> void:
 	scroll = ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; root.add_child(scroll)
 	content = VBoxContainer.new(); content.size_flags_horizontal = Control.SIZE_EXPAND_FILL; content.add_theme_constant_override("separation", 12); scroll.add_child(content)
 	nav = HBoxContainer.new(); nav.name = "MobileBottomNavigation"; nav.add_theme_constant_override("separation", 5); root.add_child(nav)
-	for item in [["⌂\nACCUEIL", show_dashboard], ["▥\nCARRIÈRE", show_career], ["●\nCOURSE", show_race_prep], ["◆\nÉCURIE", show_team], ["•••\nPLUS", show_more]]:
-		var b = button(item[0], item[1], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.custom_minimum_size = Vector2(0, 64); nav.add_child(b)
+	for item in [["ACCUEIL", "accueil", show_dashboard], ["CARRIÈRE", "classements", show_career], ["COURSE", "courses", show_race_prep], ["ÉCURIE", "equipe", show_team], ["PLUS", "parametres", show_more]]:
+		var b = button(item[0], item[2], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.custom_minimum_size = Vector2(0, 64)
+		var icon: Texture2D = UI_ICON_ATLAS.get_icon(item[1])
+		if icon != null: b.icon = icon; b.icon_max_width = 42; b.expand_icon = true
+		nav.add_child(b)
 	_apply_safe_area()
 
 func _apply_safe_area() -> void:
