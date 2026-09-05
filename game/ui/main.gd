@@ -133,9 +133,7 @@ func show_creation_step() -> void:
 		2: creation_summary()
 
 func creation_progress() -> String:
-	var dots: Array[String] = []
-	for i in 3: dots.append("●" if i <= creation_step else "○")
-	return "  ".join(dots)
+	return "%d / 3 - %s" % [creation_step + 1, CREATION_STEPS[creation_step]]
 
 func creation_manager() -> void:
 	_set_manager_background(true)
