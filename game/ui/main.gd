@@ -181,28 +181,47 @@ func creation_manager() -> void:
 	reveal.tween_property(presentation, "modulate", Color.WHITE, 0.18)
 
 	var arrows := HBoxContainer.new()
-	arrows.add_theme_constant_override("separation", 12)
+	arrows.add_theme_constant_override("separation", 10)
 	content.add_child(arrows)
-	var previous := button("‹", func(): _cycle_manager(-1), true)
-	previous.custom_minimum_size.x = 90
+	var previous := MANAGER_UI_HELPERS.game_button("<", 72)
+	previous.custom_minimum_size.x = 78
+	previous.pressed.connect(func(): _cycle_manager(-1))
 	arrows.add_child(previous)
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	arrows.add_child(identity)
-	var manager_name := Label.new()
-	manager_name.text = str(manager.first_name).to_upper()
-	manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	manager_name.add_theme_font_size_override("font_size", 28)
-	manager_name.add_theme_color_override("font_color", colors.text)
-	identity.add_child(manager_name)
-	var role := Label.new()
-	role.text = str(manager.title).to_upper()
-	role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	role.add_theme_font_size_override("font_size", 16)
-	role.add_theme_color_override("font_color", colors.accent)
-	identity.add_child(role)
-	var following := button("›", func(): _cycle_manager(1), true)
-	following.custom_minimum_size.x = 90
+	var alex_plate: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_DIR + "ui_name_plate_alex.png")
+	if ids[selected] == "alex" and alex_plate != null:
+		var plate := TextureRect.new()
+		plate.texture = alex_plate
+		plate.custom_minimum_size.y = 108
+		plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		identity.add_child(plate)
+	else:
+		var manager_name := Label.new()
+		manager_name.text = str(manager.first_name).to_upper()
+		manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		manager_name.add_theme_font_size_override("font_size", 28)
+		manager_name.add_theme_color_override("font_color", colors.text)
+		identity.add_child(manager_name)
+		var role := Label.new()
+		role.text = str(manager.title).trim_prefix("Le ").trim_prefix("La ").to_upper()
+		role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		role.add_theme_font_size_override("font_size", 15)
+		role.add_theme_color_override("font_color", colors.gold)
+		identity.add_child(role)
+	var specialty: Texture2D = MANAGER_UI_HELPERS.specialty(ids[selected])
+	if specialty != null:
+		var badge := TextureRect.new()
+		badge.texture = specialty
+		badge.custom_minimum_size.y = 60
+		badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		identity.add_child(badge)
+	var following := MANAGER_UI_HELPERS.game_button(">", 72)
+	following.custom_minimum_size.x = 78
+	following.pressed.connect(func(): _cycle_manager(1))
 	arrows.add_child(following)
 
 	var info := PanelContainer.new()
