@@ -308,14 +308,14 @@ func _manager_stage_input(event: InputEvent) -> void:
 		if event.pressed:
 			manager_swipe_start_x = event.position.x
 		elif manager_swipe_start_x >= 0.0:
-			var delta := event.position.x - manager_swipe_start_x
+			var delta: float = event.position.x - manager_swipe_start_x
 			manager_swipe_start_x = -1.0
 			if abs(delta) >= 80.0: _cycle_manager(-1 if delta > 0.0 else 1)
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			manager_swipe_start_x = event.position.x
 		elif manager_swipe_start_x >= 0.0:
-			var mouse_delta := event.position.x - manager_swipe_start_x
+			var mouse_delta: float = event.position.x - manager_swipe_start_x
 			manager_swipe_start_x = -1.0
 			if abs(mouse_delta) >= 80.0: _cycle_manager(-1 if mouse_delta > 0.0 else 1)
 
