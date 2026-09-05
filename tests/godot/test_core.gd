@@ -31,7 +31,7 @@ func _run_tests() -> void:
 	state.creation_config = state.load_creation_config()
 	state.career_config = state.load_career_config()
 	state.data = state.defaults()
-	_check(state.data.save_version == 5, "save version")
+	_check(state.data.save_version == 6, "save version")
 	_check(state.career_config.kart_calendar.size() == 6, "kart calendar")
 	_check(state.career_config.rivals.size() == 11, "rival count")
 	_check(state.points_for(1) == 25 and state.points_for(10) == 1 and state.points_for(11) == 0, "points table")
