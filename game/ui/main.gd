@@ -55,8 +55,8 @@ func _ready() -> void:
 	print("[BOOT] Main UI ready")
 
 func build_shell() -> void:
-	var garage_bg = TextureRect.new(); garage_bg.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg"); garage_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); garage_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; garage_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; garage_bg.modulate = Color(0.42, 0.50, 0.58, 0.34); garage_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(garage_bg)
-	var bg = ColorRect.new(); bg.color = Color(0.027, 0.067, 0.09, 0.90); bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); bg.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(bg)
+	shell_background = TextureRect.new(); shell_background.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg"); shell_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); shell_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; shell_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; shell_background.modulate = Color(0.42, 0.50, 0.58, 0.34); shell_background.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(shell_background)
+	shell_tint = ColorRect.new(); shell_tint.color = Color(0.027, 0.067, 0.09, 0.90); shell_tint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); shell_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(shell_tint)
 	var glow = ColorRect.new(); glow.color = Color(0.04, 0.28, 0.27, 0.16); glow.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE); glow.custom_minimum_size.y = 270; add_child(glow)
 	var safe = MarginContainer.new(); safe.name = "SafeArea"; safe.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(safe)
 	var root = VBoxContainer.new(); root.add_theme_constant_override("separation", 12); safe.add_child(root)
