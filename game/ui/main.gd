@@ -224,69 +224,23 @@ func creation_manager() -> void:
 	following.pressed.connect(func(): _cycle_manager(1))
 	arrows.add_child(following)
 
-	var info := PanelContainer.new()
-	var info_style := StyleBoxFlat.new()
-	info_style.bg_color = Color(0.035, 0.09, 0.12, 0.96)
-	info_style.border_color = Color(0.18, 0.47, 0.53, 0.72)
-	info_style.set_border_width_all(1)
-	info_style.set_corner_radius_all(18)
-	info_style.content_margin_left = 18
-	info_style.content_margin_right = 18
-	info_style.content_margin_top = 14
-	info_style.content_margin_bottom = 14
-	info.add_theme_stylebox_override("panel", info_style)
-	content.add_child(info)
-	var info_box := VBoxContainer.new()
-	info_box.add_theme_constant_override("separation", 8)
-	info.add_child(info_box)
-	var attributes: Dictionary = manager.get("attributes", {})
-	for stat in [["TECHNIQUE", "technical"], ["STRATÉGIE", "strategy"], ["BUSINESS", "business"]]:
-		var stat_row := HBoxContainer.new()
-		stat_row.add_theme_constant_override("separation", 10)
-		info_box.add_child(stat_row)
-		var stat_name := Label.new()
-		stat_name.text = stat[0]
-		stat_name.custom_minimum_size.x = 135
-		stat_name.add_theme_font_size_override("font_size", 13)
-		stat_name.add_theme_color_override("font_color", colors.text)
-		stat_row.add_child(stat_name)
-		var stat_bar := ProgressBar.new()
-		stat_bar.min_value = 0
-		stat_bar.max_value = 100
-		stat_bar.value = int(attributes.get(stat[1], 50))
-		stat_bar.show_percentage = false
-		stat_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		stat_bar.custom_minimum_size.y = 16
-		var bar_bg := StyleBoxFlat.new()
-		bar_bg.bg_color = Color(0.02, 0.04, 0.06, 0.92)
-		bar_bg.set_corner_radius_all(6)
-		stat_bar.add_theme_stylebox_override("background", bar_bg)
-		var bar_fill := StyleBoxFlat.new()
-		bar_fill.bg_color = colors.accent
-		bar_fill.set_corner_radius_all(6)
-		stat_bar.add_theme_stylebox_override("fill", bar_fill)
-		stat_row.add_child(stat_bar)
-		var stat_value := Label.new()
-		stat_value.text = str(int(attributes.get(stat[1], 50)))
-		stat_value.custom_minimum_size.x = 40
-		stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		stat_value.add_theme_font_size_override("font_size", 15)
-		stat_value.add_theme_color_override("font_color", colors.gold)
-		stat_row.add_child(stat_value)
+	var stats_card = MANAGER_STATS_CARD.new()
+	stats_card.setup(manager)
+	content.add_child(stats_card)
+	var effects := HBoxContainer.new()
+	effects.add_theme_constant_override("separation", 18)
+	content.add_child(effects)
 	var advantages: Array = manager.get("advantages", [])
 	var drawbacks: Array = manager.get("drawbacks", [])
-	var advantage := Label.new()
-	advantage.text = "▲  " + (str(advantages[0]) if not advantages.is_empty() else "Profil équilibré")
-	advantage.add_theme_font_size_override("font_size", 15)
-	advantage.add_theme_color_override("font_color", Color(0.48, 0.95, 0.67))
-	advantage.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_box.add_child(advantage)
-	var drawback := Label.new()
-	drawback.text = "▼  " + (str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun inconvénient majeur")
-	drawback.add_theme_font_size_override("font_size", 14)
-	drawback.add_theme_color_override("font_color", colors.danger)
-	drawback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_box.add_child(drawback)
+	for effect in [["+ " + (str(advantages[0]) if not advantages.is_empty() else "Profil équilibré"), Color("79f19b")], ["- " + (str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun inconvénient majeur"), Color("ff665d")]]:
+		var effect_label := Label.new()
+		effect_label.text = effect[0]
+		effect_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		effect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		effect_label.add_theme_font_size_override("font_size", 13)
+		effect_label.add_theme_color_override("font_color", effect[1])
+		effects.add_child(effect_label)
 
 	var manager_dots: Array[String] = []
 	for i in ids.size(): manager_dots.append("●" if i == selected else "○")
