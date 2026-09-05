@@ -786,9 +786,9 @@
       "style": "protector",
       "points": {
         "workshop": 1,
-        "technical": 2,
+        "technical": 1,
         "simulator": 3,
-        "scouting": 3,
+        "scouting": 2,
         "marketing": 1,
         "strategy": 2
       },
@@ -834,10 +834,10 @@
       "points": {
         "workshop": 2,
         "technical": 2,
-        "simulator": 2,
-        "scouting": 2,
+        "simulator": 1,
+        "scouting": 1,
         "marketing": 2,
-        "strategy": 3
+        "strategy": 2
       },
       "modifiers": {
         "team_efficiency": 0.08,
