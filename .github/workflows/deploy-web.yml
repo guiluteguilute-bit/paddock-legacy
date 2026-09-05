@@ -70,6 +70,7 @@ jobs:
           set -euo pipefail
           python3 tests/validate_project.py
           python3 tests/validate_ui_catalog.py
+          python3 tests/validate_manager_assets.py
 
       - name: Import Godot project
         shell: bash
