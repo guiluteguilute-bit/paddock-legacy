@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -52,63 +52,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          template_dir="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
           echo "Installed export templates:"
           find "$HOME/.local/share/godot/export_templates" -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
-          python3 tests/validate_web_export.py --templates "$template_dir"
+          python3 tests/validate_web_export.py --templates "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
 
-      - name: Stamp development build
+      - name: Build, test, and validate Web artifact
         shell: bash
-        run: |
-          set -euo pipefail
-          short_sha="${GITHUB_SHA:0:7}"
-          sed -i "s/const BUILD_COMMIT := \"local\"/const BUILD_COMMIT := \"${short_sha}\"/" web/build_info.gd
+        env:
+          BUILD_ENVIRONMENT: production
+        run: ./scripts/ci_web.sh
 
-      - name: Validate project data and UI catalog
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 tests/validate_project.py
-          python3 tests/validate_ui_catalog.py
-          python3 tests/validate_manager_assets.py
-
-      - name: Import Godot project
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 5m "${GODOT_BIN}" --headless --path . --editor --import --quit 2>&1 | tee /tmp/godot-import.log
-          python3 tests/validate_godot_log.py /tmp/godot-import.log
-
-      - name: Run Godot core tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 1m "${GODOT_BIN}" --headless --path . tests/godot/test_core.tscn 2>&1 | tee /tmp/godot-core.log
-          python3 tests/validate_godot_log.py /tmp/godot-core.log
-
-      - name: Load main scene headlessly
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 2m "${GODOT_BIN}" --headless --path . --quit-after 2 2>&1 | tee /tmp/godot-main.log
-          python3 tests/validate_godot_log.py /tmp/godot-main.log
-
-      - name: Export Web Preview
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf build/web
-          mkdir -p build/web
-          timeout 10m "${GODOT_BIN}" --headless --verbose --path . --export-release "Web Preview" build/web/index.html 2>&1 | tee /tmp/godot-export.log
-          python3 tests/validate_godot_log.py /tmp/godot-export.log
-
-      - name: Validate Web artifact
-        shell: bash
-        run: |
-          set -euo pipefail
-          touch build/web/.nojekyll
-          python3 tests/validate_web_build.py build/web
-          find build/web -maxdepth 1 -type f -printf '%f %s bytes\n' | sort
+      - name: Upload Godot debug logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-debug-logs
+          path: build/logs/*.log
+          if-no-files-found: warn
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

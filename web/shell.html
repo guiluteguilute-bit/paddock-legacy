@@ -21,6 +21,8 @@
     #progress::-moz-progress-bar { background: #18d3c5; }
     #status-error { display: none; max-width: min(80vw, 560px); margin: 0; color: #ff6b71; white-space: pre-wrap; }
     #retry { display: none; padding: 14px 24px; border: 1px solid #18d3c5; border-radius: 8px; background: #10232c; color: #f5f7fa; font-weight: 700; }
+    #build-version { position: fixed; right: 8px; bottom: 8px; z-index: 5; color: #789; font-size: 10px; }
+    #update { display: none; position: fixed; left: 50%; bottom: max(28px, env(safe-area-inset-bottom)); z-index: 10; transform: translateX(-50%); padding: 12px 18px; border: 1px solid #18d3c5; border-radius: 8px; background: #10232c; color: white; }
   </style>
 </head>
 <body>
@@ -33,6 +35,8 @@
     <button id="retry" type="button">RÉESSAYER</button>
   </div>
   <noscript>JavaScript doit être activé pour lancer Paddock Legacy.</noscript>
+  <span id="build-version">BUILD __BUILD_SHORT_COMMIT__</span>
+  <button id="update" type="button">NOUVELLE VERSION DISPONIBLE — METTRE À JOUR</button>
   <script src="$GODOT_URL"></script>
   <script>
     const engine = new Engine($GODOT_CONFIG);
@@ -42,6 +46,18 @@
     const progress = document.getElementById('progress');
     const retry = document.getElementById('retry');
     retry.addEventListener('click', () => window.location.reload());
+    const loadedCommit = '__BUILD_COMMIT__';
+    const update = document.getElementById('update');
+    update.addEventListener('click', () => window.location.reload());
+    async function checkVersion() {
+      try {
+        const response = await fetch(`build-version.json?cache_bust=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) return;
+        const deployed = await response.json();
+        if (loadedCommit !== 'local' && deployed.commit && deployed.commit !== loadedCommit) update.style.display = 'block';
+      } catch (error) { console.warn('Build version check unavailable', error); }
+    }
+    window.setInterval(checkVersion, 60000);
 
     engine.startGame({
       onProgress(current, total) {
