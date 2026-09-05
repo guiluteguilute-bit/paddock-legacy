@@ -75,12 +75,13 @@ assert "BÂTISSEZ VOTRE LÉGENDE" not in main
 assert "AudioManager.set_music_volume" in main
 assert len(creation["managers"]) == 5
 for manager_id, manager in creation["managers"].items():
-    assert (ROOT / "graphics/portraits/managers" / f"{manager_id}.svg").is_file()
+    assert (ROOT / manager["avatar"].removeprefix("res://")).is_file()
+    assert (ROOT / manager["presentation"].removeprefix("res://")).is_file()
     assert sum(manager["points"].values()) == 10
     assert len(manager["ratings"]) == 3
 assert len(re.findall(r'res://graphics/logos/logo_team_[a-z_]+\.svg', main)) >= 12
 state = (ROOT / "game/core/game_state.gd").read_text()
-for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 5"):
+for feature in ("build_team_dna", "effective_cost", "potential_estimate", "neutral_dna", "SAVE_VERSION := 6"):
     assert feature in state
 print("Team creation configuration, balance bounds and integration checks passed")
 
