@@ -44,8 +44,8 @@ func _draw() -> void:
 
 	if fill_area.size.x > 0.0:
 		var source_width := fill_region.size.x * fill_ratio
-		draw_texture_rect_region(fill_area, atlas, Rect2(fill_region.position, Vector2(source_width, fill_region.size.y)))
-	draw_texture_rect_region(dest, atlas, background_region)
+		draw_texture_rect_region(atlas, fill_area, Rect2(fill_region.position, Vector2(source_width, fill_region.size.y)))
+	draw_texture_rect_region(atlas, dest, background_region)
 
 func _fill_region_for_kind() -> Rect2:
 	match stat_kind:
