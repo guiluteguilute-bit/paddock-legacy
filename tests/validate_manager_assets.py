@@ -21,4 +21,9 @@ for manager_id, manager in config["managers"].items():
     assert manager["presentation"].endswith(f"{manager_id}_presentation.png")
     assert set(manager["attributes"].keys()) == {"technical", "strategy", "business"}
 
+main_gd = (ROOT / "game" / "ui" / "main.gd").read_text(encoding="utf-8")
+assert "APERÇU CHOIX DU GÉRANT" in main_gd
+assert "manager_preview_mode" in main_gd
+assert "RETOUR AUX PARAMÈTRES" in main_gd
+
 print("Premium manager assets: OK")
