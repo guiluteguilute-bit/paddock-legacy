@@ -362,7 +362,7 @@
         "control": 56,
         "mental": 51
       },
-      "xp": 1.0,
+      "xp": 1,
       "potential": [
         86,
         96
@@ -407,7 +407,7 @@
         "control": 52,
         "mental": 57
       },
-      "xp": 1.0,
+      "xp": 1,
       "potential": [
         76,
         93
@@ -454,7 +454,7 @@
         "control": 59,
         "mental": 59
       },
-      "xp": 1.0,
+      "xp": 1,
       "potential": [
         77,
         92
@@ -613,12 +613,14 @@
     }
   },
   "managers": {
-    "alex_martin": {
-      "name": "Alex Martin",
+    "alex": {
+      "id": "alex",
+      "name": "Alex",
       "first_name": "Alex",
       "title": "Le Technicien",
-      "personality": "Ingénieux et passionné de mécanique.",
-      "portrait": "alex_martin",
+      "personality": "Ingénieux, précis et passionné de mécanique.",
+      "avatar": "res://graphics/portraits/managers/premium/alex_avatar.png",
+      "presentation": "res://graphics/portraits/managers/premium/alex_presentation.png",
       "icons": [
         "🔧 TECHNIQUE",
         "🧠 STRATÉGIE",
@@ -629,7 +631,12 @@
         3,
         2
       ],
-      "highlight": "🔧 +8 % DÉVELOPPEMENT",
+      "attributes": {
+        "technical": 85,
+        "strategy": 62,
+        "business": 48
+      },
+      "highlight": "+8 % DÉVELOPPEMENT VÉHICULE",
       "origin": "family_garage",
       "philosophy": "pure_performance",
       "style": "technician",
@@ -654,23 +661,30 @@
         "-5 % revenus sponsors"
       ]
     },
-    "maya_chen": {
-      "name": "Maya Chen",
+    "maya": {
+      "id": "maya",
+      "name": "Maya",
       "first_name": "Maya",
       "title": "La Stratège",
-      "personality": "Calme et brillante sous pression.",
-      "portrait": "maya_chen",
+      "personality": "Calme, analytique et brillante sous pression.",
+      "avatar": "res://graphics/portraits/managers/premium/maya_avatar.png",
+      "presentation": "res://graphics/portraits/managers/premium/maya_presentation.png",
       "icons": [
         "🧠 STRATÉGIE",
         "🔧 TECHNIQUE",
-        "👥 ÉQUIPE"
+        "💰 BUSINESS"
       ],
       "ratings": [
         5,
         3,
         3
       ],
-      "highlight": "🧠 +10 % INFOS COURSE",
+      "attributes": {
+        "technical": 65,
+        "strategy": 90,
+        "business": 55
+      },
+      "highlight": "+10 % INFORMATIONS DE COURSE",
       "origin": "former_driver",
       "philosophy": "strategy",
       "style": "strategist",
@@ -695,23 +709,30 @@
         "-4 % développement brut"
       ]
     },
-    "sofia_reyes": {
-      "name": "Sofia Reyes",
-      "first_name": "Sofia",
-      "title": "La Commerciale",
-      "personality": "Charismatique et redoutable négociatrice.",
-      "portrait": "sofia_reyes",
+    "ethan": {
+      "id": "ethan",
+      "name": "Ethan",
+      "first_name": "Ethan",
+      "title": "Le Commercial",
+      "personality": "Charismatique, détendu et redoutable en négociation.",
+      "avatar": "res://graphics/portraits/managers/premium/ethan_avatar.png",
+      "presentation": "res://graphics/portraits/managers/premium/ethan_presentation.png",
       "icons": [
         "💰 BUSINESS",
-        "👥 ÉQUIPE",
+        "🧠 STRATÉGIE",
         "🔧 TECHNIQUE"
       ],
       "ratings": [
         5,
-        4,
+        3,
         2
       ],
-      "highlight": "💰 +10 % SPONSORS",
+      "attributes": {
+        "technical": 45,
+        "strategy": 60,
+        "business": 92
+      },
+      "highlight": "+10 % REVENUS SPONSORS",
       "origin": "private_investor",
       "philosophy": "financial_management",
       "style": "businessman",
@@ -736,86 +757,98 @@
         "-5 % développement technique"
       ]
     },
-    "idris_kone": {
-      "name": "Idris Koné",
-      "first_name": "Idris",
-      "title": "Le Formateur",
-      "personality": "Patient, exigeant et proche des jeunes.",
-      "portrait": "idris_kone",
+    "sofia": {
+      "id": "sofia",
+      "name": "Sofia",
+      "first_name": "Sofia",
+      "title": "La Formatrice",
+      "personality": "Ancienne pilote, sportive, accessible et exigeante.",
+      "avatar": "res://graphics/portraits/managers/premium/sofia_avatar.png",
+      "presentation": "res://graphics/portraits/managers/premium/sofia_presentation.png",
       "icons": [
         "🏁 PILOTES",
-        "🔎 SCOUTING",
+        "🧠 STRATÉGIE",
         "🔧 TECHNIQUE"
       ],
       "ratings": [
         5,
         4,
-        2
+        3
       ],
-      "highlight": "🏁 +10 % XP PILOTES",
+      "attributes": {
+        "technical": 62,
+        "strategy": 72,
+        "business": 50
+      },
+      "highlight": "+10 % XP PILOTES",
       "origin": "youth_academy",
       "philosophy": "driver_excellence",
       "style": "protector",
       "points": {
         "workshop": 1,
-        "technical": 1,
+        "technical": 2,
         "simulator": 3,
         "scouting": 3,
         "marketing": 1,
-        "strategy": 1
-      },
-      "modifiers": {
-        "driver_xp": 0.1,
-        "scouting_efficiency": 0.08,
-        "development_speed": -0.05
-      },
-      "advantages": [
-        "+10 % XP pilotes",
-        "+8 % scouting"
-      ],
-      "drawbacks": [
-        "-5 % développement véhicule"
-      ]
-    },
-    "victor_bauer": {
-      "name": "Victor Bauer",
-      "first_name": "Victor",
-      "title": "Le Meneur",
-      "personality": "Énergique, loyal et fédérateur.",
-      "portrait": "victor_bauer",
-      "icons": [
-        "👥 ÉQUIPE",
-        "🔥 MORAL",
-        "💰 BUSINESS"
-      ],
-      "ratings": [
-        5,
-        5,
-        3
-      ],
-      "highlight": "👥 +10 % MORAL",
-      "origin": "passionate_amateur",
-      "philosophy": "reliability",
-      "style": "passionate",
-      "points": {
-        "workshop": 2,
-        "technical": 1,
-        "simulator": 1,
-        "scouting": 1,
-        "marketing": 3,
         "strategy": 2
       },
       "modifiers": {
-        "morale": 0.1,
-        "staff_loyalty": 0.08,
-        "operating_cost": 0.04
+        "driver_xp": 0.1,
+        "sponsor": -0.04
       },
       "advantages": [
-        "+10 % moral",
-        "+8 % fidélité du personnel"
+        "+10 % XP pilotes",
+        "+8 % progression des jeunes"
       ],
       "drawbacks": [
-        "+4 % coûts de fonctionnement"
+        "-4 % revenus commerciaux"
+      ]
+    },
+    "marcus": {
+      "id": "marcus",
+      "name": "Marcus",
+      "first_name": "Marcus",
+      "title": "Le Meneur",
+      "personality": "Directeur d'écurie expérimenté, autoritaire et fédérateur.",
+      "avatar": "res://graphics/portraits/managers/premium/marcus_avatar.png",
+      "presentation": "res://graphics/portraits/managers/premium/marcus_presentation.png",
+      "icons": [
+        "👥 ÉQUIPE",
+        "🧠 STRATÉGIE",
+        "🔧 TECHNIQUE"
+      ],
+      "ratings": [
+        4,
+        4,
+        4
+      ],
+      "attributes": {
+        "technical": 72,
+        "strategy": 80,
+        "business": 70
+      },
+      "highlight": "+8 % EFFICACITÉ D'ÉQUIPE",
+      "origin": "former_driver",
+      "philosophy": "reliability",
+      "style": "demanding",
+      "points": {
+        "workshop": 2,
+        "technical": 2,
+        "simulator": 2,
+        "scouting": 2,
+        "marketing": 2,
+        "strategy": 3
+      },
+      "modifiers": {
+        "team_efficiency": 0.08,
+        "operating_cost": 0.05
+      },
+      "advantages": [
+        "+8 % efficacité d'équipe",
+        "+5 % stabilité opérationnelle"
+      ],
+      "drawbacks": [
+        "+5 % coûts de personnel"
       ]
     }
   }
