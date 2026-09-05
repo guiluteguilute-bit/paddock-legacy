@@ -12,6 +12,13 @@ var creation_draft: Dictionary = {}
 var creation_controls: Dictionary = {}
 var manager_swipe_start_x: float = -1.0
 var manager_preview_mode: bool = false
+var shell_background: TextureRect
+var shell_tint: ColorRect
+const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_card.gd")
+const MANAGER_STATS_CARD := preload("res://game/ui/components/manager_stats_card.gd")
+const MANAGER_UI_HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
+const UI_ICON_ATLAS := preload("res://game/ui/components/ui_icon_atlas.gd")
+const MANAGER_UI_DIR := "res://graphics/ui/manager_selection/cartoon/"
 const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
 const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
 const TEAM_LOGO_PATHS := ["res://graphics/logos/logo_team_apex_nova.svg", "res://graphics/logos/logo_team_crimson_orbit.svg", "res://graphics/logos/logo_team_ember_fox.svg", "res://graphics/logos/logo_team_helix_racing.svg", "res://graphics/logos/logo_team_kinetic_arc.svg", "res://graphics/logos/logo_team_lumen_motorsport.svg", "res://graphics/logos/logo_team_meridian_kart.svg", "res://graphics/logos/logo_team_northstar.svg", "res://graphics/logos/logo_team_pulse_competition.svg", "res://graphics/logos/logo_team_silver_finch.svg", "res://graphics/logos/logo_team_vector_peak.svg", "res://graphics/logos/logo_team_vertex_union.svg"]
@@ -49,8 +56,8 @@ func _ready() -> void:
 	print("[BOOT] Main UI ready")
 
 func build_shell() -> void:
-	var garage_bg = TextureRect.new(); garage_bg.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg"); garage_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); garage_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; garage_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; garage_bg.modulate = Color(0.42, 0.50, 0.58, 0.34); garage_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(garage_bg)
-	var bg = ColorRect.new(); bg.color = Color(0.027, 0.067, 0.09, 0.90); bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); bg.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(bg)
+	shell_background = TextureRect.new(); shell_background.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg"); shell_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); shell_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; shell_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; shell_background.modulate = Color(0.42, 0.50, 0.58, 0.34); shell_background.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(shell_background)
+	shell_tint = ColorRect.new(); shell_tint.color = Color(0.027, 0.067, 0.09, 0.90); shell_tint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); shell_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE; add_child(shell_tint)
 	var glow = ColorRect.new(); glow.color = Color(0.04, 0.28, 0.27, 0.16); glow.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE); glow.custom_minimum_size.y = 270; add_child(glow)
 	var safe = MarginContainer.new(); safe.name = "SafeArea"; safe.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(safe)
 	var root = VBoxContainer.new(); root.add_theme_constant_override("separation", 12); safe.add_child(root)
@@ -61,8 +68,11 @@ func build_shell() -> void:
 	scroll = ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; root.add_child(scroll)
 	content = VBoxContainer.new(); content.size_flags_horizontal = Control.SIZE_EXPAND_FILL; content.add_theme_constant_override("separation", 12); scroll.add_child(content)
 	nav = HBoxContainer.new(); nav.name = "MobileBottomNavigation"; nav.add_theme_constant_override("separation", 5); root.add_child(nav)
-	for item in [["⌂\nACCUEIL", show_dashboard], ["▥\nCARRIÈRE", show_career], ["●\nCOURSE", show_race_prep], ["◆\nÉCURIE", show_team], ["•••\nPLUS", show_more]]:
-		var b = button(item[0], item[1], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.custom_minimum_size = Vector2(0, 64); nav.add_child(b)
+	for item in [["ACCUEIL", "accueil", show_dashboard], ["CARRIÈRE", "classements", show_career], ["COURSE", "courses", show_race_prep], ["ÉCURIE", "equipe", show_team], ["PLUS", "parametres", show_more]]:
+		var b = button(item[0], item[2], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.custom_minimum_size = Vector2(0, 64)
+		var icon: Texture2D = UI_ICON_ATLAS.get_icon(item[1])
+		if icon != null: b.icon = icon; b.icon_max_width = 42; b.expand_icon = true
+		nav.add_child(b)
 	_apply_safe_area()
 
 func _apply_safe_area() -> void:
@@ -78,6 +88,7 @@ func _apply_safe_area() -> void:
 	safe.add_theme_constant_override("margin_left", side); safe.add_theme_constant_override("margin_right", side); safe.add_theme_constant_override("margin_top", top); safe.add_theme_constant_override("margin_bottom", bottom)
 
 func clear(page_title: String) -> void:
+	_set_manager_background(false)
 	if GameState.has_career() and GameState.data.team.get("colors", []).size() >= 3:
 		colors.accent = Color(GameState.data.team.colors[2])
 	for child in content.get_children(): child.queue_free()
@@ -85,6 +96,19 @@ func clear(page_title: String) -> void:
 	title.text = "PADDOCK LEGACY"
 	subtitle.text = page_title + (("  •  " + GameState.data.get("team", {}).get("name", "").to_upper()) if GameState.has_career() else "")
 	notice.text = ("SAISON %d  •  %s €  •  RÉP. %d  •  ÉNERGIE %s/5" % [GameState.data.get("career_year", 2026), money(GameState.data.get("money", 0)), GameState.data.get("reputation", 0), GameState.data.get("energy", 0)]) if GameState.has_career() else "GODOT • PORTRAIT • WEB"
+
+func _set_manager_background(enabled: bool) -> void:
+	if shell_background == null or shell_tint == null:
+		return
+	var cartoon := MANAGER_UI_DIR + "ui_manager_bg.jpg"
+	if enabled and ResourceLoader.exists(cartoon):
+		shell_background.texture = load(cartoon)
+		shell_background.modulate = Color(0.90, 0.95, 1.0, 0.88)
+		shell_tint.color = Color(0.01, 0.025, 0.04, 0.48)
+	else:
+		shell_background.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg")
+		shell_background.modulate = Color(0.42, 0.50, 0.58, 0.34)
+		shell_tint.color = Color(0.027, 0.067, 0.09, 0.90)
 
 func show_boot_error(error_id: String, detail: String) -> void:
 	push_error("[BOOT] %s: %s" % [error_id, detail])
@@ -109,11 +133,10 @@ func show_creation_step() -> void:
 		2: creation_summary()
 
 func creation_progress() -> String:
-	var dots: Array[String] = []
-	for i in 3: dots.append("●" if i <= creation_step else "○")
-	return "  ".join(dots)
+	return "%d / 3 - %s" % [creation_step + 1, CREATION_STEPS[creation_step]]
 
 func creation_manager() -> void:
+	_set_manager_background(true)
 	heading("CHOISISSEZ VOTRE GÉRANT", 28)
 	label("Cinq profils. Une seule vision pour votre écurie.", colors.muted, 14)
 	if manager_preview_mode:
@@ -136,169 +159,120 @@ func creation_manager() -> void:
 	for i in ids.size():
 		var manager_id: String = ids[i]
 		var item: Dictionary = managers[manager_id]
-		var selected_card := i == selected
-		var panel := PanelContainer.new()
-		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		panel.custom_minimum_size = Vector2(0, 190 if selected_card else 174)
-		var panel_style := StyleBoxFlat.new()
-		panel_style.bg_color = Color(0.035, 0.09, 0.12, 0.94)
-		panel_style.border_color = colors.accent if selected_card else Color(0.22, 0.39, 0.44, 0.75)
-		panel_style.set_border_width_all(3 if selected_card else 1)
-		panel_style.set_corner_radius_all(14)
-		panel_style.content_margin_left = 5
-		panel_style.content_margin_right = 5
-		panel_style.content_margin_top = 6
-		panel_style.content_margin_bottom = 7
-		panel.add_theme_stylebox_override("panel", panel_style)
-		chooser.add_child(panel)
-		var box := VBoxContainer.new()
-		box.add_theme_constant_override("separation", 2)
-		panel.add_child(box)
-		var avatar := TextureButton.new()
-		avatar.texture_normal = load(MANAGER_AVATARS[manager_id])
-		avatar.ignore_texture_size = true
-		avatar.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-		avatar.custom_minimum_size = Vector2(0, 118 if selected_card else 106)
-		avatar.tooltip_text = "%s — %s" % [item.first_name, item.title]
-		avatar.pressed.connect(func(id = manager_id): creation_draft.manager = id; show_creation_step())
-		box.add_child(avatar)
-		var first := Label.new()
-		first.text = str(item.first_name).to_upper()
-		first.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		first.add_theme_font_size_override("font_size", 14 if selected_card else 12)
-		first.add_theme_color_override("font_color", colors.text)
-		box.add_child(first)
-		var role_small := Label.new()
-		role_small.text = str(item.title).trim_prefix("Le ").trim_prefix("La ").to_upper()
-		role_small.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		role_small.add_theme_font_size_override("font_size", 10)
-		role_small.add_theme_color_override("font_color", colors.gold if selected_card else colors.muted)
-		box.add_child(role_small)
+		var avatar_card = MANAGER_AVATAR_CARD.new()
+		avatar_card.setup(manager_id, item, MANAGER_AVATARS[manager_id], i == selected)
+		avatar_card.chosen.connect(func(id): creation_draft.manager = id; show_creation_step())
+		chooser.add_child(avatar_card)
 
-	var stage := PanelContainer.new()
-	stage.custom_minimum_size.y = 610
+	var stage := Control.new()
+	stage.custom_minimum_size.y = 620
 	stage.mouse_filter = Control.MOUSE_FILTER_STOP
 	stage.gui_input.connect(_manager_stage_input)
-	var stage_style := StyleBoxFlat.new()
-	stage_style.bg_color = Color(0.015, 0.035, 0.05, 0.74)
-	stage_style.border_color = Color(colors.accent, 0.36)
-	stage_style.set_border_width_all(1)
-	stage_style.set_corner_radius_all(22)
-	stage.add_theme_stylebox_override("panel", stage_style)
 	content.add_child(stage)
+	var stage_glow := ColorRect.new()
+	stage_glow.color = Color(0.02, 0.34, 0.50, 0.14)
+	stage_glow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	stage_glow.offset_left = 190; stage_glow.offset_right = -190
+	stage_glow.offset_top = 45; stage_glow.offset_bottom = -45
+	stage_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stage.add_child(stage_glow)
 	var presentation := TextureRect.new()
 	presentation.texture = load(MANAGER_PRESENTATIONS[ids[selected]])
+	presentation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	presentation.offset_left = 245; presentation.offset_right = -245
+	presentation.offset_top = 30; presentation.offset_bottom = -36
 	presentation.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	presentation.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	presentation.modulate = Color(1, 1, 1, 0.20)
+	presentation.modulate = Color(1, 1, 1, 0.18)
 	stage.add_child(presentation)
+	var frame_texture: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_DIR + "ui_character_frame.png")
+	if frame_texture != null:
+		var frame := TextureRect.new()
+		frame.texture = frame_texture
+		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		frame.offset_left = 220; frame.offset_right = -220
+		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stage.add_child(frame)
 	var reveal := create_tween()
 	reveal.tween_property(presentation, "modulate", Color.WHITE, 0.18)
 
 	var arrows := HBoxContainer.new()
-	arrows.add_theme_constant_override("separation", 12)
+	arrows.add_theme_constant_override("separation", 10)
 	content.add_child(arrows)
-	var previous := button("‹", func(): _cycle_manager(-1), true)
-	previous.custom_minimum_size.x = 90
+	var previous := MANAGER_UI_HELPERS.game_button("<", 72)
+	previous.custom_minimum_size.x = 78
+	previous.pressed.connect(func(): _cycle_manager(-1))
 	arrows.add_child(previous)
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	arrows.add_child(identity)
-	var manager_name := Label.new()
-	manager_name.text = str(manager.first_name).to_upper()
-	manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	manager_name.add_theme_font_size_override("font_size", 28)
-	manager_name.add_theme_color_override("font_color", colors.text)
-	identity.add_child(manager_name)
-	var role := Label.new()
-	role.text = str(manager.title).to_upper()
-	role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	role.add_theme_font_size_override("font_size", 16)
-	role.add_theme_color_override("font_color", colors.accent)
-	identity.add_child(role)
-	var following := button("›", func(): _cycle_manager(1), true)
-	following.custom_minimum_size.x = 90
+	var alex_plate: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_DIR + "ui_name_plate_alex.png")
+	if ids[selected] == "alex" and alex_plate != null:
+		var plate := TextureRect.new()
+		plate.texture = alex_plate
+		plate.custom_minimum_size.y = 108
+		plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		identity.add_child(plate)
+	else:
+		var manager_name := Label.new()
+		manager_name.text = str(manager.first_name).to_upper()
+		manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		manager_name.add_theme_font_size_override("font_size", 28)
+		manager_name.add_theme_color_override("font_color", colors.text)
+		identity.add_child(manager_name)
+		var role := Label.new()
+		role.text = str(manager.title).trim_prefix("Le ").trim_prefix("La ").to_upper()
+		role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		role.add_theme_font_size_override("font_size", 15)
+		role.add_theme_color_override("font_color", colors.gold)
+		identity.add_child(role)
+	var specialty: Texture2D = MANAGER_UI_HELPERS.specialty(ids[selected])
+	if specialty != null:
+		var badge := TextureRect.new()
+		badge.texture = specialty
+		badge.custom_minimum_size.y = 60
+		badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		identity.add_child(badge)
+	var following := MANAGER_UI_HELPERS.game_button(">", 72)
+	following.custom_minimum_size.x = 78
+	following.pressed.connect(func(): _cycle_manager(1))
 	arrows.add_child(following)
 
-	var info := PanelContainer.new()
-	var info_style := StyleBoxFlat.new()
-	info_style.bg_color = Color(0.035, 0.09, 0.12, 0.96)
-	info_style.border_color = Color(0.18, 0.47, 0.53, 0.72)
-	info_style.set_border_width_all(1)
-	info_style.set_corner_radius_all(18)
-	info_style.content_margin_left = 18
-	info_style.content_margin_right = 18
-	info_style.content_margin_top = 14
-	info_style.content_margin_bottom = 14
-	info.add_theme_stylebox_override("panel", info_style)
-	content.add_child(info)
-	var info_box := VBoxContainer.new()
-	info_box.add_theme_constant_override("separation", 8)
-	info.add_child(info_box)
-	var attributes: Dictionary = manager.get("attributes", {})
-	for stat in [["TECHNIQUE", "technical"], ["STRATÉGIE", "strategy"], ["BUSINESS", "business"]]:
-		var stat_row := HBoxContainer.new()
-		stat_row.add_theme_constant_override("separation", 10)
-		info_box.add_child(stat_row)
-		var stat_name := Label.new()
-		stat_name.text = stat[0]
-		stat_name.custom_minimum_size.x = 135
-		stat_name.add_theme_font_size_override("font_size", 13)
-		stat_name.add_theme_color_override("font_color", colors.text)
-		stat_row.add_child(stat_name)
-		var stat_bar := ProgressBar.new()
-		stat_bar.min_value = 0
-		stat_bar.max_value = 100
-		stat_bar.value = int(attributes.get(stat[1], 50))
-		stat_bar.show_percentage = false
-		stat_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		stat_bar.custom_minimum_size.y = 16
-		var bar_bg := StyleBoxFlat.new()
-		bar_bg.bg_color = Color(0.02, 0.04, 0.06, 0.92)
-		bar_bg.set_corner_radius_all(6)
-		stat_bar.add_theme_stylebox_override("background", bar_bg)
-		var bar_fill := StyleBoxFlat.new()
-		bar_fill.bg_color = colors.accent
-		bar_fill.set_corner_radius_all(6)
-		stat_bar.add_theme_stylebox_override("fill", bar_fill)
-		stat_row.add_child(stat_bar)
-		var stat_value := Label.new()
-		stat_value.text = str(int(attributes.get(stat[1], 50)))
-		stat_value.custom_minimum_size.x = 40
-		stat_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		stat_value.add_theme_font_size_override("font_size", 15)
-		stat_value.add_theme_color_override("font_color", colors.gold)
-		stat_row.add_child(stat_value)
+	var stats_card = MANAGER_STATS_CARD.new()
+	stats_card.setup(manager)
+	content.add_child(stats_card)
+	var effects := HBoxContainer.new()
+	effects.add_theme_constant_override("separation", 18)
+	content.add_child(effects)
 	var advantages: Array = manager.get("advantages", [])
 	var drawbacks: Array = manager.get("drawbacks", [])
-	var advantage := Label.new()
-	advantage.text = "▲  " + (str(advantages[0]) if not advantages.is_empty() else "Profil équilibré")
-	advantage.add_theme_font_size_override("font_size", 15)
-	advantage.add_theme_color_override("font_color", Color(0.48, 0.95, 0.67))
-	advantage.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_box.add_child(advantage)
-	var drawback := Label.new()
-	drawback.text = "▼  " + (str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun inconvénient majeur")
-	drawback.add_theme_font_size_override("font_size", 14)
-	drawback.add_theme_color_override("font_color", colors.danger)
-	drawback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_box.add_child(drawback)
+	for effect in [["+ " + (str(advantages[0]) if not advantages.is_empty() else "Profil équilibré"), Color("79f19b")], ["- " + (str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun inconvénient majeur"), Color("ff665d")]]:
+		var effect_label := Label.new()
+		effect_label.text = effect[0]
+		effect_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		effect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		effect_label.add_theme_font_size_override("font_size", 13)
+		effect_label.add_theme_color_override("font_color", effect[1])
+		effects.add_child(effect_label)
 
-	var manager_dots: Array[String] = []
-	for i in ids.size(): manager_dots.append("●" if i == selected else "○")
 	var dots := Label.new()
-	dots.text = "  ".join(manager_dots)
+	dots.text = "%d / %d" % [selected + 1, ids.size()]
 	dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dots.add_theme_color_override("font_color", colors.accent)
+	dots.add_theme_color_override("font_color", colors.gold)
 	content.add_child(dots)
-	var choose: Button
+	var choose_text := "RETOUR AUX PARAMÈTRES" if manager_preview_mode else "CHOISIR %s" % str(manager.first_name).to_upper()
+	var choose := MANAGER_UI_HELPERS.game_button(choose_text, 78)
+	choose.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if manager_preview_mode:
-		choose = button("RETOUR AUX PARAMÈTRES", func(): manager_preview_mode = false; show_settings())
+		choose.pressed.connect(func(): manager_preview_mode = false; show_settings())
 	else:
-		choose = button("CHOISIR %s" % str(manager.first_name).to_upper(), func(): creation_step = 1; show_creation_step())
-	choose.custom_minimum_size.y = 72
-	choose.add_theme_font_size_override("font_size", 20)
+		choose.pressed.connect(func(): creation_step = 1; show_creation_step())
 	content.add_child(choose)
 
 func _cycle_manager(delta: int) -> void:
