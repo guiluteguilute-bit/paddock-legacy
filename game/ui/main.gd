@@ -84,6 +84,7 @@ func _apply_safe_area() -> void:
 	safe.add_theme_constant_override("margin_left", side); safe.add_theme_constant_override("margin_right", side); safe.add_theme_constant_override("margin_top", top); safe.add_theme_constant_override("margin_bottom", bottom)
 
 func clear(page_title: String) -> void:
+	_set_manager_background(false)
 	if GameState.has_career() and GameState.data.team.get("colors", []).size() >= 3:
 		colors.accent = Color(GameState.data.team.colors[2])
 	for child in content.get_children(): child.queue_free()
@@ -91,6 +92,19 @@ func clear(page_title: String) -> void:
 	title.text = "PADDOCK LEGACY"
 	subtitle.text = page_title + (("  •  " + GameState.data.get("team", {}).get("name", "").to_upper()) if GameState.has_career() else "")
 	notice.text = ("SAISON %d  •  %s €  •  RÉP. %d  •  ÉNERGIE %s/5" % [GameState.data.get("career_year", 2026), money(GameState.data.get("money", 0)), GameState.data.get("reputation", 0), GameState.data.get("energy", 0)]) if GameState.has_career() else "GODOT • PORTRAIT • WEB"
+
+func _set_manager_background(enabled: bool) -> void:
+	if shell_background == null or shell_tint == null:
+		return
+	var cartoon := MANAGER_UI_DIR + "ui_manager_bg.jpg"
+	if enabled and ResourceLoader.exists(cartoon):
+		shell_background.texture = load(cartoon)
+		shell_background.modulate = Color(0.90, 0.95, 1.0, 0.88)
+		shell_tint.color = Color(0.01, 0.025, 0.04, 0.48)
+	else:
+		shell_background.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg")
+		shell_background.modulate = Color(0.42, 0.50, 0.58, 0.34)
+		shell_tint.color = Color(0.027, 0.067, 0.09, 0.90)
 
 func show_boot_error(error_id: String, detail: String) -> void:
 	push_error("[BOOT] %s: %s" % [error_id, detail])
@@ -120,6 +134,7 @@ func creation_progress() -> String:
 	return "  ".join(dots)
 
 func creation_manager() -> void:
+	_set_manager_background(true)
 	heading("CHOISISSEZ VOTRE GÉRANT", 28)
 	label("Cinq profils. Une seule vision pour votre écurie.", colors.muted, 14)
 	if manager_preview_mode:
