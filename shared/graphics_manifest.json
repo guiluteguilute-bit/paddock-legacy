@@ -1433,5 +1433,55 @@
     "path": "res://graphics/parallel/monoplaces/common/wheels/wheel_professional.svg",
     "type": "vehicle_visual",
     "version": 1
+  },
+  "manager_alex_avatar": {
+    "path": "res://graphics/portraits/managers/premium/alex_avatar.png",
+    "type": "manager_avatar",
+    "version": 1
+  },
+  "manager_alex_presentation": {
+    "path": "res://graphics/portraits/managers/premium/alex_presentation.png",
+    "type": "manager_presentation",
+    "version": 1
+  },
+  "manager_maya_avatar": {
+    "path": "res://graphics/portraits/managers/premium/maya_avatar.png",
+    "type": "manager_avatar",
+    "version": 1
+  },
+  "manager_maya_presentation": {
+    "path": "res://graphics/portraits/managers/premium/maya_presentation.png",
+    "type": "manager_presentation",
+    "version": 1
+  },
+  "manager_ethan_avatar": {
+    "path": "res://graphics/portraits/managers/premium/ethan_avatar.png",
+    "type": "manager_avatar",
+    "version": 1
+  },
+  "manager_ethan_presentation": {
+    "path": "res://graphics/portraits/managers/premium/ethan_presentation.png",
+    "type": "manager_presentation",
+    "version": 1
+  },
+  "manager_sofia_avatar": {
+    "path": "res://graphics/portraits/managers/premium/sofia_avatar.png",
+    "type": "manager_avatar",
+    "version": 1
+  },
+  "manager_sofia_presentation": {
+    "path": "res://graphics/portraits/managers/premium/sofia_presentation.png",
+    "type": "manager_presentation",
+    "version": 1
+  },
+  "manager_marcus_avatar": {
+    "path": "res://graphics/portraits/managers/premium/marcus_avatar.png",
+    "type": "manager_avatar",
+    "version": 1
+  },
+  "manager_marcus_presentation": {
+    "path": "res://graphics/portraits/managers/premium/marcus_presentation.png",
+    "type": "manager_presentation",
+    "version": 1
   }
 }
