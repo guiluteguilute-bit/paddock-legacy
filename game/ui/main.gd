@@ -88,6 +88,7 @@ func _apply_safe_area() -> void:
 
 func clear(page_title: String) -> void:
 	_set_manager_background(false)
+	content.add_theme_constant_override("separation", 12)
 	if GameState.has_career() and GameState.data.team.get("colors", []).size() >= 3:
 		colors.accent = Color(GameState.data.team.colors[2])
 	for child in content.get_children(): child.queue_free()
@@ -136,8 +137,12 @@ func creation_progress() -> String:
 
 func creation_manager() -> void:
 	_set_manager_background(true)
-	heading("CHOISISSEZ VOTRE GÉRANT", 28)
-	label("Cinq profils. Une seule vision pour votre écurie.", colors.muted, 14)
+	content.add_theme_constant_override("separation", 7)
+	# This page intentionally has a denser, game-like hierarchy than the data screens.
+	title.text = "PADDOCK"
+	subtitle.text = "CHOIX DU GÉRANT"
+	notice.text = ""
+	heading("CHOISISSEZ VOTRE GÉRANT", 25)
 	if manager_preview_mode:
 		label("MODE APERÇU - SAUVEGARDE NON MODIFIÉE", colors.gold, 12)
 	var managers: Dictionary = GameState.creation_config.get("managers", {})
@@ -152,7 +157,7 @@ func creation_manager() -> void:
 	var manager: Dictionary = managers[ids[selected]]
 
 	var chooser := HBoxContainer.new()
-	chooser.add_theme_constant_override("separation", 8)
+	chooser.add_theme_constant_override("separation", 5)
 	chooser.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_child(chooser)
 	for i in ids.size():
@@ -164,22 +169,22 @@ func creation_manager() -> void:
 		chooser.add_child(avatar_card)
 
 	var stage := Control.new()
-	stage.custom_minimum_size.y = 390
+	stage.custom_minimum_size.y = 290
 	stage.mouse_filter = Control.MOUSE_FILTER_STOP
 	stage.gui_input.connect(_manager_stage_input)
 	content.add_child(stage)
 	var stage_glow := ColorRect.new()
 	stage_glow.color = Color(0.02, 0.34, 0.50, 0.14)
 	stage_glow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stage_glow.offset_left = 24; stage_glow.offset_right = -24
-	stage_glow.offset_top = 45; stage_glow.offset_bottom = -45
+	stage_glow.offset_left = 36; stage_glow.offset_right = -36
+	stage_glow.offset_top = 30; stage_glow.offset_bottom = -28
 	stage_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(stage_glow)
 	var presentation := TextureRect.new()
 	presentation.texture = load(MANAGER_PRESENTATIONS[ids[selected]])
 	presentation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	presentation.offset_left = 12; presentation.offset_right = -12
-	presentation.offset_top = 30; presentation.offset_bottom = -36
+	presentation.offset_left = 26; presentation.offset_right = -26
+	presentation.offset_top = 14; presentation.offset_bottom = -20
 	presentation.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	presentation.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -190,7 +195,7 @@ func creation_manager() -> void:
 		var frame := TextureRect.new()
 		frame.texture = frame_texture
 		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		frame.offset_left = 12; frame.offset_right = -12
+		frame.offset_left = 18; frame.offset_right = -18
 		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -201,8 +206,9 @@ func creation_manager() -> void:
 	var arrows := HBoxContainer.new()
 	arrows.add_theme_constant_override("separation", 10)
 	content.add_child(arrows)
-	var previous := MANAGER_UI_HELPERS.game_button("<", 72)
-	previous.custom_minimum_size.x = 78
+	var previous := MANAGER_UI_HELPERS.game_button("‹", 66)
+	previous.custom_minimum_size.x = 66
+	previous.tooltip_text = "Gérant précédent"
 	previous.pressed.connect(func(): _cycle_manager(-1))
 	arrows.add_child(previous)
 	var identity := VBoxContainer.new()
@@ -212,23 +218,27 @@ func creation_manager() -> void:
 	if ids[selected] == "alex" and alex_plate != null:
 		var plate := TextureRect.new()
 		plate.texture = alex_plate
-		plate.custom_minimum_size.y = 108
+		plate.custom_minimum_size.y = 78
 		plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		identity.add_child(plate)
 	else:
+		var plate_panel := PanelContainer.new()
+		plate_panel.add_theme_stylebox_override("panel", MANAGER_UI_HELPERS.premium_panel(colors.gold, Color(0.02, 0.10, 0.15, 0.96), 12))
+		identity.add_child(plate_panel)
+		var plate_box := VBoxContainer.new(); plate_box.add_theme_constant_override("separation", 0); plate_panel.add_child(plate_box)
 		var manager_name := Label.new()
 		manager_name.text = str(manager.first_name).to_upper()
 		manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		manager_name.add_theme_font_size_override("font_size", 28)
+		manager_name.add_theme_font_size_override("font_size", 25)
 		manager_name.add_theme_color_override("font_color", colors.text)
-		identity.add_child(manager_name)
+		plate_box.add_child(manager_name)
 		var role := Label.new()
 		role.text = str(manager.title).trim_prefix("Le ").trim_prefix("La ").to_upper()
 		role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		role.add_theme_font_size_override("font_size", 15)
+		role.add_theme_font_size_override("font_size", 13)
 		role.add_theme_color_override("font_color", colors.gold)
-		identity.add_child(role)
+		plate_box.add_child(role)
 	var specialty: Texture2D = MANAGER_UI_HELPERS.specialty(ids[selected])
 	if specialty != null:
 		var badge := TextureRect.new()
@@ -237,37 +247,36 @@ func creation_manager() -> void:
 		badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		identity.add_child(badge)
-	var following := MANAGER_UI_HELPERS.game_button(">", 72)
-	following.custom_minimum_size.x = 78
+	else:
+		var badge_fallback := Label.new()
+		badge_fallback.text = "◆  " + MANAGER_UI_HELPERS.specialty_name(ids[selected]) + "  ◆"
+		badge_fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		badge_fallback.add_theme_font_size_override("font_size", 12)
+		badge_fallback.add_theme_color_override("font_color", colors.accent)
+		identity.add_child(badge_fallback)
+	var following := MANAGER_UI_HELPERS.game_button("›", 66)
+	following.custom_minimum_size.x = 66
+	following.tooltip_text = "Gérant suivant"
 	following.pressed.connect(func(): _cycle_manager(1))
 	arrows.add_child(following)
 
 	var stats_card = MANAGER_STATS_CARD.new()
 	stats_card.setup(manager)
 	content.add_child(stats_card)
-	var effects := HBoxContainer.new()
-	effects.add_theme_constant_override("separation", 18)
-	content.add_child(effects)
-	var advantages: Array = manager.get("advantages", [])
-	var drawbacks: Array = manager.get("drawbacks", [])
-	for effect in [["+ " + (str(advantages[0]) if not advantages.is_empty() else "Profil équilibré"), Color("79f19b")], ["- " + (str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun inconvénient majeur"), Color("ff665d")]]:
-		var effect_label := Label.new()
-		effect_label.text = effect[0]
-		effect_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		effect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		effect_label.add_theme_font_size_override("font_size", 13)
-		effect_label.add_theme_color_override("font_color", effect[1])
-		effects.add_child(effect_label)
 
 	var dots := Label.new()
-	dots.text = "%d / %d" % [selected + 1, ids.size()]
+	dots.text = "● ".repeat(selected) + "◆ " + "● ".repeat(ids.size() - selected - 1)
 	dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dots.add_theme_color_override("font_color", colors.gold)
 	content.add_child(dots)
 	var choose_text := "RETOUR AUX PARAMÈTRES" if manager_preview_mode else "CHOISIR %s" % str(manager.first_name).to_upper()
 	var choose := MANAGER_UI_HELPERS.game_button(choose_text, 78)
 	choose.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	choose.add_theme_font_size_override("font_size", 22)
+	choose.add_theme_color_override("font_color", Color("071117"))
+	var cta := MANAGER_UI_HELPERS.premium_panel(Color("fff0a6"), Color("f4b92f"), 15)
+	cta.set_border_width_all(3); cta.shadow_color = Color(1.0, 0.62, 0.05, 0.35); cta.shadow_size = 10
+	choose.add_theme_stylebox_override("normal", cta); choose.add_theme_stylebox_override("hover", cta)
 	if manager_preview_mode:
 		choose.pressed.connect(func(): manager_preview_mode = false; show_settings())
 	else:

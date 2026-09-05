@@ -16,7 +16,7 @@ var stat_kind: String = "technical":
 var atlas: Texture2D
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(0, 24)
+	custom_minimum_size = Vector2(0, 26)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	atlas = HELPERS.texture(HELPERS.optional_ui_path("ui_stat_gauges_atlas.png"))
 	queue_redraw()
@@ -75,6 +75,11 @@ func _draw_fallback() -> void:
 	var width := size.x * value / 100.0
 	if width > 0.0:
 		draw_style_box(_fallback_box(fill_color, radius), Rect2(0, 0, width, size.y))
+	# Gloss and tick marks keep the safe fallback feeling like game art.
+	draw_rect(Rect2(4, 3, maxf(0.0, width - 8), 3), Color(1, 1, 1, 0.22))
+	for marker in [0.25, 0.5, 0.75]:
+		var x := size.x * marker
+		draw_line(Vector2(x, 4), Vector2(x, size.y - 4), Color(0, 0, 0, 0.28), 1.0)
 
 func _fallback_box(color: Color, radius: float) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new()

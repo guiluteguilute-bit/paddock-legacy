@@ -50,4 +50,22 @@ static func game_button(text_value: String, height := 72) -> Button:
 	b.add_theme_stylebox_override("normal", normal)
 	b.add_theme_stylebox_override("hover", normal)
 	b.add_theme_stylebox_override("pressed", pressed)
+	var hover := normal.duplicate() as StyleBoxFlat
+	hover.bg_color = Color("10527a")
+	hover.border_color = Color("5edfff")
+	b.add_theme_stylebox_override("hover", hover)
+	b.add_theme_stylebox_override("focus", pressed)
 	return b
+
+static func premium_panel(accent := Color("159fff"), fill := Color(0.025, 0.10, 0.15, 0.94), radius := 16) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = accent
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(radius)
+	style.shadow_color = Color(0, 0, 0, 0.45)
+	style.shadow_size = 8
+	return style
+
+static func specialty_name(manager_id: String) -> String:
+	return {"alex":"TECHNICIEN", "maya":"STRATÈGE", "ethan":"COMMERCIAL", "sofia":"FORMATRICE", "marcus":"MENEUR"}.get(manager_id, "GÉRANT")
