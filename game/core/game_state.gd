@@ -19,6 +19,8 @@ func _ready() -> void:
 	endurance_config = _load_json(ENDURANCE_DATA_PATH)
 	if FileAccess.file_exists(SAVE_PATH):
 		if not load_game(): push_error("[BOOT] SAVE_INVALID: career save could not be loaded")
+	if data.is_empty():
+		data = defaults()
 	print("[BOOT] GameState ready")
 	print("[BOOT] Save checked: %s" % ("valid career" if has_career() else "no career"))
 
