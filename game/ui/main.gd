@@ -12,6 +12,8 @@ var creation_draft: Dictionary = {}
 var creation_controls: Dictionary = {}
 var manager_swipe_start_x: float = -1.0
 var manager_preview_mode: bool = false
+var shell_background: TextureRect
+var shell_tint: ColorRect
 const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_card.gd")
 const MANAGER_STATS_CARD := preload("res://game/ui/components/manager_stats_card.gd")
 const MANAGER_UI_HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
