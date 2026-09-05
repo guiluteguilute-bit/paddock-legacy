@@ -11,6 +11,7 @@ var creation_step = 0
 var creation_draft: Dictionary = {}
 var creation_controls: Dictionary = {}
 var manager_swipe_start_x: float = -1.0
+var manager_preview_mode: bool = false
 const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
 const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
 const TEAM_LOGO_PATHS := ["res://graphics/logos/logo_team_apex_nova.svg", "res://graphics/logos/logo_team_crimson_orbit.svg", "res://graphics/logos/logo_team_ember_fox.svg", "res://graphics/logos/logo_team_helix_racing.svg", "res://graphics/logos/logo_team_kinetic_arc.svg", "res://graphics/logos/logo_team_lumen_motorsport.svg", "res://graphics/logos/logo_team_meridian_kart.svg", "res://graphics/logos/logo_team_northstar.svg", "res://graphics/logos/logo_team_pulse_competition.svg", "res://graphics/logos/logo_team_silver_finch.svg", "res://graphics/logos/logo_team_vector_peak.svg", "res://graphics/logos/logo_team_vertex_union.svg"]
@@ -94,6 +95,7 @@ func show_boot_error(error_id: String, detail: String) -> void:
 	set_navigation_enabled(false)
 
 func show_creation() -> void:
+	manager_preview_mode = false
 	if creation_draft.is_empty():
 		creation_draft = {"manager":"alex","team_name":"Nova Racing","short_name":"NOVA","country":"France","team_number":27,"colors":TEAM_PALETTES[0].duplicate(),"logo_preset":0,"livery_pattern":0,"driver_variant":0}
 	creation_step = clampi(creation_step, 0, 2)
@@ -114,6 +116,8 @@ func creation_progress() -> String:
 func creation_manager() -> void:
 	heading("CHOISISSEZ VOTRE GÉRANT", 28)
 	label("Cinq profils. Une seule vision pour votre écurie.", colors.muted, 14)
+	if manager_preview_mode:
+		label("MODE APERÇU • VOTRE SAUVEGARDE N’EST PAS MODIFIÉE", colors.gold, 12)
 	var managers: Dictionary = GameState.creation_config.get("managers", {})
 	var ids: Array[String] = []
 	for id in MANAGER_ORDER:
@@ -288,7 +292,11 @@ func creation_manager() -> void:
 	dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dots.add_theme_color_override("font_color", colors.accent)
 	content.add_child(dots)
-	var choose := button("CHOISIR %s" % str(manager.first_name).to_upper(), func(): creation_step = 1; show_creation_step())
+	var choose: Button
+	if manager_preview_mode:
+		choose = button("RETOUR AUX PARAMÈTRES", func(): manager_preview_mode = false; show_settings())
+	else:
+		choose = button("CHOISIR %s" % str(manager.first_name).to_upper(), func(): creation_step = 1; show_creation_step())
 	choose.custom_minimum_size.y = 72
 	choose.add_theme_font_size_override("font_size", 20)
 	content.add_child(choose)
@@ -574,6 +582,13 @@ func accept_career_offer(id:String) -> void:
 	if GameState.accept_offer(id):show_dashboard()
 	else:toast("Offre indisponible ou solde insuffisant")
 
+func show_manager_preview() -> void:
+	manager_preview_mode = true
+	if creation_draft.is_empty():
+		creation_draft = {"manager":"alex","team_name":"Nova Racing","short_name":"NOVA","country":"France","team_number":27,"colors":TEAM_PALETTES[0].duplicate(),"logo_preset":0,"livery_pattern":0,"driver_variant":0}
+	creation_step = 0
+	show_creation_step()
+
 func show_settings() -> void:
 	clear("PARAMÈTRES"); heading("AUDIO & JEU", 24)
 	for key in ["master", "sfx"]:
@@ -581,6 +596,7 @@ func show_settings() -> void:
 	label("MUSIQUE", colors.muted, 12)
 	var music_slider := HSlider.new(); music_slider.min_value = 0; music_slider.max_value = 100; music_slider.value = GameState.data.settings.get("music_volume", 55); music_slider.custom_minimum_size.y = 48; music_slider.value_changed.connect(AudioManager.set_music_volume); content.add_child(music_slider)
 	var music_toggle := CheckButton.new(); music_toggle.text = "MUSIQUE ON / OFF"; music_toggle.button_pressed = GameState.data.settings.get("music_enabled", true); music_toggle.toggled.connect(AudioManager.set_music_enabled); content.add_child(music_toggle)
+	content.add_child(button("APERÇU CHOIX DU GÉRANT", show_manager_preview))
 	content.add_child(button("NOUVELLE CARRIÈRE / EFFACER", confirm_reset))
 
 func confirm_reset() -> void:
