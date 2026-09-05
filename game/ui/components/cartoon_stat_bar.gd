@@ -1,7 +1,7 @@
 extends Control
 class_name CartoonStatBar
 
-const ATLAS_PATH := "res://graphics/ui/manager_selection/cartoon/ui_stat_gauges_atlas.png"
+const HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
 
 var value: float = 50.0:
 	set(new_value):
@@ -18,8 +18,7 @@ var atlas: Texture2D
 func _ready() -> void:
 	custom_minimum_size = Vector2(0, 24)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if ResourceLoader.exists(ATLAS_PATH):
-		atlas = load(ATLAS_PATH)
+	atlas = HELPERS.texture(HELPERS.optional_ui_path("ui_stat_gauges_atlas.png"))
 	queue_redraw()
 
 func configure(new_value: float, new_kind: String) -> void:

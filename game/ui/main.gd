@@ -18,7 +18,6 @@ const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_ca
 const MANAGER_STATS_CARD := preload("res://game/ui/components/manager_stats_card.gd")
 const MANAGER_UI_HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
 const UI_ICON_ATLAS := preload("res://game/ui/components/ui_icon_atlas.gd")
-const MANAGER_UI_DIR := "res://graphics/ui/manager_selection/cartoon/"
 const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
 const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
 const TEAM_LOGO_PATHS := ["res://graphics/logos/logo_team_apex_nova.svg", "res://graphics/logos/logo_team_crimson_orbit.svg", "res://graphics/logos/logo_team_ember_fox.svg", "res://graphics/logos/logo_team_helix_racing.svg", "res://graphics/logos/logo_team_kinetic_arc.svg", "res://graphics/logos/logo_team_lumen_motorsport.svg", "res://graphics/logos/logo_team_meridian_kart.svg", "res://graphics/logos/logo_team_northstar.svg", "res://graphics/logos/logo_team_pulse_competition.svg", "res://graphics/logos/logo_team_silver_finch.svg", "res://graphics/logos/logo_team_vector_peak.svg", "res://graphics/logos/logo_team_vertex_union.svg"]
@@ -100,7 +99,7 @@ func clear(page_title: String) -> void:
 func _set_manager_background(enabled: bool) -> void:
 	if shell_background == null or shell_tint == null:
 		return
-	var cartoon := MANAGER_UI_DIR + "ui_manager_bg.jpg"
+	var cartoon := MANAGER_UI_HELPERS.optional_ui_path("ui_manager_bg.jpg")
 	if enabled and ResourceLoader.exists(cartoon):
 		shell_background.texture = load(cartoon)
 		shell_background.modulate = Color(0.90, 0.95, 1.0, 0.88)
@@ -140,7 +139,7 @@ func creation_manager() -> void:
 	heading("CHOISISSEZ VOTRE GÉRANT", 28)
 	label("Cinq profils. Une seule vision pour votre écurie.", colors.muted, 14)
 	if manager_preview_mode:
-		label("MODE APERÇU • VOTRE SAUVEGARDE N’EST PAS MODIFIÉE", colors.gold, 12)
+		label("MODE APERÇU - SAUVEGARDE NON MODIFIÉE", colors.gold, 12)
 	var managers: Dictionary = GameState.creation_config.get("managers", {})
 	var ids: Array[String] = []
 	for id in MANAGER_ORDER:
@@ -165,33 +164,33 @@ func creation_manager() -> void:
 		chooser.add_child(avatar_card)
 
 	var stage := Control.new()
-	stage.custom_minimum_size.y = 620
+	stage.custom_minimum_size.y = 390
 	stage.mouse_filter = Control.MOUSE_FILTER_STOP
 	stage.gui_input.connect(_manager_stage_input)
 	content.add_child(stage)
 	var stage_glow := ColorRect.new()
 	stage_glow.color = Color(0.02, 0.34, 0.50, 0.14)
 	stage_glow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stage_glow.offset_left = 190; stage_glow.offset_right = -190
+	stage_glow.offset_left = 24; stage_glow.offset_right = -24
 	stage_glow.offset_top = 45; stage_glow.offset_bottom = -45
 	stage_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(stage_glow)
 	var presentation := TextureRect.new()
 	presentation.texture = load(MANAGER_PRESENTATIONS[ids[selected]])
 	presentation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	presentation.offset_left = 245; presentation.offset_right = -245
+	presentation.offset_left = 12; presentation.offset_right = -12
 	presentation.offset_top = 30; presentation.offset_bottom = -36
 	presentation.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	presentation.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	presentation.modulate = Color(1, 1, 1, 0.18)
 	stage.add_child(presentation)
-	var frame_texture: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_DIR + "ui_character_frame.png")
+	var frame_texture: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_HELPERS.optional_ui_path("ui_character_frame.png"))
 	if frame_texture != null:
 		var frame := TextureRect.new()
 		frame.texture = frame_texture
 		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		frame.offset_left = 220; frame.offset_right = -220
+		frame.offset_left = 12; frame.offset_right = -12
 		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -209,7 +208,7 @@ func creation_manager() -> void:
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	arrows.add_child(identity)
-	var alex_plate: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_DIR + "ui_name_plate_alex.png")
+	var alex_plate: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_HELPERS.optional_ui_path("ui_name_plate_alex.png"))
 	if ids[selected] == "alex" and alex_plate != null:
 		var plate := TextureRect.new()
 		plate.texture = alex_plate

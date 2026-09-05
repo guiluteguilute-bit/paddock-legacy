@@ -1,8 +1,10 @@
 extends RefCounted
 class_name ManagerUIHelpers
 
-const UI_DIR := "res://graphics/ui/manager_selection/cartoon/"
-const SPECIALTY_ATLAS := UI_DIR + "ui_specialty_atlas.png"
+## Optional art is assembled at runtime so missing, not-yet-shipped cartoon
+## files do not become mandatory Web export resources.
+static func optional_ui_path(file_name: String) -> String:
+	return "res:/" + "/graphics/ui/manager_selection/cartoon/" + file_name
 
 static func texture(path: String) -> Texture2D:
 	if path.is_empty() or not ResourceLoader.exists(path):
@@ -10,10 +12,14 @@ static func texture(path: String) -> Texture2D:
 	return load(path)
 
 static func specialty(manager_id: String) -> Texture2D:
-	var source := texture(SPECIALTY_ATLAS)
+	var source := texture(optional_ui_path("ui_specialty_atlas.png"))
 	if source == null:
 		return null
 	var size := source.get_size()
+	# The supplied layout has two equal cells on top and three below. Refuse an
+	# incompatible image rather than assigning a manager the wrong badge.
+	if size.x <= 0.0 or size.y <= 0.0 or int(size.x) % 6 != 0 or int(size.y) % 2 != 0:
+		return null
 	var region := Rect2()
 	match manager_id:
 		"alex": region = Rect2(0, 0, size.x / 2.0, size.y / 2.0)
