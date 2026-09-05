@@ -145,24 +145,38 @@ func creation_manager() -> void:
 		avatar_card.chosen.connect(func(id): creation_draft.manager = id; show_creation_step())
 		chooser.add_child(avatar_card)
 
-	var stage := PanelContainer.new()
-	stage.custom_minimum_size.y = 610
+	var stage := Control.new()
+	stage.custom_minimum_size.y = 620
 	stage.mouse_filter = Control.MOUSE_FILTER_STOP
 	stage.gui_input.connect(_manager_stage_input)
-	var stage_style := StyleBoxFlat.new()
-	stage_style.bg_color = Color(0.015, 0.035, 0.05, 0.74)
-	stage_style.border_color = Color(colors.accent, 0.36)
-	stage_style.set_border_width_all(1)
-	stage_style.set_corner_radius_all(22)
-	stage.add_theme_stylebox_override("panel", stage_style)
 	content.add_child(stage)
+	var stage_glow := ColorRect.new()
+	stage_glow.color = Color(0.02, 0.34, 0.50, 0.14)
+	stage_glow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	stage_glow.offset_left = 190; stage_glow.offset_right = -190
+	stage_glow.offset_top = 45; stage_glow.offset_bottom = -45
+	stage_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stage.add_child(stage_glow)
 	var presentation := TextureRect.new()
 	presentation.texture = load(MANAGER_PRESENTATIONS[ids[selected]])
+	presentation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	presentation.offset_left = 245; presentation.offset_right = -245
+	presentation.offset_top = 30; presentation.offset_bottom = -36
 	presentation.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	presentation.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	presentation.modulate = Color(1, 1, 1, 0.20)
+	presentation.modulate = Color(1, 1, 1, 0.18)
 	stage.add_child(presentation)
+	var frame_texture: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_DIR + "ui_character_frame.png")
+	if frame_texture != null:
+		var frame := TextureRect.new()
+		frame.texture = frame_texture
+		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		frame.offset_left = 220; frame.offset_right = -220
+		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stage.add_child(frame)
 	var reveal := create_tween()
 	reveal.tween_property(presentation, "modulate", Color.WHITE, 0.18)
 
