@@ -140,44 +140,10 @@ func creation_manager() -> void:
 	for i in ids.size():
 		var manager_id: String = ids[i]
 		var item: Dictionary = managers[manager_id]
-		var selected_card := i == selected
-		var panel := PanelContainer.new()
-		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		panel.custom_minimum_size = Vector2(0, 190 if selected_card else 174)
-		var panel_style := StyleBoxFlat.new()
-		panel_style.bg_color = Color(0.035, 0.09, 0.12, 0.94)
-		panel_style.border_color = colors.accent if selected_card else Color(0.22, 0.39, 0.44, 0.75)
-		panel_style.set_border_width_all(3 if selected_card else 1)
-		panel_style.set_corner_radius_all(14)
-		panel_style.content_margin_left = 5
-		panel_style.content_margin_right = 5
-		panel_style.content_margin_top = 6
-		panel_style.content_margin_bottom = 7
-		panel.add_theme_stylebox_override("panel", panel_style)
-		chooser.add_child(panel)
-		var box := VBoxContainer.new()
-		box.add_theme_constant_override("separation", 2)
-		panel.add_child(box)
-		var avatar := TextureButton.new()
-		avatar.texture_normal = load(MANAGER_AVATARS[manager_id])
-		avatar.ignore_texture_size = true
-		avatar.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-		avatar.custom_minimum_size = Vector2(0, 118 if selected_card else 106)
-		avatar.tooltip_text = "%s — %s" % [item.first_name, item.title]
-		avatar.pressed.connect(func(id = manager_id): creation_draft.manager = id; show_creation_step())
-		box.add_child(avatar)
-		var first := Label.new()
-		first.text = str(item.first_name).to_upper()
-		first.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		first.add_theme_font_size_override("font_size", 14 if selected_card else 12)
-		first.add_theme_color_override("font_color", colors.text)
-		box.add_child(first)
-		var role_small := Label.new()
-		role_small.text = str(item.title).trim_prefix("Le ").trim_prefix("La ").to_upper()
-		role_small.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		role_small.add_theme_font_size_override("font_size", 10)
-		role_small.add_theme_color_override("font_color", colors.gold if selected_card else colors.muted)
-		box.add_child(role_small)
+		var avatar_card = MANAGER_AVATAR_CARD.new()
+		avatar_card.setup(manager_id, item, MANAGER_AVATARS[manager_id], i == selected)
+		avatar_card.chosen.connect(func(id): creation_draft.manager = id; show_creation_step())
+		chooser.add_child(avatar_card)
 
 	var stage := PanelContainer.new()
 	stage.custom_minimum_size.y = 610
