@@ -18,6 +18,7 @@ const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_ca
 const MANAGER_STATS_CARD := preload("res://game/ui/components/manager_stats_card.gd")
 const MANAGER_UI_HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
 const UI_ICON_ATLAS := preload("res://game/ui/components/ui_icon_atlas.gd")
+const BUILD_INFO := preload("res://web/build_info.gd")
 const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
 const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
 const TEAM_LOGO_PATHS := ["res://graphics/logos/logo_team_apex_nova.svg", "res://graphics/logos/logo_team_crimson_orbit.svg", "res://graphics/logos/logo_team_ember_fox.svg", "res://graphics/logos/logo_team_helix_racing.svg", "res://graphics/logos/logo_team_kinetic_arc.svg", "res://graphics/logos/logo_team_lumen_motorsport.svg", "res://graphics/logos/logo_team_meridian_kart.svg", "res://graphics/logos/logo_team_northstar.svg", "res://graphics/logos/logo_team_pulse_competition.svg", "res://graphics/logos/logo_team_silver_finch.svg", "res://graphics/logos/logo_team_vector_peak.svg", "res://graphics/logos/logo_team_vertex_union.svg"]
@@ -573,6 +574,7 @@ func show_manager_preview() -> void:
 
 func show_settings() -> void:
 	clear("PARAMÈTRES"); heading("AUDIO & JEU", 24)
+	label("PADDOCK LEGACY • %s BUILD • %s (#%s)" % [BUILD_INFO.BUILD_ENVIRONMENT.to_upper(), BUILD_INFO.BUILD_SHORT_COMMIT, BUILD_INFO.BUILD_NUMBER], colors.accent, 13)
 	for key in ["master", "sfx"]:
 		label(key.to_upper(), colors.muted, 12); var slider = HSlider.new(); slider.min_value = 0; slider.max_value = 100; slider.value = GameState.data.settings.get(key, 80); slider.custom_minimum_size.y = 48; slider.value_changed.connect(func(v, k = key): GameState.data.settings[k] = int(v); GameState.save_game()); content.add_child(slider)
 	label("MUSIQUE", colors.muted, 12)

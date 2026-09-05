@@ -260,10 +260,10 @@ func migrate(old:Dictionary)->Dictionary:
 	if not fresh.driver.has("hidden_potential"):fresh.driver.hidden_potential=82;fresh.driver.profile="versatile";fresh.driver.xp_multiplier=1.0
 	if not fresh.team.has("short_name"):fresh.team.short_name=str(fresh.team.get("name","Legacy Team")).left(12)
 	var manager_aliases := {"alex_martin":"alex","maya_chen":"maya","sofia_reyes":"ethan","idris_kone":"sofia","victor_bauer":"marcus"}
-	var legacy_manager := str(fresh.team.get("manager_id",""))
+	var legacy_manager: String = str(fresh.team.get("manager_id",""))
 	if manager_aliases.has(legacy_manager): fresh.team.manager_id = manager_aliases[legacy_manager]
 	if fresh.team_dna.has("manager_id"):
-		var legacy_dna_manager := str(fresh.team_dna.get("manager_id",""))
+		var legacy_dna_manager: String = str(fresh.team_dna.get("manager_id",""))
 		if manager_aliases.has(legacy_dna_manager): fresh.team_dna.manager_id = manager_aliases[legacy_dna_manager]
 	elif fresh.team.has("manager_id"):
 		fresh.team_dna.manager_id = fresh.team.manager_id

@@ -10,6 +10,11 @@ FATAL_PATTERNS = (
     r"Parse Error:",
     r"ERROR: Failed to load script",
     r"Compile Error:",
+    r"Failed loading resource",
+    r"Invalid call",
+    r"Invalid argument",
+    r"Invalid get index",
+    r"Node not found",
 )
 
 

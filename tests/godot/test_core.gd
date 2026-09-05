@@ -34,6 +34,7 @@ func _run_tests() -> void:
 	_check(state.data.save_version == 6, "save version")
 	_check(state.career_config.kart_calendar.size() == 6, "kart calendar")
 	_check(state.career_config.rivals.size() == 11, "rival count")
+	_check(state.creation_config.managers.keys() == ["alex", "maya", "ethan", "sofia", "marcus"], "official manager IDs")
 	_check(state.points_for(1) == 25 and state.points_for(10) == 1 and state.points_for(11) == 0, "points table")
 
 	var points: Dictionary = {"workshop": 2, "technical": 2, "simulator": 2, "scouting": 1, "marketing": 1, "strategy": 2}
