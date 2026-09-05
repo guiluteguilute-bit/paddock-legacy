@@ -1,7 +1,7 @@
 extends Node
 
 signal changed
-const SAVE_VERSION := 5
+const SAVE_VERSION := 6
 const SAVE_PATH := "user://career.json"
 const CREATION_DATA_PATH := "res://game/data/team_creation.json"
 const CAREER_DATA_PATH := "res://game/data/career.json"
@@ -259,6 +259,14 @@ func migrate(old:Dictionary)->Dictionary:
 	if not old.has("team_dna"):fresh.team_dna=neutral_dna()
 	if not fresh.driver.has("hidden_potential"):fresh.driver.hidden_potential=82;fresh.driver.profile="versatile";fresh.driver.xp_multiplier=1.0
 	if not fresh.team.has("short_name"):fresh.team.short_name=str(fresh.team.get("name","Legacy Team")).left(12)
+	var manager_aliases := {"alex_martin":"alex","maya_chen":"maya","sofia_reyes":"ethan","idris_kone":"sofia","victor_bauer":"marcus"}
+	var legacy_manager := str(fresh.team.get("manager_id",""))
+	if manager_aliases.has(legacy_manager): fresh.team.manager_id = manager_aliases[legacy_manager]
+	if fresh.team_dna.has("manager_id"):
+		var legacy_dna_manager := str(fresh.team_dna.get("manager_id",""))
+		if manager_aliases.has(legacy_dna_manager): fresh.team_dna.manager_id = manager_aliases[legacy_dna_manager]
+	elif fresh.team.has("manager_id"):
+		fresh.team_dna.manager_id = fresh.team.manager_id
 	data=fresh;_prepare_driver_stats()
 	if not old.has("standings"):fresh.standings=make_standings()
 	if old.get("save_version",0)<3 and fresh.calendar.size()<6:fresh.calendar=make_calendar(fresh.category);fresh.race_index=mini(int(fresh.race_index),fresh.calendar.size())
