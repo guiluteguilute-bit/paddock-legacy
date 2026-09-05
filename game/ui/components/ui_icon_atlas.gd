@@ -1,7 +1,7 @@
 extends RefCounted
 class_name UIIconAtlas
 
-const ATLAS_PATH := "res://graphics/ui/manager_selection/cartoon/ui_navigation_icon_atlas.png"
+const HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
 const COLUMNS := 3
 const ROWS := 4
 const ICON_MAP := {
@@ -20,12 +20,16 @@ const ICON_MAP := {
 }
 
 static func get_icon(icon_id: String) -> Texture2D:
-	if not ICON_MAP.has(icon_id) or not ResourceLoader.exists(ATLAS_PATH):
+	if not ICON_MAP.has(icon_id):
 		return null
-	var texture: Texture2D = load(ATLAS_PATH)
+	var texture := HELPERS.texture(HELPERS.optional_ui_path("ui_navigation_icon_atlas.png"))
 	if texture == null:
 		return null
+	if texture.get_width() % COLUMNS != 0 or texture.get_height() % ROWS != 0:
+		return null
 	var cell := Vector2(texture.get_width() / float(COLUMNS), texture.get_height() / float(ROWS))
+	if not is_equal_approx(cell.x, cell.y):
+		return null
 	var grid: Vector2i = ICON_MAP[icon_id]
 	var atlas := AtlasTexture.new()
 	atlas.atlas = texture
