@@ -6,34 +6,43 @@ signal manager_confirmed(manager_id: String)
 
 const MANAGER_UI_REVISION: String = "V2"
 const MANAGER_ORDER: Array[String] = ["alex", "maya", "ethan", "sofia", "marcus"]
-const BAR_SCRIPT := preload("res://game/ui/components/cartoon_stat_bar.gd")
-
 var managers: Dictionary = {}
 var selected_id: String = "alex"
 var preview_mode: bool = false
 var _avatar_buttons: Dictionary = {}
-var _presentation: TextureRect
 var _reveal_tween: Tween
 var _swipe_start_x: float = -1.0
 var _pending_build_label: String = ""
 var _setup_requested: bool = false
 
-@onready var selector: HBoxContainer = $SafeArea/MainVBox/ManagerSelector
-@onready var stage: PanelContainer = $SafeArea/MainVBox/CharacterStage
-@onready var stage_content: Control = $SafeArea/MainVBox/CharacterStage/StageContent
-@onready var identity: PanelContainer = $SafeArea/MainVBox/IdentityPanel
-@onready var manager_name: Label = $SafeArea/MainVBox/IdentityPanel/IdentityVBox/ManagerName
-@onready var manager_role: Label = $SafeArea/MainVBox/IdentityPanel/IdentityVBox/ManagerRole
-@onready var stats_panel: PanelContainer = $SafeArea/MainVBox/StatsPanel
-@onready var stats_box: VBoxContainer = $SafeArea/MainVBox/StatsPanel/StatsVBox
-@onready var pagination: Label = $SafeArea/MainVBox/Pagination
-@onready var confirm_button: Button = $SafeArea/MainVBox/ConfirmButton
+@onready var selector: HBoxContainer = $ContentMargin/MainVBox/ManagerSelector
+@onready var stage: PanelContainer = $ContentMargin/MainVBox/CharacterStage
+@onready var presentation: TextureRect = $ContentMargin/MainVBox/CharacterStage/StageContent/Presentation
+@onready var identity: PanelContainer = $ContentMargin/MainVBox/IdentityPanel
+@onready var manager_name: Label = $ContentMargin/MainVBox/IdentityPanel/IdentityVBox/ManagerName
+@onready var manager_role: Label = $ContentMargin/MainVBox/IdentityPanel/IdentityVBox/ManagerRole
+@onready var stats_panel: PanelContainer = $ContentMargin/MainVBox/StatsPanel
+@onready var stats_box: VBoxContainer = $ContentMargin/MainVBox/StatsPanel/StatsVBox
+@onready var technical_bar: CartoonStatBar = $ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow/TechnicalBar
+@onready var technical_value: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow/TechnicalValue
+@onready var strategy_bar: CartoonStatBar = $ContentMargin/MainVBox/StatsPanel/StatsVBox/StrategyRow/StrategyBar
+@onready var strategy_value: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/StrategyRow/StrategyValue
+@onready var business_bar: CartoonStatBar = $ContentMargin/MainVBox/StatsPanel/StatsVBox/BusinessRow/BusinessBar
+@onready var business_value: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/BusinessRow/BusinessValue
+@onready var bonus_card: PanelContainer = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/BonusCard
+@onready var bonus_heading: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/BonusCard/Content/Heading
+@onready var bonus_body: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/BonusCard/Content/Body
+@onready var malus_card: PanelContainer = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard
+@onready var malus_heading: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard/Content/Heading
+@onready var malus_body: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard/Content/Body
+@onready var pagination: Label = $ContentMargin/MainVBox/Pagination
+@onready var confirm_button: Button = $ContentMargin/MainVBox/ConfirmButton
 
 func _ready() -> void:
 	_apply_theme()
 	stage.gui_input.connect(_on_stage_input)
-	$SafeArea/MainVBox/CharacterStage/StageContent/Previous.pressed.connect(cycle_manager.bind(-1))
-	$SafeArea/MainVBox/CharacterStage/StageContent/Next.pressed.connect(cycle_manager.bind(1))
+	$ContentMargin/MainVBox/CharacterStage/StageContent/Previous.pressed.connect(cycle_manager.bind(-1))
+	$ContentMargin/MainVBox/CharacterStage/StageContent/Next.pressed.connect(cycle_manager.bind(1))
 	confirm_button.pressed.connect(_confirm)
 	if _setup_requested:
 		_apply_setup()
@@ -51,7 +60,7 @@ func _apply_setup() -> void:
 	if not is_node_ready():
 		return
 	_setup_requested = false
-	var revision: Label = get_node_or_null("SafeArea/MainVBox/Header/Revision") as Label
+	var revision: Label = get_node_or_null("ContentMargin/MainVBox/Header/Revision") as Label
 	if revision != null:
 		revision.text = "UI %s  •  BUILD %s" % [MANAGER_UI_REVISION, _pending_build_label]
 	_build_selector()
@@ -78,9 +87,9 @@ func _build_selector() -> void:
 	for manager_id: String in MANAGER_ORDER:
 		if not managers.has(manager_id):
 			continue
-		var button := Button.new()
+		var button: Button = Button.new()
 		button.name = manager_id.capitalize() + "Avatar"
-		button.custom_minimum_size = Vector2(0, 122)
+		button.custom_minimum_size = Vector2(58, 96)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.expand_icon = true
 		button.icon = load(str(managers[manager_id].get("avatar", ""))) as Texture2D
@@ -112,98 +121,46 @@ func _refresh_avatars() -> void:
 		button.position.y = -5.0 if selected else 3.0
 
 func _refresh_stage(manager: Dictionary) -> void:
-	if stage_content == null:
+	if presentation == null:
 		return
 	if _reveal_tween != null and _reveal_tween.is_valid():
 		_reveal_tween.kill()
-	if _presentation != null and is_instance_valid(_presentation):
-		_presentation.free()
-	_presentation = TextureRect.new()
-	_presentation.name = "Presentation"
-	_presentation.texture = load(str(manager.get("presentation", ""))) as Texture2D
-	_presentation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_presentation.offset_left = 76
-	_presentation.offset_right = -76
-	_presentation.offset_top = 4
-	_presentation.offset_bottom = -8
-	_presentation.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_presentation.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_presentation.modulate = Color(1, 1, 1, 0.15)
-	stage_content.add_child(_presentation)
-	stage_content.move_child(_presentation, 0)
+	var texture_path: String = str(manager.get("presentation", ""))
+	var texture: Texture2D = null
+	if ResourceLoader.exists(texture_path):
+		texture = load(texture_path) as Texture2D
+	presentation.texture = texture
+	presentation.pivot_offset = presentation.size * 0.5
+	presentation.modulate = Color(1, 1, 1, 0.15)
+	presentation.scale = Vector2(0.96, 0.96)
 	_reveal_tween = create_tween()
 	_reveal_tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_reveal_tween.tween_property(_presentation, "modulate", Color.WHITE, 0.24)
-	_reveal_tween.parallel().tween_property(_presentation, "scale", Vector2.ONE, 0.24).from(Vector2(0.96, 0.96))
+	_reveal_tween.tween_property(presentation, "modulate", Color.WHITE, 0.24)
+	_reveal_tween.parallel().tween_property(presentation, "scale", Vector2.ONE, 0.24)
 
 func _refresh_stats(manager: Dictionary) -> void:
 	if stats_box == null:
 		return
-	for child: Node in stats_box.get_children():
-		child.queue_free()
 	var attributes: Dictionary = manager.get("attributes", {})
-	_add_stat("TECHNIQUE", "technical", int(attributes.get("technical", 0)))
-	_add_stat("STRATÉGIE", "strategy", int(attributes.get("strategy", 0)))
-	_add_stat("BUSINESS", "business", int(attributes.get("business", 0)))
-	var effects := HBoxContainer.new()
-	effects.add_theme_constant_override("separation", 10)
-	stats_box.add_child(effects)
+	_set_stat(technical_bar, technical_value, int(attributes.get("technical", 0)), "technical")
+	_set_stat(strategy_bar, strategy_value, int(attributes.get("strategy", 0)), "strategy")
+	_set_stat(business_bar, business_value, int(attributes.get("business", 0)), "business")
 	var advantages: Array = manager.get("advantages", [])
 	var drawbacks: Array = manager.get("drawbacks", [])
-	_add_effect(effects, "+ BONUS", str(advantages[0]) if not advantages.is_empty() else "Profil équilibré", Color("65e89a"))
-	_add_effect(effects, "− MALUS", str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun malus", Color("ff756d"))
+	bonus_body.text = str(advantages[0]) if not advantages.is_empty() else "Profil équilibré"
+	malus_body.text = str(drawbacks[0]) if not drawbacks.is_empty() else "Aucun malus"
 
-func _add_stat(label_text: String, kind: String, value: int) -> void:
-	var row := HBoxContainer.new()
-	row.custom_minimum_size.y = 42
-	stats_box.add_child(row)
-	var label_node := Label.new()
-	label_node.text = label_text
-	label_node.custom_minimum_size.x = 146
-	label_node.add_theme_font_size_override("font_size", 18)
-	row.add_child(label_node)
-	var bar: Control = BAR_SCRIPT.new() as Control
-	bar.name = kind.capitalize() + "Bar"
-	bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.custom_minimum_size.y = 30
-	bar.call("configure", float(value), kind)
-	row.add_child(bar)
-	var score := Label.new()
-	score.name = kind.capitalize() + "Value"
+func _set_stat(bar: CartoonStatBar, score: Label, value: int, kind: String) -> void:
+	bar.configure(float(value), kind)
 	score.text = str(value)
-	score.custom_minimum_size.x = 48
-	score.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	score.add_theme_font_size_override("font_size", 20)
-	score.add_theme_color_override("font_color", Color("ffcf4a"))
-	row.add_child(score)
-
-func _add_effect(parent: HBoxContainer, heading: String, text_value: String, color: Color) -> void:
-	var card := PanelContainer.new()
-	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card.add_theme_stylebox_override("panel", _panel_style(color, Color(0.025, 0.075, 0.10, 0.96), 12, 1))
-	parent.add_child(card)
-	var box := VBoxContainer.new()
-	card.add_child(box)
-	var heading_label := Label.new()
-	heading_label.text = heading
-	heading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	heading_label.add_theme_color_override("font_color", color)
-	box.add_child(heading_label)
-	var body := Label.new()
-	body.text = text_value
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body.add_theme_font_size_override("font_size", 14)
-	box.add_child(body)
 
 func _apply_theme() -> void:
-	$SafeArea/MainVBox/Header/Brand.add_theme_font_size_override("font_size", 28)
-	$SafeArea/MainVBox/Header/Brand.add_theme_color_override("font_color", Color("f7fbff"))
-	$SafeArea/MainVBox/Header/Prompt.add_theme_font_size_override("font_size", 18)
-	$SafeArea/MainVBox/Header/Prompt.add_theme_color_override("font_color", Color("33e1da"))
-	$SafeArea/MainVBox/Header/Revision.add_theme_font_size_override("font_size", 11)
-	$SafeArea/MainVBox/Header/Revision.add_theme_color_override("font_color", Color(0.55, 0.7, 0.75, 0.8))
+	$ContentMargin/MainVBox/Header/Brand.add_theme_font_size_override("font_size", 26)
+	$ContentMargin/MainVBox/Header/Brand.add_theme_color_override("font_color", Color("f7fbff"))
+	$ContentMargin/MainVBox/Header/Prompt.add_theme_font_size_override("font_size", 17)
+	$ContentMargin/MainVBox/Header/Prompt.add_theme_color_override("font_color", Color("33e1da"))
+	$ContentMargin/MainVBox/Header/Revision.add_theme_font_size_override("font_size", 11)
+	$ContentMargin/MainVBox/Header/Revision.add_theme_color_override("font_color", Color(0.55, 0.7, 0.75, 0.8))
 	$Background.add_theme_stylebox_override("panel", _panel_style(Color("147d91"), Color(0.015, 0.045, 0.065, 0.78), 24, 2))
 	stage.add_theme_stylebox_override("panel", _panel_style(Color("29d9dd"), Color(0.025, 0.12, 0.16, 0.72), 28, 3))
 	identity.add_theme_stylebox_override("panel", _panel_style(Color("ffd05a"), Color(0.025, 0.085, 0.12, 0.97), 18, 3))
@@ -212,23 +169,32 @@ func _apply_theme() -> void:
 	manager_name.add_theme_color_override("font_color", Color("ffffff"))
 	manager_role.add_theme_font_size_override("font_size", 18)
 	manager_role.add_theme_color_override("font_color", Color("ffd05a"))
+	for label_node: Label in [technical_value, strategy_value, business_value]:
+		label_node.add_theme_font_size_override("font_size", 18)
+		label_node.add_theme_color_override("font_color", Color("ffcf4a"))
+	bonus_card.add_theme_stylebox_override("panel", _panel_style(Color("65e89a"), Color(0.025, 0.075, 0.10, 0.96), 12, 1))
+	malus_card.add_theme_stylebox_override("panel", _panel_style(Color("ff756d"), Color(0.025, 0.075, 0.10, 0.96), 12, 1))
+	bonus_heading.add_theme_color_override("font_color", Color("65e89a"))
+	malus_heading.add_theme_color_override("font_color", Color("ff756d"))
+	bonus_body.add_theme_font_size_override("font_size", 13)
+	malus_body.add_theme_font_size_override("font_size", 13)
 	pagination.add_theme_font_size_override("font_size", 18)
 	pagination.add_theme_color_override("font_color", Color("9ce9ed"))
-	var cta := _panel_style(Color("fff2ad"), Color("f5b928"), 20, 4)
+	var cta: StyleBoxFlat = _panel_style(Color("fff2ad"), Color("f5b928"), 20, 4)
 	cta.shadow_color = Color(0, 0, 0, 0.55)
 	cta.shadow_size = 10
 	confirm_button.add_theme_stylebox_override("normal", cta)
-	var hover := cta.duplicate() as StyleBoxFlat
+	var hover: StyleBoxFlat = cta.duplicate() as StyleBoxFlat
 	hover.bg_color = Color("ffd34e")
 	confirm_button.add_theme_stylebox_override("hover", hover)
-	var pressed := cta.duplicate() as StyleBoxFlat
+	var pressed: StyleBoxFlat = cta.duplicate() as StyleBoxFlat
 	pressed.bg_color = Color("d99817")
 	pressed.shadow_size = 3
 	confirm_button.add_theme_stylebox_override("pressed", pressed)
-	confirm_button.add_theme_font_size_override("font_size", 25)
+	confirm_button.add_theme_font_size_override("font_size", 22)
 	confirm_button.add_theme_color_override("font_color", Color("09202a"))
-	for arrow_path: NodePath in [NodePath("SafeArea/MainVBox/CharacterStage/StageContent/Previous"), NodePath("SafeArea/MainVBox/CharacterStage/StageContent/Next")]:
-		var arrow := get_node(arrow_path) as Button
+	for arrow_path: NodePath in [NodePath("ContentMargin/MainVBox/CharacterStage/StageContent/Previous"), NodePath("ContentMargin/MainVBox/CharacterStage/StageContent/Next")]:
+		var arrow: Button = get_node(arrow_path) as Button
 		arrow.add_theme_font_size_override("font_size", 30)
 		arrow.add_theme_color_override("font_color", Color("d8fbff"))
 		arrow.add_theme_stylebox_override("normal", _panel_style(Color(0.1, 0.75, 0.82, 0.55), Color(0.01, 0.08, 0.12, 0.72), 18, 2))
@@ -238,13 +204,13 @@ func _avatar_style(selected: bool, pressed: bool = false) -> StyleBoxFlat:
 	var fill: Color = Color("0d4260") if selected else Color("071f32")
 	if pressed:
 		fill = Color("082638")
-	var style := _panel_style(border, fill, 16, 4 if selected else 2)
+	var style: StyleBoxFlat = _panel_style(border, fill, 16, 4 if selected else 2)
 	style.shadow_color = Color(0.1, 0.9, 1.0, 0.36) if selected else Color(0, 0, 0, 0.35)
 	style.shadow_size = 10 if selected else 3
 	return style
 
 func _panel_style(border: Color, fill: Color, radius: int, width: int) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
+	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = fill
 	style.border_color = border
 	style.set_border_width_all(width)
@@ -257,13 +223,13 @@ func _panel_style(border: Color, fill: Color, radius: int, width: int) -> StyleB
 
 func _on_stage_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
-		var touch := event as InputEventScreenTouch
+		var touch: InputEventScreenTouch = event as InputEventScreenTouch
 		if touch.pressed:
 			_swipe_start_x = touch.position.x
 		elif _swipe_start_x >= 0.0:
 			_finish_swipe(touch.position.x)
 	elif event is InputEventMouseButton:
-		var mouse := event as InputEventMouseButton
+		var mouse: InputEventMouseButton = event as InputEventMouseButton
 		if mouse.button_index == MOUSE_BUTTON_LEFT:
 			if mouse.pressed:
 				_swipe_start_x = mouse.position.x
