@@ -4,7 +4,6 @@ class_name ManagerSelection
 signal manager_changed(manager_id: String)
 signal manager_confirmed(manager_id: String)
 
-const MANAGER_UI_REVISION: String = "V2"
 const MANAGER_ORDER: Array[String] = ["alex", "maya", "ethan", "sofia", "marcus"]
 var managers: Dictionary = {}
 var selected_id: String = "alex"
@@ -21,6 +20,7 @@ var _setup_requested: bool = false
 @onready var identity: PanelContainer = $ContentMargin/MainVBox/IdentityPanel
 @onready var manager_name: Label = $ContentMargin/MainVBox/IdentityPanel/IdentityVBox/ManagerName
 @onready var manager_role: Label = $ContentMargin/MainVBox/IdentityPanel/IdentityVBox/ManagerRole
+@onready var specialty_badge: Label = $ContentMargin/MainVBox/IdentityPanel/IdentityVBox/SpecialtyBadge
 @onready var stats_panel: PanelContainer = $ContentMargin/MainVBox/StatsPanel
 @onready var stats_box: VBoxContainer = $ContentMargin/MainVBox/StatsPanel/StatsVBox
 @onready var technical_bar: CartoonStatBar = $ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow/TechnicalBar
@@ -37,6 +37,7 @@ var _setup_requested: bool = false
 @onready var malus_body: Label = $ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard/Content/Body
 @onready var pagination: Label = $ContentMargin/MainVBox/Pagination
 @onready var confirm_button: Button = $ContentMargin/MainVBox/ConfirmButton
+@onready var build_label: Label = $BuildLabel
 
 func _ready() -> void:
 	_apply_theme()
@@ -44,6 +45,8 @@ func _ready() -> void:
 	$ContentMargin/MainVBox/CharacterStage/StageContent/Previous.pressed.connect(cycle_manager.bind(-1))
 	$ContentMargin/MainVBox/CharacterStage/StageContent/Next.pressed.connect(cycle_manager.bind(1))
 	confirm_button.pressed.connect(_confirm)
+	confirm_button.button_down.connect(_set_cta_pressed.bind(true))
+	confirm_button.button_up.connect(_set_cta_pressed.bind(false))
 	if _setup_requested:
 		_apply_setup()
 
@@ -60,9 +63,7 @@ func _apply_setup() -> void:
 	if not is_node_ready():
 		return
 	_setup_requested = false
-	var revision: Label = get_node_or_null("ContentMargin/MainVBox/Header/Revision") as Label
-	if revision != null:
-		revision.text = "UI %s  •  BUILD %s" % [MANAGER_UI_REVISION, _pending_build_label]
+	build_label.text = "BUILD %s" % _pending_build_label
 	_build_selector()
 	_refresh()
 
@@ -89,7 +90,7 @@ func _build_selector() -> void:
 			continue
 		var button: Button = Button.new()
 		button.name = manager_id.capitalize() + "Avatar"
-		button.custom_minimum_size = Vector2(58, 72)
+		button.custom_minimum_size = Vector2(72, 106)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.expand_icon = true
 		button.icon = load(str(managers[manager_id].get("avatar", ""))) as Texture2D
@@ -106,6 +107,7 @@ func _refresh() -> void:
 	_refresh_stage(manager)
 	manager_name.text = str(manager.get("first_name", selected_id)).to_upper()
 	manager_role.text = str(manager.get("title", "Gérant")).to_upper()
+	specialty_badge.text = "◆  %s  ◆" % _specialty_name(selected_id)
 	pagination.text = "%d / %d" % [MANAGER_ORDER.find(selected_id) + 1, MANAGER_ORDER.size()]
 	confirm_button.text = "RETOUR AUX PARAMÈTRES" if preview_mode else "CHOISIR %s" % manager_name.text
 	_refresh_stats(manager)
@@ -117,8 +119,10 @@ func _refresh_avatars() -> void:
 		button.add_theme_stylebox_override("normal", _avatar_style(selected))
 		button.add_theme_stylebox_override("hover", _avatar_style(true))
 		button.add_theme_stylebox_override("pressed", _avatar_style(true, true))
-		button.modulate = Color(1.08, 1.08, 1.02, 1.0) if selected else Color(0.62, 0.72, 0.82, 0.92)
-		button.position.y = -5.0 if selected else 3.0
+		button.modulate = Color(1.08, 1.06, 0.98, 1.0) if selected else Color(0.82, 0.85, 0.88, 0.96)
+		button.pivot_offset = button.size * 0.5
+		button.scale = Vector2(1.05, 1.05) if selected else Vector2.ONE
+		button.position.y = -4.0 if selected else 2.0
 
 func _refresh_stage(manager: Dictionary) -> void:
 	if presentation == null:
@@ -157,20 +161,27 @@ func _set_stat(bar: CartoonStatBar, score: Label, value: int, kind: String) -> v
 	score.text = str(value)
 
 func _apply_theme() -> void:
-	$ContentMargin/MainVBox/Header/Brand.add_theme_font_size_override("font_size", 26)
+	$ContentMargin/MainVBox/Header/Brand.add_theme_font_size_override("font_size", 22)
 	$ContentMargin/MainVBox/Header/Brand.add_theme_color_override("font_color", Color("f7fbff"))
-	$ContentMargin/MainVBox/Header/Prompt.add_theme_font_size_override("font_size", 17)
-	$ContentMargin/MainVBox/Header/Prompt.add_theme_color_override("font_color", Color("33e1da"))
-	$ContentMargin/MainVBox/Header/Revision.add_theme_font_size_override("font_size", 11)
-	$ContentMargin/MainVBox/Header/Revision.add_theme_color_override("font_color", Color(0.55, 0.7, 0.75, 0.8))
-	$Background.add_theme_stylebox_override("panel", _panel_style(Color("147d91"), Color(0.015, 0.045, 0.065, 0.78), 24, 2))
-	stage.add_theme_stylebox_override("panel", _panel_style(Color("29d9dd"), Color(0.025, 0.12, 0.16, 0.72), 28, 3))
+	$ContentMargin/MainVBox/Header/Prompt.add_theme_font_size_override("font_size", 19)
+	$ContentMargin/MainVBox/Header/Prompt.add_theme_color_override("font_color", Color("ffd05a"))
+	$Background.add_theme_stylebox_override("panel", _panel_style(Color(0, 0, 0, 0), Color(0.01, 0.045, 0.065, 0.64), 0, 0))
+	stage.add_theme_stylebox_override("panel", _panel_style(Color("f5b928"), Color(0.02, 0.09, 0.12, 0.84), 30, 2))
+	$ContentMargin/MainVBox/CharacterStage/StageContent/StageBackdrop.add_theme_stylebox_override("panel", _panel_style(Color(0, 0, 0, 0), Color(0.02, 0.14, 0.18, 0.42), 28, 0))
+	$ContentMargin/MainVBox/CharacterStage/StageContent/CharacterShadow.add_theme_stylebox_override("panel", _panel_style(Color(0, 0, 0, 0), Color(0.005, 0.015, 0.02, 0.44), 190, 0))
+	$ContentMargin/MainVBox/CharacterStage/StageContent/GroundGlow.add_theme_stylebox_override("panel", _panel_style(Color(0, 0, 0, 0), Color(0.10, 0.86, 0.80, 0.18), 46, 0))
+	var frame_style: StyleBoxFlat = _panel_style(Color(1.0, 0.80, 0.35, 0.64), Color(0, 0, 0, 0), 26, 2)
+	frame_style.shadow_color = Color(0.05, 0.75, 0.78, 0.18)
+	frame_style.shadow_size = 8
+	$ContentMargin/MainVBox/CharacterStage/StageContent/CharacterFrame.add_theme_stylebox_override("panel", frame_style)
 	identity.add_theme_stylebox_override("panel", _panel_style(Color("ffd05a"), Color(0.025, 0.085, 0.12, 0.97), 18, 3))
 	stats_panel.add_theme_stylebox_override("panel", _panel_style(Color("168da5"), Color(0.018, 0.07, 0.095, 0.97), 18, 2))
 	manager_name.add_theme_font_size_override("font_size", 34)
 	manager_name.add_theme_color_override("font_color", Color("ffffff"))
 	manager_role.add_theme_font_size_override("font_size", 18)
 	manager_role.add_theme_color_override("font_color", Color("ffd05a"))
+	specialty_badge.add_theme_font_size_override("font_size", 13)
+	specialty_badge.add_theme_color_override("font_color", Color("55e1d7"))
 	for label_node: Label in [technical_value, strategy_value, business_value]:
 		label_node.add_theme_font_size_override("font_size", 18)
 		label_node.add_theme_color_override("font_color", Color("ffcf4a"))
@@ -182,6 +193,8 @@ func _apply_theme() -> void:
 	malus_body.add_theme_font_size_override("font_size", 13)
 	pagination.add_theme_font_size_override("font_size", 18)
 	pagination.add_theme_color_override("font_color", Color("9ce9ed"))
+	build_label.add_theme_font_size_override("font_size", 9)
+	build_label.add_theme_color_override("font_color", Color(0.65, 0.73, 0.76, 0.55))
 	var cta: StyleBoxFlat = _panel_style(Color("fff2ad"), Color("f5b928"), 20, 4)
 	cta.shadow_color = Color(0, 0, 0, 0.55)
 	cta.shadow_size = 10
@@ -200,6 +213,7 @@ func _apply_theme() -> void:
 		arrow.add_theme_font_size_override("font_size", 30)
 		arrow.add_theme_color_override("font_color", Color("d8fbff"))
 		arrow.add_theme_stylebox_override("normal", _panel_style(Color(0.1, 0.75, 0.82, 0.55), Color(0.01, 0.08, 0.12, 0.72), 18, 2))
+		arrow.add_theme_stylebox_override("pressed", _panel_style(Color("ffd05a"), Color("103949"), 18, 3))
 
 func _avatar_style(selected: bool, pressed: bool = false) -> StyleBoxFlat:
 	var border: Color = Color("ffd05a") if selected else Color("176b89")
@@ -222,6 +236,17 @@ func _panel_style(border: Color, fill: Color, radius: int, width: int) -> StyleB
 	style.content_margin_top = 12
 	style.content_margin_bottom = 12
 	return style
+
+func _specialty_name(manager_id: String) -> String:
+	var names: Dictionary = {
+		"alex": "TECHNICIEN", "maya": "STRATÈGE", "ethan": "COMMERCIAL",
+		"sofia": "FORMATRICE", "marcus": "MENEUR"
+	}
+	return str(names.get(manager_id, "GÉRANT"))
+
+func _set_cta_pressed(is_pressed: bool) -> void:
+	confirm_button.pivot_offset = confirm_button.size * 0.5
+	confirm_button.scale = Vector2(0.98, 0.98) if is_pressed else Vector2.ONE
 
 func _on_stage_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
