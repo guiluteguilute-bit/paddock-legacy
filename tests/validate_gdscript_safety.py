@@ -10,6 +10,9 @@ RULES = (
     (re.compile(r"\bvar\s+\w+\s*:=\s*JSON\.parse"), "inference from JSON.parse()"),
     (re.compile(r"\bvar\s+\w+\s*:=\s*(?:load|ResourceLoader\.load)\s*\("), "inference from dynamic resource load"),
 )
+UNSUPPORTED_GODOT_43_PROPERTIES = (
+    (re.compile(r"\.icon_max_width\b"), "Button.icon_max_width is not available in Godot 4.3"),
+)
 
 
 def critical(path: Path) -> bool:
@@ -36,6 +39,9 @@ def main() -> None:
                 for regex, reason in RULES:
                     if regex.search(line):
                         errors.append(f"{path.relative_to(ROOT)}:{number}: {reason}")
+            for regex, reason in UNSUPPORTED_GODOT_43_PROPERTIES:
+                if regex.search(line):
+                    errors.append(f"{path.relative_to(ROOT)}:{number}: {reason}")
     if errors:
         raise SystemExit("GDSCRIPT SAFETY ERROR:\n" + "\n".join(errors))
     print("GDScript safety validation OK (Godot 4.3 Variant guards)")

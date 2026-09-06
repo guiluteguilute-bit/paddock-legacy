@@ -83,7 +83,6 @@ func _build_selector() -> void:
 		button.custom_minimum_size = Vector2(0, 122)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.expand_icon = true
-		button.icon_max_width = 105
 		button.icon = load(str(managers[manager_id].get("avatar", ""))) as Texture2D
 		button.tooltip_text = str(managers[manager_id].get("first_name", manager_id))
 		button.pressed.connect(select_manager.bind(manager_id))
