@@ -53,15 +53,32 @@ for key,value in zip(keys,sys.argv[1:]):
 p.write_text(s)
 p=Path('web/shell.html'); s=p.read_text().replace('__BUILD_COMMIT__',sys.argv[1]).replace('__BUILD_SHORT_COMMIT__',sys.argv[2]); p.write_text(s)
 PY
-rm -rf build/web; mkdir -p build/web
-run_godot godot-export.log --verbose --export-release 'Web Preview' build/web/index.html
+rm -rf build/web
+release_path="releases/${short}/"
+release_dir="build/web/${release_path}"
+mkdir -p "$release_dir"
+run_godot godot-export.log --verbose --export-release 'Web Preview' "${release_dir}/index.html"
 python3 - "$commit" "$short" "$run" "$built" "$branch" "$environment" <<'PY'
 import json,sys
 from pathlib import Path
 keys=('commit','short_commit','run_number','built_at','branch','environment')
 data=dict(zip(keys,sys.argv[1:])); data['run_number']=int(data['run_number'])
+data['release_path']=f"releases/{data['short_commit']}/"
 Path('build/web/build-version.json').write_text(json.dumps(data,indent=2)+'\n')
+target=f"{data['release_path']}index.html?v={data['short_commit']}"
+launcher=f'''<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<title>Paddock Legacy</title></head><body>
+<p>Chargement de Paddock Legacy…</p>
+<script>window.location.replace({json.dumps(target)});</script>
+</body></html>
+'''
+Path('build/web/index.html').write_text(launcher)
 PY
 touch build/web/.nojekyll
+echo '=== VERSIONED WEB BUILD ==='
+python3 tests/validate_versioned_web_build.py build/web
 echo '=== WEB BUILD VALIDATION ==='
 python3 tests/validate_web_build.py build/web

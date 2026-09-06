@@ -12,7 +12,7 @@
     body { height: 100vh; color: #f5f7fa; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     /* Godot owns the single in-game safe area. Do not apply the iPhone insets a
        second time around the canvas. */
-    #game { position: fixed; inset: 0; box-sizing: border-box; width: 100%; height: var(--app-height); overflow: hidden; }
+    #game { position: fixed; top: var(--app-top, 0px); right: 0; bottom: auto; left: 0; box-sizing: border-box; width: 100%; height: var(--app-height); overflow: hidden; }
     #canvas { display: block; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; outline: 0; overflow: hidden; }
     #canvas:focus { outline: 0; }
     @supports (height: 100dvh) {
@@ -58,21 +58,37 @@
     retry.addEventListener('click', () => window.location.reload());
     const loadedCommit = '__BUILD_COMMIT__';
     const update = document.getElementById('update');
-    update.addEventListener('click', () => window.location.reload());
+    const rootUrl = new URL('../../', window.location.href);
+    let deployedVersion = null;
+    update.addEventListener('click', () => {
+      if (!deployedVersion || !deployedVersion.short_commit) return;
+      const destination = new URL(rootUrl.href);
+      destination.searchParams.set('v', deployedVersion.short_commit);
+      window.location.replace(destination.href);
+    });
     function syncVisibleViewport() {
-      const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const viewport = window.visualViewport;
+      const height = viewport ? viewport.height : window.innerHeight;
+      const offsetTop = viewport ? viewport.offsetTop : 0;
       document.documentElement.style.setProperty('--app-height', `${Math.round(height)}px`);
+      document.documentElement.style.setProperty('--app-top', `${Math.round(offsetTop)}px`);
       window.scrollTo(0, 0);
     }
     syncVisibleViewport();
     window.addEventListener('resize', syncVisibleViewport, { passive: true });
     window.addEventListener('orientationchange', syncVisibleViewport, { passive: true });
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', syncVisibleViewport, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', syncVisibleViewport, { passive: true });
+      window.visualViewport.addEventListener('scroll', syncVisibleViewport, { passive: true });
+    }
     async function checkVersion() {
       try {
-        const response = await fetch(`build-version.json?cache_bust=${Date.now()}`, { cache: 'no-store' });
+        const versionUrl = new URL('build-version.json', rootUrl);
+        versionUrl.searchParams.set('cache_bust', Date.now().toString());
+        const response = await fetch(versionUrl, { cache: 'no-store' });
         if (!response.ok) return;
         const deployed = await response.json();
+        deployedVersion = deployed;
         if (loadedCommit !== 'local' && deployed.commit && deployed.commit !== loadedCommit) update.style.display = 'block';
       } catch (error) { console.warn('Build version check unavailable', error); }
     }
