@@ -6,6 +6,8 @@ var title: Label
 var subtitle: Label
 var notice: Label
 var scroll: ScrollContainer
+var fixed_screen_host: Control
+var global_header: VBoxContainer
 var race_view: RaceView
 var creation_step = 0
 var creation_draft: Dictionary = {}
@@ -50,12 +52,15 @@ func build_shell() -> void:
 	var glow = ColorRect.new(); glow.color = Color(0.04, 0.28, 0.27, 0.16); glow.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE); glow.custom_minimum_size.y = 270; add_child(glow)
 	var safe = MarginContainer.new(); safe.name = "SafeArea"; safe.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(safe)
 	var root = VBoxContainer.new(); root.add_theme_constant_override("separation", 12); safe.add_child(root)
-	var header = VBoxContainer.new(); header.add_theme_constant_override("separation", 0); root.add_child(header)
+	global_header = VBoxContainer.new(); global_header.name = "Header"; global_header.add_theme_constant_override("separation", 0); root.add_child(global_header)
+	var header: VBoxContainer = global_header
 	title = Label.new(); title.text = "PADDOCK LEGACY"; title.add_theme_font_size_override("font_size", 27); title.add_theme_color_override("font_color", colors.text); header.add_child(title)
 	subtitle = Label.new(); subtitle.add_theme_font_size_override("font_size", 13); subtitle.add_theme_color_override("font_color", colors.accent); header.add_child(subtitle)
 	notice = Label.new(); notice.add_theme_font_size_override("font_size", 12); notice.add_theme_color_override("font_color", colors.gold); notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; header.add_child(notice)
-	scroll = ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; root.add_child(scroll)
+	var body_host := Control.new(); body_host.name = "BodyHost"; body_host.size_flags_vertical = Control.SIZE_EXPAND_FILL; body_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL; root.add_child(body_host)
+	scroll = ScrollContainer.new(); scroll.name = "ScrollContainer"; scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; body_host.add_child(scroll)
 	content = VBoxContainer.new(); content.size_flags_horizontal = Control.SIZE_EXPAND_FILL; content.add_theme_constant_override("separation", 12); scroll.add_child(content)
+	fixed_screen_host = Control.new(); fixed_screen_host.name = "FixedScreenHost"; fixed_screen_host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); fixed_screen_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL; fixed_screen_host.size_flags_vertical = Control.SIZE_EXPAND_FILL; fixed_screen_host.visible = false; body_host.add_child(fixed_screen_host)
 	nav = HBoxContainer.new(); nav.name = "MobileBottomNavigation"; nav.add_theme_constant_override("separation", 5); root.add_child(nav)
 	for item in [["ACCUEIL", "accueil", show_dashboard], ["CARRIÈRE", "classements", show_career], ["COURSE", "courses", show_race_prep], ["ÉCURIE", "equipe", show_team], ["PLUS", "parametres", show_more]]:
 		var b = button(item[0], item[2], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.custom_minimum_size = Vector2(0, 64)
@@ -78,8 +83,8 @@ func _apply_safe_area() -> void:
 
 func clear(page_title: String) -> void:
 	_set_manager_background(false)
-	if title != null and title.get_parent() != null:
-		title.get_parent().visible = true
+	_show_scroll_content()
+	_clear_fixed_screen()
 	content.add_theme_constant_override("separation", 12)
 	var team: Dictionary = GameState.data.get("team", {})
 	var team_colors: Array = team.get("colors", [])
@@ -87,9 +92,25 @@ func clear(page_title: String) -> void:
 		colors.accent = Color(team_colors[2])
 	for child in content.get_children(): child.queue_free()
 	scroll.scroll_vertical = 0
+	scroll.set_deferred("scroll_vertical", 0)
 	title.text = "PADDOCK LEGACY"
 	subtitle.text = page_title + (("  •  " + GameState.data.get("team", {}).get("name", "").to_upper()) if GameState.has_career() else "")
 	notice.text = ("SAISON %d  •  %s €  •  RÉP. %d  •  ÉNERGIE %s/5" % [GameState.data.get("career_year", 2026), money(GameState.data.get("money", 0)), GameState.data.get("reputation", 0), GameState.data.get("energy", 0)]) if GameState.has_career() else "GODOT • PORTRAIT • WEB"
+
+func _show_scroll_content() -> void:
+	scroll.visible = true
+	fixed_screen_host.visible = false
+	global_header.visible = true
+
+func _show_fixed_screen() -> void:
+	scroll.visible = false
+	fixed_screen_host.visible = true
+	global_header.visible = false
+
+func _clear_fixed_screen() -> void:
+	for child: Node in fixed_screen_host.get_children():
+		fixed_screen_host.remove_child(child)
+		child.queue_free()
 
 func _set_manager_background(enabled: bool) -> void:
 	if shell_background == null or shell_tint == null:
@@ -128,10 +149,10 @@ func creation_progress() -> String:
 func creation_manager() -> void:
 	_set_manager_background(true)
 	# ManagerSelection V2 owns its complete visual hierarchy; Main only coordinates flow.
-	title.get_parent().visible = false
+	_show_fixed_screen()
 	var managers: Dictionary = GameState.creation_config.get("managers", {})
 	if managers.is_empty():
-		title.get_parent().visible = true
+		_show_scroll_content()
 		label("Aucun gérant disponible.", colors.danger, 16)
 		return
 	var selected_id: String = str(creation_draft.get("manager", "alex"))
@@ -139,7 +160,8 @@ func creation_manager() -> void:
 	screen.setup(managers, selected_id, BUILD_INFO.BUILD_SHORT_COMMIT, manager_preview_mode)
 	screen.manager_changed.connect(_on_manager_changed)
 	screen.manager_confirmed.connect(_on_manager_confirmed)
-	content.add_child(screen)
+	fixed_screen_host.add_child(screen)
+	assert(screen.get_parent() == fixed_screen_host)
 
 func _on_manager_changed(manager_id: String) -> void:
 	creation_draft["manager"] = manager_id
