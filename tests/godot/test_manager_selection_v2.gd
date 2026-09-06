@@ -59,6 +59,14 @@ func _run() -> void:
 
 func _assert_viewport_fit(screen: ManagerSelection, viewport_size: Vector2i) -> bool:
 	const TOLERANCE: float = 1.0
+	# Controls are laid out in Godot's logical canvas coordinates (1080x1920
+	# reference with canvas_items/expand), while viewport_size is the physical
+	# window size used to emulate devices. Comparing logical coordinates
+	# directly to 390x700 creates false overflow failures. Use the screen's
+	# actual logical rect so both sides of the comparison share one space.
+	var screen_rect: Rect2 = screen.get_global_rect()
+	if not _assert(screen_rect.size.x > 0.0 and screen_rect.size.y > 0.0, "logical screen rect is valid at %s" % viewport_size):
+		return false
 	var paths: Array[NodePath] = [
 		NodePath("ContentMargin/MainVBox/Header"),
 		NodePath("ContentMargin/MainVBox/ManagerSelector"),
@@ -70,17 +78,21 @@ func _assert_viewport_fit(screen: ManagerSelection, viewport_size: Vector2i) -> 
 	]
 	for path: NodePath in paths:
 		var control: Control = screen.get_node(path) as Control
-		var rect: Rect2 = control.get_global_rect()
-		if not _assert(rect.position.y >= -TOLERANCE, "%s top is inside %s" % [path, viewport_size]):
+		if not _assert(control != null, "%s exists at %s" % [path, viewport_size]):
 			return false
-		if not _assert(rect.end.y <= float(viewport_size.y) + TOLERANCE, "%s bottom is inside %s (%.1f > %d)" % [path, viewport_size, rect.end.y, viewport_size.y]):
+		var rect: Rect2 = control.get_global_rect()
+		if not _assert(rect.position.y >= screen_rect.position.y - TOLERANCE, "%s top is inside logical screen at %s" % [path, viewport_size]):
+			return false
+		if not _assert(rect.end.y <= screen_rect.end.y + TOLERANCE, "%s bottom is inside logical screen at %s (%.1f > %.1f)" % [path, viewport_size, rect.end.y, screen_rect.end.y]):
 			return false
 	for manager_id: String in EXPECTED:
 		var avatar: Control = screen.selector.get_node(manager_id.capitalize() + "Avatar") as Control
-		var avatar_rect: Rect2 = avatar.get_global_rect()
-		if not _assert(avatar_rect.position.x >= -TOLERANCE, "%s avatar left edge is visible at %s" % [manager_id, viewport_size]):
+		if not _assert(avatar != null, "%s avatar exists at %s" % [manager_id, viewport_size]):
 			return false
-		if not _assert(avatar_rect.end.x <= float(viewport_size.x) + TOLERANCE, "%s avatar right edge is visible at %s" % [manager_id, viewport_size]):
+		var avatar_rect: Rect2 = avatar.get_global_rect()
+		if not _assert(avatar_rect.position.x >= screen_rect.position.x - TOLERANCE, "%s avatar left edge is visible at %s" % [manager_id, viewport_size]):
+			return false
+		if not _assert(avatar_rect.end.x <= screen_rect.end.x + TOLERANCE, "%s avatar right edge is visible at %s" % [manager_id, viewport_size]):
 			return false
 	return true
 
