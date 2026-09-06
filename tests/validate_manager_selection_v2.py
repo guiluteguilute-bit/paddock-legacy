@@ -11,8 +11,11 @@ MAIN = ROOT / "game/ui/main.gd"
 assert SCENE.is_file(), "Missing dedicated ManagerSelection V2 scene"
 assert SCRIPT.is_file(), "Missing dedicated ManagerSelection V2 script"
 scene = SCENE.read_text(encoding="utf-8")
-for node in ("Background", "SafeArea", "MainVBox", "Header", "ManagerSelector",
-             "CharacterStage", "IdentityPanel", "StatsPanel", "Pagination", "ConfirmButton"):
+for node in ("Background", "ContentMargin", "MainVBox", "Header", "ManagerSelector",
+             "CharacterStage", "Presentation", "IdentityPanel", "StatsPanel", "StatsVBox",
+             "TechnicalRow", "TechnicalBar", "TechnicalValue", "StrategyRow", "StrategyBar",
+             "StrategyValue", "BusinessRow", "BusinessBar", "BusinessValue", "EffectsRow",
+             "BonusCard", "MalusCard", "Pagination", "ConfirmButton"):
     assert f'name="{node}"' in scene, f"ManagerSelection hierarchy missing {node}"
 
 main = MAIN.read_text(encoding="utf-8")

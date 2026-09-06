@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://game/ui/screens/manager_selection.gd" id="1"]
+[ext_resource type="Script" path="res://game/ui/components/cartoon_stat_bar.gd" id="2"]
 
 [node name="ManagerSelection" type="Control"]
-custom_minimum_size = Vector2(0, 1540)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,115 +23,229 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="SafeArea" type="MarginContainer" parent="."]
+[node name="ContentMargin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="MainVBox" type="VBoxContainer" parent="SafeArea"]
+[node name="MainVBox" type="VBoxContainer" parent="ContentMargin"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Header" type="VBoxContainer" parent="SafeArea/MainVBox"]
+[node name="Header" type="VBoxContainer" parent="ContentMargin/MainVBox"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Brand" type="Label" parent="SafeArea/MainVBox/Header"]
+[node name="Brand" type="Label" parent="ContentMargin/MainVBox/Header"]
 layout_mode = 2
 text = "PADDOCK LEGACY"
 horizontal_alignment = 1
 
-[node name="Prompt" type="Label" parent="SafeArea/MainVBox/Header"]
+[node name="Prompt" type="Label" parent="ContentMargin/MainVBox/Header"]
 layout_mode = 2
 text = "CHOISISSEZ VOTRE GÉRANT"
 horizontal_alignment = 1
 
-[node name="Revision" type="Label" parent="SafeArea/MainVBox/Header"]
+[node name="Revision" type="Label" parent="ContentMargin/MainVBox/Header"]
 layout_mode = 2
 text = "UI V2"
 horizontal_alignment = 1
 
-[node name="ManagerSelector" type="HBoxContainer" parent="SafeArea/MainVBox"]
-custom_minimum_size = Vector2(0, 132)
+[node name="ManagerSelector" type="HBoxContainer" parent="ContentMargin/MainVBox"]
+custom_minimum_size = Vector2(0, 104)
 layout_mode = 2
 theme_override_constants/separation = 7
 alignment = 1
 
-[node name="CharacterStage" type="PanelContainer" parent="SafeArea/MainVBox"]
-custom_minimum_size = Vector2(0, 530)
+[node name="CharacterStage" type="PanelContainer" parent="ContentMargin/MainVBox"]
+custom_minimum_size = Vector2(0, 280)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="StageContent" type="Control" parent="SafeArea/MainVBox/CharacterStage"]
+[node name="StageContent" type="Control" parent="ContentMargin/MainVBox/CharacterStage"]
 layout_mode = 2
 
-[node name="Previous" type="Button" parent="SafeArea/MainVBox/CharacterStage/StageContent"]
-custom_minimum_size = Vector2(72, 96)
+[node name="Presentation" type="TextureRect" parent="ContentMargin/MainVBox/CharacterStage/StageContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 56.0
+offset_top = 4.0
+offset_right = -56.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Previous" type="Button" parent="ContentMargin/MainVBox/CharacterStage/StageContent"]
+custom_minimum_size = Vector2(52, 80)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -48.0
-offset_right = 72.0
-offset_bottom = 48.0
+offset_top = -40.0
+offset_right = 52.0
+offset_bottom = 40.0
 grow_vertical = 2
 text = "<"
 
-[node name="Next" type="Button" parent="SafeArea/MainVBox/CharacterStage/StageContent"]
-custom_minimum_size = Vector2(72, 96)
+[node name="Next" type="Button" parent="ContentMargin/MainVBox/CharacterStage/StageContent"]
+custom_minimum_size = Vector2(52, 80)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -72.0
-offset_top = -48.0
-offset_bottom = 48.0
+offset_left = -52.0
+offset_top = -40.0
+offset_bottom = 40.0
 grow_horizontal = 0
 grow_vertical = 2
 text = ">"
 
-[node name="IdentityPanel" type="PanelContainer" parent="SafeArea/MainVBox"]
-custom_minimum_size = Vector2(0, 112)
+[node name="IdentityPanel" type="PanelContainer" parent="ContentMargin/MainVBox"]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
 
-[node name="IdentityVBox" type="VBoxContainer" parent="SafeArea/MainVBox/IdentityPanel"]
+[node name="IdentityVBox" type="VBoxContainer" parent="ContentMargin/MainVBox/IdentityPanel"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="ManagerName" type="Label" parent="SafeArea/MainVBox/IdentityPanel/IdentityVBox"]
+[node name="ManagerName" type="Label" parent="ContentMargin/MainVBox/IdentityPanel/IdentityVBox"]
 layout_mode = 2
 text = "ALEX"
 horizontal_alignment = 1
 
-[node name="ManagerRole" type="Label" parent="SafeArea/MainVBox/IdentityPanel/IdentityVBox"]
+[node name="ManagerRole" type="Label" parent="ContentMargin/MainVBox/IdentityPanel/IdentityVBox"]
 layout_mode = 2
 text = "LE TECHNICIEN"
 horizontal_alignment = 1
 
-[node name="StatsPanel" type="PanelContainer" parent="SafeArea/MainVBox"]
-custom_minimum_size = Vector2(0, 300)
+[node name="StatsPanel" type="PanelContainer" parent="ContentMargin/MainVBox"]
+custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
 
-[node name="StatsVBox" type="VBoxContainer" parent="SafeArea/MainVBox/StatsPanel"]
+[node name="StatsVBox" type="VBoxContainer" parent="ContentMargin/MainVBox/StatsPanel"]
 layout_mode = 2
-theme_override_constants/separation = 7
+theme_override_constants/separation = 5
 
-[node name="Pagination" type="Label" parent="SafeArea/MainVBox"]
+[node name="TechnicalRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+
+[node name="TechnicalLabel" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+text = "TECHNIQUE"
+
+[node name="TechnicalBar" type="Control" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2")
+
+[node name="TechnicalValue" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow"]
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="StrategyRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+
+[node name="StrategyLabel" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/StrategyRow"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+text = "STRATÉGIE"
+
+[node name="StrategyBar" type="Control" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/StrategyRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2")
+stat_kind = "strategy"
+
+[node name="StrategyValue" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/StrategyRow"]
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="BusinessRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+
+[node name="BusinessLabel" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/BusinessRow"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+text = "BUSINESS"
+
+[node name="BusinessBar" type="Control" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/BusinessRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2")
+stat_kind = "business"
+
+[node name="BusinessValue" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/BusinessRow"]
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="EffectsRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BonusCard" type="PanelContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Content" type="VBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/BonusCard"]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/BonusCard/Content"]
+layout_mode = 2
+text = "+ BONUS"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/BonusCard/Content"]
+layout_mode = 2
+text = "Profil équilibré"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="MalusCard" type="PanelContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Content" type="VBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard"]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard/Content"]
+layout_mode = 2
+text = "- MALUS"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/EffectsRow/MalusCard/Content"]
+layout_mode = 2
+text = "Aucun malus"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Pagination" type="Label" parent="ContentMargin/MainVBox"]
 layout_mode = 2
 text = "1 / 5"
 horizontal_alignment = 1
 
-[node name="ConfirmButton" type="Button" parent="SafeArea/MainVBox"]
-custom_minimum_size = Vector2(0, 92)
+[node name="ConfirmButton" type="Button" parent="ContentMargin/MainVBox"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 text = "CHOISIR ALEX"

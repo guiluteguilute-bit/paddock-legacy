@@ -26,14 +26,18 @@ config = json.loads((ROOT / "game/data/team_creation.json").read_text(encoding="
 assert list(config["managers"]) == ["alex", "maya", "ethan", "sofia", "marcus"]
 
 cartoon = ROOT / "graphics/ui/manager_selection/cartoon"
-missing_ui = [name for name in UI_V2_ASSETS if str((cartoon / name).relative_to(ROOT)) not in tracked]
+present_ui = [name for name in UI_V2_ASSETS if (cartoon / name).is_file()]
+missing_ui = [name for name in UI_V2_ASSETS if not (cartoon / name).is_file()]
+untracked_ui = [name for name in present_ui if str((cartoon / name).relative_to(ROOT)) not in tracked]
 screen = (ROOT / "game/ui/screens/manager_selection.gd").read_text(encoding="utf-8")
-if missing_ui:
+if present_ui:
+    assert not missing_ui, f"Partially delivered UI V2 production art: missing {missing_ui}"
+    assert not untracked_ui, f"UI V2 production art is not tracked by Git: {untracked_ui}"
+    print("UI V2 mandatory production art tracked: OK")
+else:
     # The requested production files have never been delivered. V2 must therefore
     # use its explicit native Godot art direction, never the legacy optional helper.
     assert "optional_ui_path" not in screen
     assert "_panel_style" in screen
-    print("UI V2 production art MISSING (native Godot V2 mode): " + ", ".join(missing_ui))
-else:
-    print("UI V2 mandatory production art tracked: OK")
+    print("UI V2 production art missing. Native Godot V2 fallback active: " + ", ".join(missing_ui))
 print("10 mandatory manager portraits/presentations tracked: OK")

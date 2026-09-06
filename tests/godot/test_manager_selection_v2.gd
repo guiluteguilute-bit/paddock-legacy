@@ -15,8 +15,12 @@ func _run() -> void:
 		var screen: ManagerSelection = packed.instantiate() as ManagerSelection
 		if not _assert(screen != null, "ManagerSelection V2 scene instantiates"):
 			return
+		# Exercise both supported lifecycles: setup before and after entering the tree.
+		if viewport_size == Vector2i(390, 844):
+			screen.setup(GameState.creation_config.get("managers", {}), "alex", "test")
 		add_child(screen)
-		screen.setup(GameState.creation_config.get("managers", {}), "alex", "test")
+		if viewport_size != Vector2i(390, 844):
+			screen.setup(GameState.creation_config.get("managers", {}), "alex", "test")
 		await get_tree().process_frame
 		if not _assert(screen.selector.get_child_count() == 5, "five managers are visible"):
 			return
@@ -30,16 +34,18 @@ func _run() -> void:
 				return
 			if not _assert(screen.manager_role.text == str(data.get("title", "")).to_upper(), "role changes for " + manager_id):
 				return
-			if not _assert(screen._presentation != null and screen._presentation.texture != null, "presentation texture exists for " + manager_id):
+			if not _assert(screen.presentation != null and screen.presentation.texture != null, "presentation texture exists for " + manager_id):
 				return
-			if not _assert(screen._presentation.texture.resource_path == str(data.get("presentation", "")), "portrait changes for " + manager_id):
+			if not _assert(screen.presentation.texture.resource_path == str(data.get("presentation", "")), "portrait changes for " + manager_id):
 				return
 			if not _assert(screen.confirm_button.text.contains(str(data.get("first_name", "")).to_upper()), "CTA changes for " + manager_id):
 				return
-			var value: Label = screen.stats_box.find_child("TechnicalValue", true, false) as Label
+			var value: Label = screen.technical_value
 			if not _assert(value != null, "TechnicalValue exists for " + manager_id):
 				return
 			if not _assert(value.text == str(data.get("attributes", {}).get("technical", 0)), "stats change for " + manager_id):
+				return
+			if not _assert(screen.pagination.text == "%d / 5" % (EXPECTED.find(manager_id) + 1), "pagination changes for " + manager_id):
 				return
 		if not _assert_non_negative(screen):
 			return
