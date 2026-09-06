@@ -2,6 +2,7 @@ extends Node
 
 const CRITICAL_SCRIPTS: Array[String] = [
 	"res://game/ui/main.gd",
+	"res://game/ui/screens/manager_selection.gd",
 	"res://game/ui/components/cartoon_stat_bar.gd",
 	"res://game/ui/components/manager_avatar_card.gd",
 	"res://game/ui/components/manager_stats_card.gd",

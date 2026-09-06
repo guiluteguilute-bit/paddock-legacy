@@ -1,44 +1,39 @@
+#!/usr/bin/env python3
+"""Validate tracked manager art and report the production V2 art delivery state."""
 from pathlib import Path
 import json
-import re
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-PREMIUM = ROOT / "graphics" / "portraits" / "managers" / "premium"
-EXPECTED = [
-    "alex_avatar.png", "alex_presentation.png",
-    "maya_avatar.png", "maya_presentation.png",
-    "ethan_avatar.png", "ethan_presentation.png",
-    "sofia_avatar.png", "sofia_presentation.png",
-    "marcus_avatar.png", "marcus_presentation.png",
+PREMIUM = ROOT / "graphics/portraits/managers/premium"
+MANAGER_ASSETS = [
+    f"{manager}_{kind}.png"
+    for manager in ("alex", "maya", "ethan", "sofia", "marcus")
+    for kind in ("avatar", "presentation")
+]
+UI_V2_ASSETS = [
+    "ui_manager_bg.jpg", "ui_character_frame.png", "ui_avatar_frame_normal.png",
+    "ui_avatar_frame_selected.png", "ui_stats_panel.png",
 ]
 
-missing = [name for name in EXPECTED if not (PREMIUM / name).is_file()]
-assert not missing, f"Missing premium manager assets: {missing}"
+tracked = set(subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).splitlines())
+missing_managers = [name for name in MANAGER_ASSETS if not (PREMIUM / name).is_file()]
+untracked_managers = [name for name in MANAGER_ASSETS if str((PREMIUM / name).relative_to(ROOT)) not in tracked]
+assert not missing_managers, f"Missing mandatory manager portraits/presentations: {missing_managers}"
+assert not untracked_managers, f"Mandatory manager art is not tracked by Git: {untracked_managers}"
 
-config = json.loads((ROOT / "game" / "data" / "team_creation.json").read_text(encoding="utf-8"))
-assert list(config["managers"].keys()) == ["alex", "maya", "ethan", "sofia", "marcus"]
-for manager_id, manager in config["managers"].items():
-    assert manager["avatar"].endswith(f"{manager_id}_avatar.png")
-    assert manager["presentation"].endswith(f"{manager_id}_presentation.png")
-    assert set(manager["attributes"].keys()) == {"technical", "strategy", "business"}
+config = json.loads((ROOT / "game/data/team_creation.json").read_text(encoding="utf-8"))
+assert list(config["managers"]) == ["alex", "maya", "ethan", "sofia", "marcus"]
 
-main_gd = (ROOT / "game" / "ui" / "main.gd").read_text(encoding="utf-8")
-assert "APERÇU CHOIX DU GÉRANT" in main_gd
-assert "manager_preview_mode" in main_gd
-assert "RETOUR AUX PARAMÈTRES" in main_gd
-
-# Cartoon UI art is optional until production files are delivered. Its absence
-# must select native Godot fallbacks instead of becoming a static dependency.
-components = ROOT / "game" / "ui" / "components"
-sources = [main_gd] + [path.read_text(encoding="utf-8") for path in components.glob("*.gd")]
-dead_cartoon_refs = [
-    match
-    for source in sources
-    for match in re.findall(r"res://graphics/ui/manager_selection/cartoon/[^\"'\s)]+", source)
-]
-assert not dead_cartoon_refs, f"Optional cartoon assets must not be static dependencies: {dead_cartoon_refs}"
-helpers = (components / "manager_ui_helpers.gd").read_text(encoding="utf-8")
-assert "optional_ui_path" in helpers
-assert "ResourceLoader.exists(path)" in helpers
-
-print("Premium manager assets and optional cartoon fallbacks: OK")
+cartoon = ROOT / "graphics/ui/manager_selection/cartoon"
+missing_ui = [name for name in UI_V2_ASSETS if str((cartoon / name).relative_to(ROOT)) not in tracked]
+screen = (ROOT / "game/ui/screens/manager_selection.gd").read_text(encoding="utf-8")
+if missing_ui:
+    # The requested production files have never been delivered. V2 must therefore
+    # use its explicit native Godot art direction, never the legacy optional helper.
+    assert "optional_ui_path" not in screen
+    assert "_panel_style" in screen
+    print("UI V2 production art MISSING (native Godot V2 mode): " + ", ".join(missing_ui))
+else:
+    print("UI V2 mandatory production art tracked: OK")
+print("10 mandatory manager portraits/presentations tracked: OK")

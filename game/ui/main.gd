@@ -10,27 +10,15 @@ var race_view: RaceView
 var creation_step = 0
 var creation_draft: Dictionary = {}
 var creation_controls: Dictionary = {}
-var manager_swipe_start_x: float = -1.0
 var manager_preview_mode: bool = false
-var manager_reveal_tween: Tween
 var shell_background: TextureRect
 var shell_tint: ColorRect
-const MANAGER_AVATAR_CARD := preload("res://game/ui/components/manager_avatar_card.gd")
-const MANAGER_STATS_CARD := preload("res://game/ui/components/manager_stats_card.gd")
-const MANAGER_UI_HELPERS := preload("res://game/ui/components/manager_ui_helpers.gd")
+const MANAGER_SELECTION_SCENE := preload("res://game/ui/screens/manager_selection.tscn")
 const UI_ICON_ATLAS := preload("res://game/ui/components/ui_icon_atlas.gd")
 const BUILD_INFO := preload("res://web/build_info.gd")
 const CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]
 const TEAM_LOGOS := ["apex_nova", "crimson_orbit", "ember_fox", "helix_racing", "kinetic_arc", "lumen_motorsport", "meridian_kart", "northstar", "pulse_competition", "silver_finch", "vector_peak", "vertex_union"]
 const TEAM_LOGO_PATHS := ["res://graphics/logos/logo_team_apex_nova.svg", "res://graphics/logos/logo_team_crimson_orbit.svg", "res://graphics/logos/logo_team_ember_fox.svg", "res://graphics/logos/logo_team_helix_racing.svg", "res://graphics/logos/logo_team_kinetic_arc.svg", "res://graphics/logos/logo_team_lumen_motorsport.svg", "res://graphics/logos/logo_team_meridian_kart.svg", "res://graphics/logos/logo_team_northstar.svg", "res://graphics/logos/logo_team_pulse_competition.svg", "res://graphics/logos/logo_team_silver_finch.svg", "res://graphics/logos/logo_team_vector_peak.svg", "res://graphics/logos/logo_team_vertex_union.svg"]
-const MANAGER_ORDER := ["alex", "maya", "ethan", "sofia", "marcus"]
-const MANAGER_AVATARS := {
-	"alex":"res://graphics/portraits/managers/premium/alex_avatar.png",
-	"maya":"res://graphics/portraits/managers/premium/maya_avatar.png",
-	"ethan":"res://graphics/portraits/managers/premium/ethan_avatar.png",
-	"sofia":"res://graphics/portraits/managers/premium/sofia_avatar.png",
-	"marcus":"res://graphics/portraits/managers/premium/marcus_avatar.png"
-}
 const MANAGER_PRESENTATIONS := {
 	"alex":"res://graphics/portraits/managers/premium/alex_presentation.png",
 	"maya":"res://graphics/portraits/managers/premium/maya_presentation.png",
@@ -89,10 +77,9 @@ func _apply_safe_area() -> void:
 	safe.add_theme_constant_override("margin_left", side); safe.add_theme_constant_override("margin_right", side); safe.add_theme_constant_override("margin_top", top); safe.add_theme_constant_override("margin_bottom", bottom)
 
 func clear(page_title: String) -> void:
-	if manager_reveal_tween != null:
-		manager_reveal_tween.kill()
-		manager_reveal_tween = null
 	_set_manager_background(false)
+	if title != null and title.get_parent() != null:
+		title.get_parent().visible = true
 	content.add_theme_constant_override("separation", 12)
 	if GameState.has_career() and GameState.data.team.get("colors", []).size() >= 3:
 		colors.accent = Color(GameState.data.team.colors[2])
@@ -105,15 +92,11 @@ func clear(page_title: String) -> void:
 func _set_manager_background(enabled: bool) -> void:
 	if shell_background == null or shell_tint == null:
 		return
-	var cartoon := MANAGER_UI_HELPERS.optional_ui_path("ui_manager_bg.jpg")
-	if enabled and ResourceLoader.exists(cartoon):
-		shell_background.texture = load(cartoon)
-		shell_background.modulate = Color(0.90, 0.95, 1.0, 0.88)
-		shell_tint.color = Color(0.01, 0.025, 0.04, 0.48)
-	else:
-		shell_background.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg")
-		shell_background.modulate = Color(0.42, 0.50, 0.58, 0.34)
-		shell_tint.color = Color(0.027, 0.067, 0.09, 0.90)
+	# The dedicated V2 currently uses the tracked garage artwork plus native Godot
+	# framing. Missing production cartoon art is never mistaken for the legacy UI.
+	shell_background.texture = load("res://graphics/ui/backgrounds/main_menu_garage.svg")
+	shell_background.modulate = Color(0.72, 0.82, 0.90, 0.58) if enabled else Color(0.42, 0.50, 0.58, 0.34)
+	shell_tint.color = Color(0.01, 0.035, 0.055, 0.64) if enabled else Color(0.027, 0.067, 0.09, 0.90)
 
 func show_boot_error(error_id: String, detail: String) -> void:
 	push_error("[BOOT] %s: %s" % [error_id, detail])
@@ -142,177 +125,31 @@ func creation_progress() -> String:
 
 func creation_manager() -> void:
 	_set_manager_background(true)
-	content.add_theme_constant_override("separation", 7)
-	# This page intentionally has a denser, game-like hierarchy than the data screens.
-	title.text = "PADDOCK"
-	subtitle.text = "CHOIX DU GÉRANT"
-	notice.text = ""
-	heading("CHOISISSEZ VOTRE GÉRANT", 25)
-	if manager_preview_mode:
-		label("MODE APERÇU - SAUVEGARDE NON MODIFIÉE", colors.gold, 12)
+	# ManagerSelection V2 owns its complete visual hierarchy; Main only coordinates flow.
+	title.get_parent().visible = false
 	var managers: Dictionary = GameState.creation_config.get("managers", {})
-	var ids: Array[String] = []
-	for id in MANAGER_ORDER:
-		if managers.has(id): ids.append(id)
-	if ids.is_empty():
+	if managers.is_empty():
+		title.get_parent().visible = true
 		label("Aucun gérant disponible.", colors.danger, 16)
 		return
-	if not ids.has(str(creation_draft.manager)): creation_draft.manager = ids[0]
-	var selected := maxi(0, ids.find(str(creation_draft.manager)))
-	var manager: Dictionary = managers[ids[selected]]
+	var selected_id: String = str(creation_draft.get("manager", "alex"))
+	var screen: ManagerSelection = MANAGER_SELECTION_SCENE.instantiate() as ManagerSelection
+	screen.setup(managers, selected_id, BUILD_INFO.BUILD_SHORT_COMMIT, manager_preview_mode)
+	screen.manager_changed.connect(_on_manager_changed)
+	screen.manager_confirmed.connect(_on_manager_confirmed)
+	content.add_child(screen)
 
-	var chooser := HBoxContainer.new()
-	chooser.add_theme_constant_override("separation", 5)
-	chooser.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_child(chooser)
-	for i in ids.size():
-		var manager_id: String = ids[i]
-		var item: Dictionary = managers[manager_id]
-		var avatar_card = MANAGER_AVATAR_CARD.new()
-		avatar_card.setup(manager_id, item, MANAGER_AVATARS[manager_id], i == selected)
-		avatar_card.chosen.connect(func(id): creation_draft.manager = id; show_creation_step())
-		chooser.add_child(avatar_card)
+func _on_manager_changed(manager_id: String) -> void:
+	creation_draft["manager"] = manager_id
 
-	var stage := Control.new()
-	stage.custom_minimum_size.y = 290
-	stage.mouse_filter = Control.MOUSE_FILTER_STOP
-	stage.gui_input.connect(_manager_stage_input)
-	content.add_child(stage)
-	var stage_glow := ColorRect.new()
-	stage_glow.color = Color(0.02, 0.34, 0.50, 0.14)
-	stage_glow.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stage_glow.offset_left = 36; stage_glow.offset_right = -36
-	stage_glow.offset_top = 30; stage_glow.offset_bottom = -28
-	stage_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	stage.add_child(stage_glow)
-	var presentation := TextureRect.new()
-	presentation.texture = load(MANAGER_PRESENTATIONS[ids[selected]])
-	presentation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	presentation.offset_left = 26; presentation.offset_right = -26
-	presentation.offset_top = 14; presentation.offset_bottom = -20
-	presentation.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	presentation.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	presentation.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	presentation.modulate = Color(1, 1, 1, 0.18)
-	stage.add_child(presentation)
-	var frame_texture: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_HELPERS.optional_ui_path("ui_character_frame.png"))
-	if frame_texture != null:
-		var frame := TextureRect.new()
-		frame.texture = frame_texture
-		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		frame.offset_left = 18; frame.offset_right = -18
-		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		stage.add_child(frame)
-	manager_reveal_tween = create_tween()
-	manager_reveal_tween.tween_property(presentation, "modulate", Color.WHITE, 0.18)
-
-	var arrows := HBoxContainer.new()
-	arrows.add_theme_constant_override("separation", 10)
-	content.add_child(arrows)
-	var previous := MANAGER_UI_HELPERS.game_button("‹", 66)
-	previous.custom_minimum_size.x = 66
-	previous.tooltip_text = "Gérant précédent"
-	previous.pressed.connect(func(): _cycle_manager(-1))
-	arrows.add_child(previous)
-	var identity := VBoxContainer.new()
-	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	arrows.add_child(identity)
-	var alex_plate: Texture2D = MANAGER_UI_HELPERS.texture(MANAGER_UI_HELPERS.optional_ui_path("ui_name_plate_alex.png"))
-	if ids[selected] == "alex" and alex_plate != null:
-		var plate := TextureRect.new()
-		plate.texture = alex_plate
-		plate.custom_minimum_size.y = 78
-		plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		identity.add_child(plate)
-	else:
-		var plate_panel := PanelContainer.new()
-		plate_panel.add_theme_stylebox_override("panel", MANAGER_UI_HELPERS.premium_panel(colors.gold, Color(0.02, 0.10, 0.15, 0.96), 12))
-		identity.add_child(plate_panel)
-		var plate_box := VBoxContainer.new(); plate_box.add_theme_constant_override("separation", 0); plate_panel.add_child(plate_box)
-		var manager_name := Label.new()
-		manager_name.text = str(manager.first_name).to_upper()
-		manager_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		manager_name.add_theme_font_size_override("font_size", 25)
-		manager_name.add_theme_color_override("font_color", colors.text)
-		plate_box.add_child(manager_name)
-		var role := Label.new()
-		role.text = str(manager.title).trim_prefix("Le ").trim_prefix("La ").to_upper()
-		role.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		role.add_theme_font_size_override("font_size", 13)
-		role.add_theme_color_override("font_color", colors.gold)
-		plate_box.add_child(role)
-	var specialty: Texture2D = MANAGER_UI_HELPERS.specialty(ids[selected])
-	if specialty != null:
-		var badge := TextureRect.new()
-		badge.texture = specialty
-		badge.custom_minimum_size.y = 60
-		badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		identity.add_child(badge)
-	else:
-		var badge_fallback := Label.new()
-		badge_fallback.text = "◆  " + MANAGER_UI_HELPERS.specialty_name(ids[selected]) + "  ◆"
-		badge_fallback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		badge_fallback.add_theme_font_size_override("font_size", 12)
-		badge_fallback.add_theme_color_override("font_color", colors.accent)
-		identity.add_child(badge_fallback)
-	var following := MANAGER_UI_HELPERS.game_button("›", 66)
-	following.custom_minimum_size.x = 66
-	following.tooltip_text = "Gérant suivant"
-	following.pressed.connect(func(): _cycle_manager(1))
-	arrows.add_child(following)
-
-	var stats_card = MANAGER_STATS_CARD.new()
-	stats_card.setup(manager)
-	content.add_child(stats_card)
-
-	var dots := Label.new()
-	dots.text = "● ".repeat(selected) + "◆ " + "● ".repeat(ids.size() - selected - 1)
-	dots.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dots.add_theme_color_override("font_color", colors.gold)
-	content.add_child(dots)
-	var choose_text := "RETOUR AUX PARAMÈTRES" if manager_preview_mode else "CHOISIR %s" % str(manager.first_name).to_upper()
-	var choose := MANAGER_UI_HELPERS.game_button(choose_text, 78)
-	choose.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	choose.add_theme_font_size_override("font_size", 22)
-	choose.add_theme_color_override("font_color", Color("071117"))
-	var cta := MANAGER_UI_HELPERS.premium_panel(Color("fff0a6"), Color("f4b92f"), 15)
-	cta.set_border_width_all(3); cta.shadow_color = Color(1.0, 0.62, 0.05, 0.35); cta.shadow_size = 10
-	choose.add_theme_stylebox_override("normal", cta); choose.add_theme_stylebox_override("hover", cta)
+func _on_manager_confirmed(manager_id: String) -> void:
+	creation_draft["manager"] = manager_id
 	if manager_preview_mode:
-		choose.pressed.connect(func(): manager_preview_mode = false; show_settings())
+		manager_preview_mode = false
+		show_settings()
 	else:
-		choose.pressed.connect(func(): creation_step = 1; show_creation_step())
-	content.add_child(choose)
-
-func _cycle_manager(delta: int) -> void:
-	var managers: Dictionary = GameState.creation_config.get("managers", {})
-	var ids: Array[String] = []
-	for id in MANAGER_ORDER:
-		if managers.has(id): ids.append(id)
-	if ids.is_empty(): return
-	var selected := maxi(0, ids.find(str(creation_draft.manager)))
-	creation_draft.manager = ids[(selected + delta + ids.size()) % ids.size()]
-	show_creation_step()
-
-func _manager_stage_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch:
-		if event.pressed:
-			manager_swipe_start_x = event.position.x
-		elif manager_swipe_start_x >= 0.0:
-			var delta: float = event.position.x - manager_swipe_start_x
-			manager_swipe_start_x = -1.0
-			if abs(delta) >= 80.0: _cycle_manager(-1 if delta > 0.0 else 1)
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			manager_swipe_start_x = event.position.x
-		elif manager_swipe_start_x >= 0.0:
-			var mouse_delta: float = event.position.x - manager_swipe_start_x
-			manager_swipe_start_x = -1.0
-			if abs(mouse_delta) >= 80.0: _cycle_manager(-1 if mouse_delta > 0.0 else 1)
+		creation_step = 1
+		show_creation_step()
 
 func creation_team() -> void:
 	heading("CRÉEZ VOTRE ÉCURIE", 28)

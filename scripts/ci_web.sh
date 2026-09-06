@@ -15,6 +15,7 @@ echo '=== PROJECT VALIDATION ==='
 python3 tests/validate_project.py
 python3 tests/validate_ui_catalog.py
 python3 tests/validate_manager_assets.py
+python3 tests/validate_manager_selection_v2.py
 python3 tests/validate_gdscript_safety.py
 python3 tests/validate_godot_resources.py
 echo '=== GODOT IMPORT ==='
@@ -23,6 +24,8 @@ echo '=== GODOT TESTS ==='
 run_godot godot-core.log tests/godot/test_core.tscn
 run_godot godot-scripts.log tests/godot/test_script_loading.tscn
 run_godot godot-ui.log tests/godot/test_ui_smoke.tscn
+echo '=== MANAGER V2 TEST ==='
+run_godot godot-manager-v2.log tests/godot/test_manager_selection_v2.tscn
 echo '=== MAIN SCENE ==='
 run_godot godot-main.log --quit-after 2
 echo '=== WEB EXPORT ==='

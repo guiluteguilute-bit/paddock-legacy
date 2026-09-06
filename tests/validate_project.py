@@ -67,8 +67,10 @@ for category in ("origins", "philosophies", "manager_styles"):
         assert choice["advantages"] and choice["drawbacks"]
         assert all(abs(value) <= .15 for value in choice.get("modifiers", {}).values())
 main = (ROOT / "game/ui/main.gd").read_text()
-for feature in ("CREATION_STEPS", "creation_manager", "creation_team", "creation_summary", "confirm_creation", "confirm_reset", "CHOISISSEZ VOTRE GÉRANT"):
+for feature in ("CREATION_STEPS", "creation_manager", "creation_team", "creation_summary", "confirm_creation", "confirm_reset"):
     assert feature in main
+manager_scene = (ROOT / "game/ui/screens/manager_selection.tscn").read_text()
+assert "CHOISISSEZ VOTRE GÉRANT" in manager_scene
 assert 'CREATION_STEPS := ["GÉRANT", "ÉCURIE", "DÉPART"]' in main
 assert "show_welcome" not in main
 assert "BÂTISSEZ VOTRE LÉGENDE" not in main
