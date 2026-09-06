@@ -16,5 +16,12 @@ assert re.search(r'body\s*\{[^}]*height\s*:\s*100vh', shell, re.DOTALL), "100vh 
 assert "@supports (height: 100dvh)" in shell and "height: 100dvh" in shell, "Dynamic viewport height strategy is required"
 assert re.search(r'#game\s*\{[^}]*position\s*:\s*fixed[^}]*inset\s*:\s*0', shell, re.DOTALL), "#game must be fixed to the visible page"
 assert re.search(r'#canvas\s*\{[^}]*width\s*:\s*100%[^}]*height\s*:\s*100%', shell, re.DOTALL), "Canvas must fill its wrapper"
+assert re.search(r'#canvas\s*\{[^}]*display\s*:\s*block[^}]*margin\s*:\s*0[^}]*border\s*:\s*0', shell, re.DOTALL), "Canvas must not add inline gaps, margins or borders"
 assert "overflow: auto" not in shell and "overflow: scroll" not in shell, "The game page must not be scrollable"
-print("WEB SHELL VALIDATION: one canvas, safe area, locked scroll and dynamic viewport passed")
+assert "visualViewport" in shell, "Safari's visual viewport must drive the canvas height"
+assert "visualViewport.addEventListener('resize'" in shell, "Safari toolbar resize must update without reload"
+assert "window.addEventListener('orientationchange'" in shell, "Orientation changes must recalculate the viewport"
+assert "window.scrollTo(0, 0)" in shell, "The shell must reset incidental browser scroll"
+assert "padding: env(safe-area-inset-top)" not in shell, "Safe area must not be applied both by HTML and Godot"
+assert "build-version.json?cache_bust=" in shell and "cache: 'no-store'" in shell, "Version polling must bypass caches"
+print("WEB SHELL VALIDATION: one canvas, one safe area, locked scroll, visual viewport and version polling passed")
