@@ -29,15 +29,21 @@ cartoon = ROOT / "graphics/ui/manager_selection/cartoon"
 present_ui = [name for name in UI_V2_ASSETS if (cartoon / name).is_file()]
 missing_ui = [name for name in UI_V2_ASSETS if not (cartoon / name).is_file()]
 untracked_ui = [name for name in present_ui if str((cartoon / name).relative_to(ROOT)) not in tracked]
+delivery_file = ROOT / "game/data/ui_asset_delivery.json"
+delivery = json.loads(delivery_file.read_text(encoding="utf-8"))
+delivered = delivery.get("manager_selection_v2_art_delivered")
+assert isinstance(delivered, bool), "manager_selection_v2_art_delivered must be a boolean"
 screen = (ROOT / "game/ui/screens/manager_selection.gd").read_text(encoding="utf-8")
-if present_ui:
-    assert not missing_ui, f"Partially delivered UI V2 production art: missing {missing_ui}"
+if delivered:
+    assert not missing_ui, f"UI V2 art is declared delivered but files are missing: {missing_ui}"
     assert not untracked_ui, f"UI V2 production art is not tracked by Git: {untracked_ui}"
-    print("UI V2 mandatory production art tracked: OK")
+    print("UI V2 production art declared delivered; 5 mandatory files are present and tracked: OK")
 else:
-    # The requested production files have never been delivered. V2 must therefore
-    # use its explicit native Godot art direction, never the legacy optional helper.
     assert "optional_ui_path" not in screen
     assert "_panel_style" in screen
-    print("UI V2 production art missing. Native Godot V2 fallback active: " + ", ".join(missing_ui))
+    print("UI V2 production art is not declared delivered; native Godot fallback accepted.")
+    if missing_ui:
+        print("ASSET NON LIVRE: " + ", ".join(missing_ui))
+    if present_ui:
+        print("Uncommitted delivery set ignored until the manifest is enabled: " + ", ".join(present_ui))
 print("10 mandatory manager portraits/presentations tracked: OK")

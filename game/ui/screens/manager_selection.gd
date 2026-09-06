@@ -89,7 +89,7 @@ func _build_selector() -> void:
 			continue
 		var button: Button = Button.new()
 		button.name = manager_id.capitalize() + "Avatar"
-		button.custom_minimum_size = Vector2(58, 96)
+		button.custom_minimum_size = Vector2(58, 72)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.expand_icon = true
 		button.icon = load(str(managers[manager_id].get("avatar", ""))) as Texture2D
@@ -129,6 +129,8 @@ func _refresh_stage(manager: Dictionary) -> void:
 	var texture: Texture2D = null
 	if ResourceLoader.exists(texture_path):
 		texture = load(texture_path) as Texture2D
+	else:
+		push_warning("Manager presentation missing: %s" % texture_path)
 	presentation.texture = texture
 	presentation.pivot_offset = presentation.size * 0.5
 	presentation.modulate = Color(1, 1, 1, 0.15)
