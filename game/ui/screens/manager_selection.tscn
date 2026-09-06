@@ -31,14 +31,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 6
+theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_bottom = 4
 
 [node name="MainVBox" type="VBoxContainer" parent="ContentMargin"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 10
+theme_override_constants/separation = 5
 
 [node name="Header" type="VBoxContainer" parent="ContentMargin/MainVBox"]
 layout_mode = 2
@@ -60,15 +60,16 @@ text = "UI V2"
 horizontal_alignment = 1
 
 [node name="ManagerSelector" type="HBoxContainer" parent="ContentMargin/MainVBox"]
-custom_minimum_size = Vector2(0, 104)
+custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 theme_override_constants/separation = 7
 alignment = 1
 
 [node name="CharacterStage" type="PanelContainer" parent="ContentMargin/MainVBox"]
-custom_minimum_size = Vector2(0, 280)
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="StageContent" type="Control" parent="ContentMargin/MainVBox/CharacterStage"]
 layout_mode = 2
@@ -78,9 +79,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 56.0
+offset_left = 48.0
 offset_top = 4.0
-offset_right = -56.0
+offset_right = -48.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -116,7 +117,7 @@ grow_vertical = 2
 text = ">"
 
 [node name="IdentityPanel" type="PanelContainer" parent="ContentMargin/MainVBox"]
-custom_minimum_size = Vector2(0, 84)
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 
 [node name="IdentityVBox" type="VBoxContainer" parent="ContentMargin/MainVBox/IdentityPanel"]
@@ -134,7 +135,7 @@ text = "LE TECHNICIEN"
 horizontal_alignment = 1
 
 [node name="StatsPanel" type="PanelContainer" parent="ContentMargin/MainVBox"]
-custom_minimum_size = Vector2(0, 224)
+custom_minimum_size = Vector2(0, 174)
 layout_mode = 2
 
 [node name="StatsVBox" type="VBoxContainer" parent="ContentMargin/MainVBox/StatsPanel"]
@@ -142,7 +143,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="TechnicalRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 
 [node name="TechnicalLabel" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/TechnicalRow"]
@@ -161,7 +162,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="StrategyRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 
 [node name="StrategyLabel" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/StrategyRow"]
@@ -181,7 +182,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="BusinessRow" type="HBoxContainer" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 
 [node name="BusinessLabel" type="Label" parent="ContentMargin/MainVBox/StatsPanel/StatsVBox/BusinessRow"]
@@ -246,6 +247,6 @@ text = "1 / 5"
 horizontal_alignment = 1
 
 [node name="ConfirmButton" type="Button" parent="ContentMargin/MainVBox"]
-custom_minimum_size = Vector2(0, 64)
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 text = "CHOISIR ALEX"

@@ -13,16 +13,24 @@ mkdir -p build/logs
 run_godot() { local log="$1"; shift; timeout 10m "$GODOT_BIN" --headless --path . "$@" 2>&1 | tee "build/logs/$log"; python3 tests/validate_godot_log.py "build/logs/$log"; }
 echo '=== PROJECT VALIDATION ==='
 python3 tests/validate_project.py
+echo '=== UI VALIDATION ==='
 python3 tests/validate_ui_catalog.py
-python3 tests/validate_manager_assets.py
 python3 tests/validate_manager_selection_v2.py
+echo '=== ASSET VALIDATION ==='
+python3 tests/validate_manager_assets.py
+echo '=== GDSCRIPT SAFETY ==='
 python3 tests/validate_gdscript_safety.py
+echo '=== RESOURCE VALIDATION ==='
 python3 tests/validate_godot_resources.py
+echo '=== WEB SHELL VALIDATION ==='
+python3 tests/validate_web_shell.py
 echo '=== GODOT IMPORT ==='
 run_godot godot-import.log --editor --import --quit
-echo '=== GODOT TESTS ==='
+echo '=== CORE TESTS ==='
 run_godot godot-core.log tests/godot/test_core.tscn
+echo '=== SCRIPT LOADING ==='
 run_godot godot-scripts.log tests/godot/test_script_loading.tscn
+echo '=== UI SMOKE ==='
 run_godot godot-ui.log tests/godot/test_ui_smoke.tscn
 echo '=== MANAGER V2 TEST ==='
 run_godot godot-manager-v2.log tests/godot/test_manager_selection_v2.tscn
@@ -55,5 +63,5 @@ data=dict(zip(keys,sys.argv[1:])); data['run_number']=int(data['run_number'])
 Path('build/web/build-version.json').write_text(json.dumps(data,indent=2)+'\n')
 PY
 touch build/web/.nojekyll
-echo '=== WEB VALIDATION ==='
+echo '=== WEB BUILD VALIDATION ==='
 python3 tests/validate_web_build.py build/web
