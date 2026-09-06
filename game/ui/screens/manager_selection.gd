@@ -15,6 +15,8 @@ var _avatar_buttons: Dictionary = {}
 var _presentation: TextureRect
 var _reveal_tween: Tween
 var _swipe_start_x: float = -1.0
+var _pending_build_label: String = ""
+var _setup_requested: bool = false
 
 @onready var selector: HBoxContainer = $SafeArea/MainVBox/ManagerSelector
 @onready var stage: PanelContainer = $SafeArea/MainVBox/CharacterStage
@@ -33,12 +35,25 @@ func _ready() -> void:
 	$SafeArea/MainVBox/CharacterStage/StageContent/Previous.pressed.connect(cycle_manager.bind(-1))
 	$SafeArea/MainVBox/CharacterStage/StageContent/Next.pressed.connect(cycle_manager.bind(1))
 	confirm_button.pressed.connect(_confirm)
+	if _setup_requested:
+		_apply_setup()
 
 func setup(manager_data: Dictionary, initial_id: String, build_label: String = "", is_preview: bool = false) -> void:
 	managers = manager_data
 	preview_mode = is_preview
 	selected_id = initial_id if MANAGER_ORDER.has(initial_id) and managers.has(initial_id) else "alex"
-	$SafeArea/MainVBox/Header/Revision.text = "UI %s  •  BUILD %s" % [MANAGER_UI_REVISION, build_label]
+	_pending_build_label = build_label
+	_setup_requested = true
+	if is_node_ready():
+		_apply_setup()
+
+func _apply_setup() -> void:
+	if not is_node_ready():
+		return
+	_setup_requested = false
+	var revision: Label = get_node_or_null("SafeArea/MainVBox/Header/Revision") as Label
+	if revision != null:
+		revision.text = "UI %s  •  BUILD %s" % [MANAGER_UI_REVISION, _pending_build_label]
 	_build_selector()
 	_refresh()
 
@@ -46,7 +61,8 @@ func select_manager(manager_id: String) -> void:
 	if not MANAGER_ORDER.has(manager_id) or not managers.has(manager_id):
 		return
 	selected_id = manager_id
-	_refresh()
+	if is_node_ready():
+		_refresh()
 	manager_changed.emit(selected_id)
 
 func cycle_manager(delta: int) -> void:
@@ -54,6 +70,8 @@ func cycle_manager(delta: int) -> void:
 	select_manager(MANAGER_ORDER[(index + delta + MANAGER_ORDER.size()) % MANAGER_ORDER.size()])
 
 func _build_selector() -> void:
+	if selector == null:
+		return
 	for child: Node in selector.get_children():
 		child.queue_free()
 	_avatar_buttons.clear()
@@ -73,7 +91,7 @@ func _build_selector() -> void:
 		_avatar_buttons[manager_id] = button
 
 func _refresh() -> void:
-	if managers.is_empty() or not managers.has(selected_id):
+	if not is_node_ready() or managers.is_empty() or not managers.has(selected_id):
 		return
 	var manager: Dictionary = managers[selected_id]
 	_refresh_avatars()
@@ -95,6 +113,8 @@ func _refresh_avatars() -> void:
 		button.position.y = -5.0 if selected else 3.0
 
 func _refresh_stage(manager: Dictionary) -> void:
+	if stage_content == null:
+		return
 	if _reveal_tween != null and _reveal_tween.is_valid():
 		_reveal_tween.kill()
 	if _presentation != null and is_instance_valid(_presentation):
@@ -119,6 +139,8 @@ func _refresh_stage(manager: Dictionary) -> void:
 	_reveal_tween.parallel().tween_property(_presentation, "scale", Vector2.ONE, 0.24).from(Vector2(0.96, 0.96))
 
 func _refresh_stats(manager: Dictionary) -> void:
+	if stats_box == null:
+		return
 	for child: Node in stats_box.get_children():
 		child.queue_free()
 	var attributes: Dictionary = manager.get("attributes", {})
