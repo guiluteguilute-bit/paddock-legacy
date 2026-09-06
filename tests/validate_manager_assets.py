@@ -37,11 +37,15 @@ screen = (ROOT / "game/ui/screens/manager_selection.gd").read_text(encoding="utf
 if delivered:
     assert not missing_ui, f"UI V2 art is declared delivered but files are missing: {missing_ui}"
     assert not untracked_ui, f"UI V2 production art is not tracked by Git: {untracked_ui}"
+    scene = (ROOT / "game/ui/screens/manager_selection.tscn").read_text(encoding="utf-8")
+    manager_sources = screen + scene
+    unreferenced_ui = [name for name in UI_V2_ASSETS if name not in manager_sources]
+    assert not unreferenced_ui, f"Delivered UI V2 art is not referenced by ManagerSelection: {unreferenced_ui}"
     print("UI V2 production art declared delivered; 5 mandatory files are present and tracked: OK")
 else:
     assert "optional_ui_path" not in screen
     assert "_panel_style" in screen
-    print("UI V2 production art is not declared delivered; native Godot fallback accepted.")
+    print("UI V2 PRODUCTION ART NOT DELIVERED; native Godot fallback accepted.")
     if missing_ui:
         print("ASSET NON LIVRE: " + ", ".join(missing_ui))
     if present_ui:

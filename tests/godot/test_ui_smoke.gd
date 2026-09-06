@@ -20,9 +20,20 @@ func _run() -> void:
 		await get_tree().process_frame
 
 		# Onboarding/no-career path.
+		var global_scroll := main.get("scroll") as ScrollContainer
+		global_scroll.scroll_vertical = 3000
 		main.call("show_creation")
 		await get_tree().process_frame
 		_assert_valid_size(main, "show_creation")
+		var fixed_host := main.get("fixed_screen_host") as Control
+		var manager_screen: Node = fixed_host.get_child(0)
+		var ancestor: Node = manager_screen.get_parent()
+		while ancestor != null:
+			if ancestor is ScrollContainer:
+				push_error("ManagerSelection leaked into the global ScrollContainer")
+				get_tree().quit(1)
+				return
+			ancestor = ancestor.get_parent()
 
 		# Career-only screens are exercised with a complete in-memory fixture.
 		_install_smoke_career()

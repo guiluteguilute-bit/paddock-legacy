@@ -34,6 +34,8 @@ echo '=== UI SMOKE ==='
 run_godot godot-ui.log tests/godot/test_ui_smoke.tscn
 echo '=== MANAGER V2 TEST ==='
 run_godot godot-manager-v2.log tests/godot/test_manager_selection_v2.tscn
+echo '=== MANAGER HOST TEST ==='
+run_godot godot-manager-host.log tests/godot/test_manager_host.tscn
 echo '=== MAIN SCENE ==='
 run_godot godot-main.log --quit-after 2
 echo '=== WEB EXPORT ==='
