@@ -81,8 +81,10 @@ func clear(page_title: String) -> void:
 	if title != null and title.get_parent() != null:
 		title.get_parent().visible = true
 	content.add_theme_constant_override("separation", 12)
-	if GameState.has_career() and GameState.data.team.get("colors", []).size() >= 3:
-		colors.accent = Color(GameState.data.team.colors[2])
+	var team: Dictionary = GameState.data.get("team", {})
+	var team_colors: Array = team.get("colors", [])
+	if GameState.has_career() and team_colors.size() >= 3:
+		colors.accent = Color(team_colors[2])
 	for child in content.get_children(): child.queue_free()
 	scroll.scroll_vertical = 0
 	title.text = "PADDOCK LEGACY"

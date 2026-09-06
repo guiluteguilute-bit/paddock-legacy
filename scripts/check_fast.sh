@@ -6,6 +6,7 @@ python3 tests/validate_ui_catalog.py
 python3 tests/validate_manager_assets.py
 python3 tests/validate_gdscript_safety.py
 python3 tests/validate_godot_resources.py
+python3 tests/validate_web_shell.py
 if [[ -z "${GODOT_BIN:-}" ]]; then
   if command -v godot >/dev/null; then GODOT_BIN="$(command -v godot)"
   elif command -v godot4 >/dev/null; then GODOT_BIN="$(command -v godot4)"
@@ -15,5 +16,7 @@ fi
 mkdir -p build/logs
 timeout 5m "$GODOT_BIN" --headless --path . --editor --import --quit 2>&1 | tee build/logs/godot-import.log
 python3 tests/validate_godot_log.py build/logs/godot-import.log
-timeout 2m "$GODOT_BIN" --headless --path . tests/godot/test_script_loading.tscn 2>&1 | tee build/logs/godot-smoke.log
-python3 tests/validate_godot_log.py build/logs/godot-smoke.log
+timeout 2m "$GODOT_BIN" --headless --path . tests/godot/test_script_loading.tscn 2>&1 | tee build/logs/godot-scripts.log
+python3 tests/validate_godot_log.py build/logs/godot-scripts.log
+timeout 2m "$GODOT_BIN" --headless --path . tests/godot/test_ui_smoke.tscn 2>&1 | tee build/logs/godot-ui.log
+python3 tests/validate_godot_log.py build/logs/godot-ui.log

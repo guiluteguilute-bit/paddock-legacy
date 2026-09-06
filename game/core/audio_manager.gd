@@ -126,5 +126,7 @@ func _load_settings() -> void:
 
 func _save_setting(key: String, value: Variant) -> void:
 	if GameState.has_career():
-		GameState.data.settings[key] = value
+		var settings: Dictionary = GameState.data.get("settings", {})
+		settings[key] = value
+		GameState.data["settings"] = settings
 		GameState.save_game()
