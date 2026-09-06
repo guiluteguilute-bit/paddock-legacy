@@ -60,7 +60,7 @@ func build_shell() -> void:
 	for item in [["ACCUEIL", "accueil", show_dashboard], ["CARRIÈRE", "classements", show_career], ["COURSE", "courses", show_race_prep], ["ÉCURIE", "equipe", show_team], ["PLUS", "parametres", show_more]]:
 		var b = button(item[0], item[2], true); b.size_flags_horizontal = Control.SIZE_EXPAND_FILL; b.custom_minimum_size = Vector2(0, 64)
 		var icon: Texture2D = UI_ICON_ATLAS.get_icon(item[1])
-		if icon != null: b.icon = icon; b.icon_max_width = 42; b.expand_icon = true
+		if icon != null: b.icon = icon; b.expand_icon = true
 		nav.add_child(b)
 	_apply_safe_area()
 
