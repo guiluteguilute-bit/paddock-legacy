@@ -77,6 +77,8 @@ func _draw_fallback() -> void:
 		Color(0.01, 0.03, 0.05, 0.95),
 		radius
 	)
+	background_box.border_color = Color(0.32, 0.55, 0.60, 0.42)
+	background_box.set_border_width_all(2)
 	draw_style_box(background_box, Rect2(Vector2.ZERO, size))
 
 	var fill_color: Color = Color("19dcc6")
@@ -93,6 +95,7 @@ func _draw_fallback() -> void:
 	var gloss_width: float = maxf(0.0, width - 8.0)
 	if gloss_width > 0.0:
 		draw_rect(Rect2(4, 3, gloss_width, 3), Color(1, 1, 1, 0.22))
+		draw_rect(Rect2(4, size.y - 5, gloss_width, 2), Color(0, 0, 0, 0.18))
 
 	# Explicit float locals avoid Godot 4.3 Variant inference failures.
 	var x_25: float = size.x * 0.25
